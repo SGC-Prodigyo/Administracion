@@ -138,6 +138,8 @@
   .btn-obs{background:none;border:1px solid var(--line-strong);border-radius:5px;padding:3px 7px;cursor:pointer;font-size:12px;}
   .btn-obs:hover{background:#EEF5FC;}
   .obs-item{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:10px;margin-bottom:8px;font-size:12px;}
+  .instructivo-body p{font-size:13px;line-height:1.5;margin:0 0 14px;padding-bottom:12px;border-bottom:1px solid var(--line);}
+  .instructivo-body p:last-child{border-bottom:none;}
   .obs-meta{color:var(--ink-soft);font-size:11px;margin-bottom:4px;}
   .estado-cerrada-pill{background:#EEE;color:#777;border-color:transparent;}
   .estado-inline{border:1px solid var(--line-strong);border-radius:12px;padding:3px 8px;font-size:11px;font-weight:600;font-family:var(--sans);cursor:pointer;}
@@ -256,9 +258,9 @@
           <option value="todos">Todos los estados</option>
         </select>
         <div class="spacer"></div>
+        <button class="btn" id="btnInstructivo">📖 Instructivo</button>
         <button class="btn" id="btnActualizar">↻ Actualizar</button>
         <button class="btn" id="btnExport">Exportar CSV</button>
-        <button class="btn hidden" id="btnImportExcel">Importar Excel</button>
         <input type="file" id="fileImportExcel" accept=".xlsx,.xls" class="hidden">
         <button class="btn hidden" id="btnNuevoCliente">+ Nueva documentación</button>
         <button class="btn btn-primary hidden" id="btnNuevaPersona">+ Nueva persona</button>
@@ -432,7 +434,6 @@ async function onLoggedIn(sess){
   if(canEdit()){
     document.getElementById('btnNuevaPersona').classList.remove('hidden');
     document.getElementById('btnNuevoCliente').classList.remove('hidden');
-    document.getElementById('btnImportExcel').classList.remove('hidden');
   }
   showView('home');
   await loadAll();
@@ -1054,6 +1055,30 @@ document.getElementById('btnExport').addEventListener('click', ()=>{
 });
 
 /* ======================= ACTUALIZAR (limpiar filtros) ======================= */
+document.getElementById('btnInstructivo').addEventListener('click', ()=>{
+  const panel = document.getElementById('panel');
+  panel.innerHTML = `
+    <div class="panel-header"><h2>📖 Instructivo</h2><button class="close-x" id="closeBtn">&times;</button></div>
+    <div class="instructivo-body">
+      <p><b>+ Nueva persona:</b> carga una persona nueva. Al crearla, le aparecen automáticamente todas las documentaciones del catálogo para completar.</p>
+      <p><b>Cargar una documentación:</b> hacé clic en el nombre de una persona, después en cualquiera de sus filas, y completá Fecha de carga y Fecha de vencimiento (o tildá "No aplica").</p>
+      <p><b>+ Nueva documentación:</b> agrega un tipo nuevo al catálogo (por ejemplo un curso de un cliente nuevo). Queda disponible para todas las personas.</p>
+      <p><b>↻ Actualizar:</b> limpia la búsqueda y los filtros, y trae los datos más recientes.</p>
+      <p><b>Buscador:</b> filtra la tabla por nombre, sector o categoría a medida que escribís.</p>
+      <p><b>Filtro de estado:</b> elegí ver Solo activos, Standby, Bajas, o Todos los estados.</p>
+      <p><b>Paneles de arriba:</b> hacé clic en Al día / Por vencer / Vencidos de cualquier categoría para ver esa lista puntual. Clic en una fila te lleva a la ficha completa de esa persona.</p>
+      <p><b>Estado en la tabla:</b> se cambia directo desde el desplegable de cada fila, sin entrar a la ficha.</p>
+      <p><b>📝 OBS:</b> abre un historial de notas fechadas para esa persona.</p>
+      <p><b>Editar datos / estado y Eliminar persona:</b> disponibles dentro de la ficha de cada persona (eliminar, solo para administradores).</p>
+      <p><b>Exportar CSV:</b> descarga en planilla todo lo que esté filtrado en ese momento.</p>
+    </div>
+    <div class="modal-actions"><button class="btn btn-primary" id="cerrarInstructivo">Entendido</button></div>
+  `;
+  document.getElementById('closeBtn').addEventListener('click', closeOverlay);
+  document.getElementById('cerrarInstructivo').addEventListener('click', closeOverlay);
+  document.getElementById('overlay').classList.add('show');
+});
+
 document.getElementById('btnActualizar').addEventListener('click', async ()=>{
   currentFilter = { buscar:'', quick:null, sector:null };
   document.getElementById('fBuscar').value = '';
@@ -1141,7 +1166,8 @@ function buscarHoja(wb, palabra){
   return wb.SheetNames.find(n => normNombre(n).includes(normNombre(palabra)));
 }
 
-document.getElementById('btnImportExcel').addEventListener('click', ()=> document.getElementById('fileImportExcel').click());
+// (El botón visible de Importar Excel se retiró; la función de importación queda disponible
+// para reactivarse más adelante si hace falta, disparándola con fileImportExcel.click() desde algún botón.)
 document.getElementById('fileImportExcel').addEventListener('change', async (e)=>{
   const file = e.target.files[0];
   if(!file) return;
