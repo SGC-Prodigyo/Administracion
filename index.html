@@ -242,8 +242,8 @@
       <div class="cat-panels" id="catPanels"></div>
 
       <div class="tabs">
-        <button class="tab-btn active" id="tabBtnListado">Listado</button>
-        <button class="tab-btn" id="tabBtnEmpresasCC">Empresas</button>
+        <button class="tab-btn active" id="tabBtnListado">Ingresos a planta</button>
+        <button class="tab-btn" id="tabBtnEmpresasCC">Documentación Empresas</button>
       </div>
 
       <div id="tab-listado">
@@ -258,6 +258,8 @@
         <div class="spacer"></div>
         <button class="btn" id="btnActualizar">↻ Actualizar</button>
         <button class="btn" id="btnExport">Exportar CSV</button>
+        <button class="btn hidden" id="btnImportExcel">Importar Excel</button>
+        <input type="file" id="fileImportExcel" accept=".xlsx,.xls" class="hidden">
         <button class="btn hidden" id="btnNuevoCliente">+ Nueva documentación</button>
         <button class="btn btn-primary hidden" id="btnNuevaPersona">+ Nueva persona</button>
       </div>
@@ -430,6 +432,7 @@ async function onLoggedIn(sess){
   if(canEdit()){
     document.getElementById('btnNuevaPersona').classList.remove('hidden');
     document.getElementById('btnNuevoCliente').classList.remove('hidden');
+    document.getElementById('btnImportExcel').classList.remove('hidden');
   }
   showView('home');
   await loadAll();
@@ -1094,6 +1097,183 @@ document.getElementById('btnNuevoCliente').addEventListener('click', ()=>{
     alert(`"${nombre}" se agregó al catálogo. Ahora podés asignárselo a cualquier persona desde su ficha.`);
   });
   document.getElementById('overlay').classList.add('show');
+});
+
+/* ======================= IMPORTAR EXCEL REAL ======================= */
+function normNombre(s){ return String(s||'').trim().toUpperCase().replace(/\s+/g,' '); }
+function tituloCase(s){ return String(s||'').trim().split(/\s+/).map(w=> w.charAt(0)+w.slice(1).toLowerCase()).join(' '); }
+function limpiarTexto(v){
+  const s = String(v??'').trim();
+  return (s==='-'||s.toLowerCase()==='nan') ? '' : s;
+}
+function fechaExcelAISO(v){
+  if(!v) return null;
+  if(v instanceof Date && !isNaN(v)){
+    if(v.getFullYear() <= 1900) return null;
+    return v.toISOString().slice(0,10);
+  }
+  return null;
+}
+
+// Mapa: columna del Excel -> nombre EXACTO del tipo de documento en el catálogo actual
+const NOMINA_MAP = [
+  { tipo:'Examen médico', emCol:4, venCol:5 },
+  { tipo:'Examen médico Unilever Tortuguitas (18 meses)', emCol:null, venCol:8 },
+  { tipo:'Examen médico', emCol:null, venCol:9 },
+  { tipo:'Capacitación Prodigyo', emCol:10, venCol:11 },
+  { tipo:'EPP', emCol:14, venCol:15 },
+  { tipo:'Curso Unilever Tortuguitas', emCol:18, venCol:19 },
+  { tipo:'Curso Unilever Pilar', emCol:22, venCol:23 },
+];
+const CURSOS_MAP = [
+  { tipo:'Curso Bayer', emCol:1, venCol:2 },
+  { tipo:'Curso Femsa', emCol:5, venCol:6 },
+  { tipo:'Curso Coca Viale', emCol:9, venCol:10 },
+  { tipo:'RCP-Viale', emCol:13, venCol:14 },
+  { tipo:'Curso Kasdorf', emCol:17, venCol:18 },
+  { tipo:'Curso CCU-Luján', emCol:21, venCol:22 },
+  { tipo:'Curso CCU-Cuida', emCol:25, venCol:26 },
+  { tipo:'Curso Bagó', emCol:29, venCol:30 },
+  { tipo:'Curso Basf', emCol:33, venCol:34 },
+];
+
+function buscarHoja(wb, palabra){
+  return wb.SheetNames.find(n => normNombre(n).includes(normNombre(palabra)));
+}
+
+document.getElementById('btnImportExcel').addEventListener('click', ()=> document.getElementById('fileImportExcel').click());
+document.getElementById('fileImportExcel').addEventListener('change', async (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  if(!confirm('Esto va a leer tu Excel y completar/actualizar personas y documentos. ¿Continuar?')){ e.target.value=''; return; }
+  try{
+    const buf = await file.arrayBuffer();
+    const wb = XLSX.read(buf, {type:'array', cellDates:true});
+
+    // Mapa de nombre normalizado -> persona existente (por id)
+    const porNombre = {};
+    personas.forEach(p=> porNombre[normNombre(p.nombre)] = p);
+
+    let personasCreadas = 0, personasActualizadas = 0, docsNuevos = 0, docsActualizados = 0;
+
+    async function obtenerOCrearPersona(nombreCrudo, datosExtra){
+      const key = normNombre(nombreCrudo);
+      if(!key) return null;
+      let p = porNombre[key];
+      if(p){
+        // completar datos vacíos si el excel trae algo y la ficha no lo tenía
+        const patch = {};
+        if(datosExtra){
+          ['dni_cuil','sector','categoria','telefono','email'].forEach(campo=>{
+            if(datosExtra[campo] && !p[campo]) patch[campo] = datosExtra[campo];
+          });
+        }
+        if(Object.keys(patch).length){
+          await sb.from('personas').update(patch).eq('id', p.id);
+          Object.assign(p, patch);
+          personasActualizadas++;
+        }
+        return p;
+      }
+      const nueva = {
+        nombre: tituloCase(nombreCrudo),
+        dni_cuil: datosExtra?.dni_cuil || '',
+        sector: datosExtra?.sector || '',
+        categoria: datosExtra?.categoria || '',
+        telefono: datosExtra?.telefono || '',
+        email: datosExtra?.email || '',
+      };
+      const { data, error } = await sb.from('personas').insert(nueva).select().single();
+      if(error){ console.error(error); return null; }
+      personas.push(data);
+      porNombre[key] = data;
+      personasCreadas++;
+      return data;
+    }
+
+    async function guardarDoc(persona, tipoNombre, fechaEmision, fechaVencimiento){
+      if(!persona || (!fechaEmision && !fechaVencimiento)) return;
+      const tipo = tiposDocumento.find(t=>t.nombre===tipoNombre);
+      if(!tipo){ console.warn('Tipo no encontrado en catálogo:', tipoNombre); return; }
+      const existente = documentos.find(d=>d.persona_id===persona.id && d.tipo_documento_id===tipo.id);
+      if(existente){
+        await sb.from('documentos_persona').update({
+          fecha_emision: fechaEmision, fecha_vencimiento: fechaVencimiento, no_aplica: false
+        }).eq('id', existente.id);
+        existente.fecha_emision = fechaEmision; existente.fecha_vencimiento = fechaVencimiento; existente.no_aplica = false;
+        docsActualizados++;
+      } else {
+        const { data, error } = await sb.from('documentos_persona').insert({
+          persona_id: persona.id, tipo_documento_id: tipo.id,
+          fecha_emision: fechaEmision, fecha_vencimiento: fechaVencimiento, no_aplica: false
+        }).select().single();
+        if(!error){ documentos.push(data); docsNuevos++; }
+      }
+    }
+
+    // 1) Nómina Viva -> datos base de personas
+    const hojaViva = buscarHoja(wb, 'Nómina Viva') || buscarHoja(wb, 'Nomina Viva');
+    if(hojaViva){
+      const rows = XLSX.utils.sheet_to_json(wb.Sheets[hojaViva], {header:1, raw:true, defval:null});
+      for(let i=2; i<rows.length; i++){
+        const row = rows[i] || [];
+        const nombre = row[0];
+        if(!nombre || !String(nombre).trim()) continue;
+        await obtenerOCrearPersona(nombre, {
+          dni_cuil: row[1] ? String(row[1]).trim() : '',
+          sector: limpiarTexto(row[2]),
+          categoria: limpiarTexto(row[3]),
+          telefono: row[4] ? String(row[4]).trim() : '',
+          email: limpiarTexto(row[5]),
+        });
+      }
+    }
+
+    // 2) Nomina -> vencimientos de examen/capacitación/EPP/curso Tortu-Pilar
+    const hojaNominaReal = wb.SheetNames.find(n=> normNombre(n)==='NOMINA') || buscarHoja(wb, 'Nomina');
+    if(hojaNominaReal){
+      const rows = XLSX.utils.sheet_to_json(wb.Sheets[hojaNominaReal], {header:1, raw:true, defval:null});
+      for(let i=4; i<rows.length; i++){
+        const row = rows[i] || [];
+        const nombre = row[2];
+        if(!nombre || !String(nombre).trim()) continue;
+        const persona = await obtenerOCrearPersona(nombre);
+        for(const m of NOMINA_MAP){
+          const fem = m.emCol!=null ? fechaExcelAISO(row[m.emCol]) : null;
+          const fven = fechaExcelAISO(row[m.venCol]);
+          if(fem || fven) await guardarDoc(persona, m.tipo, fem, fven);
+        }
+      }
+    }
+
+    // 3) Cursos de Inducción -> cursos por cliente
+    const hojaCursos = buscarHoja(wb, 'Cursos de Inducción') || buscarHoja(wb, 'Cursos de Induccion');
+    if(hojaCursos){
+      const rows = XLSX.utils.sheet_to_json(wb.Sheets[hojaCursos], {header:1, raw:true, defval:null});
+      for(let i=3; i<rows.length; i++){
+        const row = rows[i] || [];
+        const nombre = row[0];
+        if(!nombre || !String(nombre).trim()) continue;
+        const persona = await obtenerOCrearPersona(nombre);
+        for(const m of CURSOS_MAP){
+          const rawEm = row[m.emCol];
+          if(typeof rawEm === 'string' && rawEm.toLowerCase().includes('no aplica')) continue;
+          const fem = fechaExcelAISO(rawEm);
+          const fven = fechaExcelAISO(row[m.venCol]);
+          if(fem || fven) await guardarDoc(persona, m.tipo, fem, fven);
+        }
+      }
+    }
+
+    document.getElementById('sectorList').innerHTML = [...new Set(personas.map(p=>p.sector).filter(Boolean))].map(s=>`<option value="${escapeHtml(s)}">`).join('');
+    renderPersonas();
+    alert(`Listo.\nPersonas nuevas: ${personasCreadas}\nPersonas con datos completados: ${personasActualizadas}\nDocumentos nuevos: ${docsNuevos}\nDocumentos actualizados: ${docsActualizados}\n\nRevisá el listado por las dudas — si alguna persona quedó duplicada por una diferencia de nombre entre hojas, avisame y lo fusionamos.`);
+  }catch(err){
+    console.error(err);
+    alert('No se pudo leer el archivo. Verificá que sea el Excel real con las hojas "Nómina Viva", "Nomina" y "Cursos de Inducción".');
+  }finally{
+    e.target.value = '';
+  }
 });
 </script>
 </body>
