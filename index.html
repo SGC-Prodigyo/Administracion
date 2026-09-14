@@ -55,7 +55,9 @@
 
   .view.hidden{display:none;}
   .module-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px;}
-  .module-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:24px;cursor:pointer;transition:box-shadow 0.15s, transform 0.15s;}
+  .module-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:0;cursor:pointer;overflow:hidden;transition:box-shadow 0.15s, transform 0.15s;}
+  .module-card-accent{height:6px;background:linear-gradient(90deg, var(--brand-dark,#0B3D6E), var(--brand-mid,#5B9BDD));}
+  .module-card-body{padding:22px 24px 24px;}
   .module-card:hover{box-shadow:0 4px 14px rgba(11,61,110,0.10);transform:translateY(-2px);}
   .module-icon{font-size:26px;margin-bottom:10px;}
   .module-card h3{font-size:15px;margin:0 0 6px;}
@@ -135,6 +137,17 @@
   .venc-monto{font-family:var(--mono);font-weight:700;font-size:13px;white-space:nowrap;}
   .venc-fecha{font-size:12px;color:var(--ink-soft);white-space:nowrap;min-width:70px;text-align:right;}
   .venc-importante{border-left:3px solid var(--rojo);}
+  .estado-inline-select{font-family:var(--sans);font-size:11px;font-weight:500;padding:3px 6px;border-radius:12px;border:none;cursor:pointer;}
+  .estado-inline-select.estado-vigente{background:var(--verde-bg);color:var(--verde);}
+  .estado-inline-select.estado-porvencer{background:var(--amarillo-bg);color:var(--amarillo);}
+  .calendario-grid{display:grid;grid-template-columns:repeat(7, 1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+  .cal-dow{background:var(--brand-dark,#0B3D6E);color:#fff;text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;padding:8px 4px;}
+  .cal-day{background:var(--card);min-height:100px;padding:6px;font-size:11px;}
+  .cal-day.otro-mes{background:#F5F5F5;color:var(--ink-soft);}
+  .cal-day-num{font-weight:700;margin-bottom:4px;}
+  .cal-chip{display:block;background:var(--brand-light,#A9D3F5);color:var(--brand-dark,#0B3D6E);border-radius:4px;padding:2px 5px;margin-bottom:3px;font-size:10px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .cal-chip.pagado{opacity:0.5;text-decoration:line-through;}
+  .cal-chip.importante{background:var(--rojo-bg);color:var(--rojo);}
   .tab-btn{font-family:var(--sans);font-size:13px;font-weight:500;padding:9px 4px;margin-right:20px;border:none;background:none;color:var(--ink-soft);cursor:pointer;border-bottom:2px solid transparent;}
   .tab-btn.active{color:var(--ink);border-bottom-color:var(--brand-dark);}
   th.sortable{cursor:pointer;user-select:none;}
@@ -224,19 +237,25 @@
       <p class="sub">Módulos de administración de Prodigyo.</p>
       <div class="module-grid">
         <div class="module-card" id="cardPersonas">
-          <div class="module-icon">🦺</div>
-          <h3>Control Contratistas</h3>
-          <p>Exámenes médicos, cursos, EPP y accesos a sitios de cliente por persona.</p>
+          <div class="module-card-accent"></div>
+          <div class="module-card-body">
+            <h3>Control Contratistas</h3>
+            <p>Exámenes médicos, cursos, EPP y accesos a sitios de cliente por persona.</p>
+          </div>
         </div>
         <div class="module-card" id="cardSiniestros">
-          <div class="module-icon">🚑</div>
-          <h3>Siniestros ART</h3>
-          <p>Próximamente: gestión de siniestros laborales.</p>
+          <div class="module-card-accent"></div>
+          <div class="module-card-body">
+            <h3>Siniestros ART</h3>
+            <p>Próximamente: gestión de siniestros laborales.</p>
+          </div>
         </div>
         <div class="module-card" id="cardProveedores">
-          <div class="module-icon">💳</div>
-          <h3>Pago a proveedores</h3>
-          <p>Próximamente: control de pagos a proveedores.</p>
+          <div class="module-card-accent"></div>
+          <div class="module-card-body">
+            <h3>Pago a proveedores</h3>
+            <p>Vencimientos mensuales y calendario de pagos a proveedores.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -371,6 +390,7 @@
 
       <div class="tabs">
         <button class="tab-btn active" id="tabBtnVenc">Vencimientos Mensuales</button>
+        <button class="tab-btn" id="tabBtnCalendario">Calendario</button>
       </div>
 
       <div id="tab-venc">
@@ -380,11 +400,22 @@
             <button class="year-btn" data-anio="2027">2027</button>
           </div>
           <div class="spacer"></div>
+          <button class="btn" id="btnReplicarRecurrentes">🔁 Replicar recurrentes hasta diciembre</button>
           <button class="btn" id="btnExportVenc">Exportar CSV</button>
           <button class="btn btn-primary hidden" id="btnNuevoVenc">+ Nuevo vencimiento</button>
         </div>
         <div class="stats" id="vencStats"></div>
         <div id="vencContenido"></div>
+      </div>
+
+      <div id="tab-calendario" class="hidden">
+        <div class="toolbar" style="margin-bottom:14px;">
+          <button class="btn" id="btnMesAnterior">← Mes anterior</button>
+          <h2 id="calendarioTitulo" style="margin:0 16px;font-size:16px;min-width:170px;text-align:center;"></h2>
+          <button class="btn" id="btnMesSiguiente">Mes siguiente →</button>
+          <div class="spacer"></div>
+        </div>
+        <div id="calendarioGrid" class="calendario-grid"></div>
       </div>
     </div>
 
@@ -1335,6 +1366,7 @@ document.getElementById('fileImportExcel').addEventListener('change', async (e)=
 /* ======================= PAGO A PROVEEDORES · VENCIMIENTOS MENSUALES ======================= */
 let vencimientos = [];
 let vencAnioActual = 2026;
+let vencFiltro = null;
 const MESES_NOMBRES = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
 async function loadVencimientos(){
@@ -1342,6 +1374,7 @@ async function loadVencimientos(){
   vencimientos = data || [];
 }
 
+document.getElementById('btnReplicarRecurrentes').addEventListener('click', replicarRecurrentesHastaDiciembre);
 document.getElementById('yearToggle').querySelectorAll('.year-btn').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     vencAnioActual = parseInt(btn.dataset.anio,10);
@@ -1354,21 +1387,37 @@ function vencimientosDelAnio(){
   return vencimientos.filter(v=>v.anio===vencAnioActual);
 }
 
+function esPorVencer(v){
+  if(v.estado!=='Pendiente' || !v.fecha_vencimiento) return false;
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+  const f = new Date(v.fecha_vencimiento+'T00:00:00');
+  const dias = Math.round((f-hoy)/86400000);
+  return dias>=0 && dias<=7;
+}
+
 function renderVencStats(){
   const el = document.getElementById('vencStats');
   const list = vencimientosDelAnio();
   const pendientes = list.filter(v=>v.estado==='Pendiente');
+  const porVencer = list.filter(esPorVencer);
   const totalPendiente = pendientes.reduce((s,v)=> s + (v.monto||0), 0);
+  const activeCls = vencFiltro==='porvencer' ? ' stat-active' : '';
   el.innerHTML = `
+    <div class="stat clickable${activeCls}" id="statPorVencer"><div class="n" style="color:var(--amarillo);">${porVencer.length}</div><div class="l">Por vencer (7 días)</div></div>
     <div class="stat"><div class="n" style="color:var(--rojo);">${pendientes.length}</div><div class="l">Vencimientos pendientes</div></div>
     <div class="stat"><div class="n" style="color:var(--verde);">${list.filter(v=>v.estado==='Pagado').length}</div><div class="l">Pagados</div></div>
     <div class="stat"><div class="n" style="font-size:16px;">$ ${totalPendiente.toLocaleString('es-AR',{minimumFractionDigits:2, maximumFractionDigits:2})}</div><div class="l">Monto total pendiente</div></div>`;
+  document.getElementById('statPorVencer').addEventListener('click', ()=>{
+    vencFiltro = vencFiltro==='porvencer' ? null : 'porvencer';
+    renderVencimientos();
+  });
 }
 
 function renderVencimientos(){
   renderVencStats();
   const el = document.getElementById('vencContenido');
-  const list = vencimientosDelAnio();
+  let list = vencimientosDelAnio();
+  if(vencFiltro==='porvencer') list = list.filter(esPorVencer);
   if(list.length===0){
     el.innerHTML = `<div class="empty">Todavía no hay vencimientos cargados para ${vencAnioActual}.</div>`;
     return;
@@ -1391,12 +1440,28 @@ function renderVencimientos(){
           </div>
           <div class="venc-monto">${v.monto ? '$ '+Number(v.monto).toLocaleString('es-AR',{minimumFractionDigits:2, maximumFractionDigits:2}) : '—'}</div>
           <div class="venc-fecha">${v.fecha_vencimiento ? formatDate(v.fecha_vencimiento) : 'Sin fecha'}</div>
-          <span class="estado-pill ${v.estado==='Pagado'?'estado-vigente':'estado-porvencer'}">${v.estado}</span>
+          <select class="estado-inline-select ${v.estado==='Pagado'?'estado-vigente':'estado-porvencer'}" data-cambiar-estado="${v.id}">
+            <option value="Pendiente" ${v.estado==='Pendiente'?'selected':''}>Pendiente</option>
+            <option value="Pagado" ${v.estado==='Pagado'?'selected':''}>Pagado</option>
+          </select>
         </div>`).join('')}
     `;
   }).join('');
   el.querySelectorAll('.venc-row').forEach(row=>{
-    row.addEventListener('click', ()=> openVencDetail(row.dataset.id));
+    row.addEventListener('click', (e)=>{
+      if(e.target.closest('[data-cambiar-estado]')) return;
+      openVencDetail(row.dataset.id);
+    });
+  });
+  el.querySelectorAll('[data-cambiar-estado]').forEach(sel=>{
+    sel.addEventListener('click', e=> e.stopPropagation());
+    sel.addEventListener('change', async (e)=>{
+      e.stopPropagation();
+      const v = vencimientos.find(x=>x.id===sel.dataset.cambiarEstado);
+      if(!v) return;
+      v.estado = sel.value;
+      await guardarVenc(v);
+    });
   });
 }
 
@@ -1412,6 +1477,7 @@ document.getElementById('btnNuevoVenc').addEventListener('click', ()=>{
     </div>
     <div class="field"><label>Título</label><input type="text" id="nv-titulo" placeholder="Ej: SUSS - Plan Cuota 8"></div>
     <div class="field"><label>Medio de pago</label><input type="text" id="nv-medio" placeholder="Ej: Banco Credicoop"></div>
+    <div class="field"><label><input type="checkbox" id="nv-recurrente"> Es un pago recurrente (lo agrega automáticamente en los meses siguientes hasta diciembre)</label></div>
     <div class="err hidden" id="err-nv">Completá el título.</div>
     <div class="modal-actions"><button class="btn" id="cancelNvBtn">Cancelar</button><button class="btn btn-primary" id="btnCrearVenc">Crear</button></div>
   `;
@@ -1420,19 +1486,79 @@ document.getElementById('btnNuevoVenc').addEventListener('click', ()=>{
   document.getElementById('btnCrearVenc').addEventListener('click', async ()=>{
     const titulo = document.getElementById('nv-titulo').value.trim();
     if(!titulo){ document.getElementById('err-nv').classList.remove('hidden'); return; }
+    const esRecurrente = document.getElementById('nv-recurrente').checked;
     const nuevo = {
       anio: parseInt(document.getElementById('nv-anio').value,10),
       mes: parseInt(document.getElementById('nv-mes').value,10),
       titulo, medio_pago: document.getElementById('nv-medio').value.trim(),
+      es_recurrente: esRecurrente,
       registrado_por: profile.id, registrado_por_nombre: profile.full_name || profile.email
     };
     const { data, error } = await sb.from('proveedores_vencimientos').insert(nuevo).select().single();
     if(error){ alert('No se pudo crear: ' + error.message); return; }
     vencimientos.push(data);
+    if(esRecurrente){
+      await replicarUnoHastaDiciembre(data);
+    }
     closeOverlay(); renderVencimientos(); openVencDetail(data.id);
   });
   document.getElementById('overlay').classList.add('show');
 });
+
+async function replicarUnoHastaDiciembre(v){
+  const existentes = new Set(vencimientos.map(x=>`${x.titulo}|${x.anio}|${x.mes}`));
+  const nuevos = [];
+  for(let m=v.mes+1; m<=12; m++){
+    const clave = `${v.titulo}|${v.anio}|${m}`;
+    if(existentes.has(clave)) continue;
+    let fecha = null;
+    if(v.fecha_vencimiento){
+      const dia = parseInt(v.fecha_vencimiento.split('-')[2],10);
+      const ultimoDia = new Date(v.anio, m, 0).getDate();
+      fecha = `${v.anio}-${String(m).padStart(2,'0')}-${String(Math.min(dia,ultimoDia)).padStart(2,'0')}`;
+    }
+    nuevos.push({
+      anio:v.anio, mes:m, titulo:v.titulo, medio_pago:v.medio_pago, como_se_paga:v.como_se_paga,
+      monto:v.monto, fecha_vencimiento:fecha, es_recurrente:true, estado:'Pendiente', prioridad:v.prioridad,
+      registrado_por: profile.id, registrado_por_nombre: profile.full_name || profile.email
+    });
+  }
+  if(nuevos.length===0) return;
+  const { data } = await sb.from('proveedores_vencimientos').insert(nuevos).select();
+  if(data) vencimientos.push(...data);
+}
+
+async function replicarRecurrentesHastaDiciembre(){
+  if(!confirm('Esto va a completar, para cada pago marcado como recurrente, los meses que le falten hasta diciembre de su mismo año (sin duplicar los que ya existen). ¿Continuar?')) return;
+  const recurrentes = vencimientos.filter(v=>v.es_recurrente);
+  const existentes = new Set(vencimientos.map(v=>`${v.titulo}|${v.anio}|${v.mes}`));
+  const nuevos = [];
+  recurrentes.forEach(v=>{
+    for(let m=v.mes+1; m<=12; m++){
+      const clave = `${v.titulo}|${v.anio}|${m}`;
+      if(existentes.has(clave)) continue;
+      existentes.add(clave);
+      let fecha = null;
+      if(v.fecha_vencimiento){
+        const dia = parseInt(v.fecha_vencimiento.split('-')[2],10);
+        const ultimoDia = new Date(v.anio, m, 0).getDate();
+        const diaAjustado = Math.min(dia, ultimoDia);
+        fecha = `${v.anio}-${String(m).padStart(2,'0')}-${String(diaAjustado).padStart(2,'0')}`;
+      }
+      nuevos.push({
+        anio:v.anio, mes:m, titulo:v.titulo, medio_pago:v.medio_pago, como_se_paga:v.como_se_paga,
+        monto:v.monto, fecha_vencimiento:fecha, es_recurrente:true, estado:'Pendiente', prioridad:v.prioridad,
+        registrado_por: profile.id, registrado_por_nombre: profile.full_name || profile.email
+      });
+    }
+  });
+  if(nuevos.length===0){ alert('No había nada nuevo para agregar — ya estaban todos los meses completos.'); return; }
+  const { data, error } = await sb.from('proveedores_vencimientos').insert(nuevos).select();
+  if(error){ alert('No se pudo replicar: ' + error.message); return; }
+  vencimientos.push(...(data||[]));
+  renderVencimientos();
+  alert(`Listo, se agregaron ${nuevos.length} vencimientos nuevos.`);
+}
 
 async function guardarVenc(v){
   await sb.from('proveedores_vencimientos').update({
@@ -1514,6 +1640,57 @@ document.getElementById('btnExportVenc').addEventListener('click', ()=>{
   const a = document.createElement('a'); a.href=url; a.download=`vencimientos_${vencAnioActual}.csv`; a.click();
   URL.revokeObjectURL(url);
 });
+
+document.getElementById('tabBtnVenc').addEventListener('click', ()=>{
+  document.getElementById('tab-venc').classList.remove('hidden');
+  document.getElementById('tab-calendario').classList.add('hidden');
+  document.getElementById('tabBtnVenc').classList.add('active');
+  document.getElementById('tabBtnCalendario').classList.remove('active');
+});
+document.getElementById('tabBtnCalendario').addEventListener('click', ()=>{
+  document.getElementById('tab-venc').classList.add('hidden');
+  document.getElementById('tab-calendario').classList.remove('hidden');
+  document.getElementById('tabBtnVenc').classList.remove('active');
+  document.getElementById('tabBtnCalendario').classList.add('active');
+  renderCalendario();
+});
+
+/* ===== Calendario ===== */
+let calMes = 8; // Septiembre 2026 (0-indexado) al abrir por primera vez
+let calAnio = 2026;
+
+document.getElementById('btnMesAnterior').addEventListener('click', ()=>{
+  calMes--; if(calMes<0){ calMes=11; calAnio--; }
+  renderCalendario();
+});
+document.getElementById('btnMesSiguiente').addEventListener('click', ()=>{
+  calMes++; if(calMes>11){ calMes=0; calAnio++; }
+  renderCalendario();
+});
+
+function renderCalendario(){
+  document.getElementById('calendarioTitulo').textContent = `${MESES_NOMBRES[calMes+1]} ${calAnio}`;
+  const primerDia = new Date(calAnio, calMes, 1);
+  const diasEnMes = new Date(calAnio, calMes+1, 0).getDate();
+  const offset = (primerDia.getDay()+6)%7; // lunes=0
+  const dow = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+  const vencsDelMes = vencimientos.filter(v=> v.fecha_vencimiento && v.anio===calAnio && v.mes===(calMes+1));
+  const porDia = {};
+  vencsDelMes.forEach(v=>{
+    const dia = parseInt(v.fecha_vencimiento.split('-')[2],10);
+    (porDia[dia] = porDia[dia]||[]).push(v);
+  });
+  let html = dow.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  for(let i=0;i<offset;i++) html += `<div class="cal-day otro-mes"></div>`;
+  for(let dia=1; dia<=diasEnMes; dia++){
+    const items = porDia[dia] || [];
+    html += `<div class="cal-day"><div class="cal-day-num">${dia}</div>${items.map(v=>`<span class="cal-chip ${v.estado==='Pagado'?'pagado':''} ${v.prioridad==='Importante'?'importante':''}" data-id="${v.id}" title="${escapeHtml(v.titulo)}">${escapeHtml(v.titulo)}</span>`).join('')}</div>`;
+  }
+  document.getElementById('calendarioGrid').innerHTML = html;
+  document.getElementById('calendarioGrid').querySelectorAll('.cal-chip').forEach(chip=>{
+    chip.addEventListener('click', ()=> openVencDetail(chip.dataset.id));
+  });
+}
 </script>
 </body>
 </html>
