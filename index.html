@@ -1475,6 +1475,7 @@ function renderVencimientos(){
       if(b.fecha_vencimiento) return 1;
       return a.titulo.localeCompare(b.titulo);
     });
+    const puedeEditarVenc = canEditModulo('proveedores');
     return `
       <div class="mes-titulo">${MESES_NOMBRES[mes]} ${vencAnioActual}</div>
       ${items.map(v=>`
@@ -1485,10 +1486,12 @@ function renderVencimientos(){
           </div>
           <div class="venc-monto">${v.monto ? '$ '+Number(v.monto).toLocaleString('es-AR',{minimumFractionDigits:2, maximumFractionDigits:2}) : '—'}</div>
           <div class="venc-fecha">${v.fecha_vencimiento ? formatDate(v.fecha_vencimiento) : 'Sin fecha'}</div>
+          ${puedeEditarVenc ? `
           <select class="estado-inline-select ${v.estado==='Pagado'?'estado-vigente':'estado-porvencer'}" data-cambiar-estado="${v.id}">
             <option value="Pendiente" ${v.estado==='Pendiente'?'selected':''}>Pendiente</option>
             <option value="Pagado" ${v.estado==='Pagado'?'selected':''}>Pagado</option>
-          </select>
+          </select>` : `
+          <span class="estado-pill ${v.estado==='Pagado'?'estado-vigente':'estado-porvencer'}">${v.estado}</span>`}
         </div>`).join('')}
     `;
   }).join('');
@@ -1502,6 +1505,7 @@ function renderVencimientos(){
     sel.addEventListener('click', e=> e.stopPropagation());
     sel.addEventListener('change', async (e)=>{
       e.stopPropagation();
+      if(!canEditModulo('proveedores')) return;
       const v = vencimientos.find(x=>x.id===sel.dataset.cambiarEstado);
       if(!v) return;
       v.estado = sel.value;
@@ -1578,11 +1582,23 @@ async function replicarTodoElAnio(v){
 }
 
 async function guardarVenc(v){
-  await sb.from('proveedores_vencimientos').update({
+  const anterior = vencimientos.find(x=>x.id===v.id);
+  const valorAnterior = anterior ? {...anterior} : null;
+  const { data, error } = await sb.from('proveedores_vencimientos').update({
     anio:v.anio, mes:v.mes, titulo:v.titulo, medio_pago:v.medio_pago, como_se_paga:v.como_se_paga,
     monto:v.monto||null, fecha_vencimiento:v.fecha_vencimiento||null, es_recurrente:v.es_recurrente,
     estado:v.estado, prioridad:v.prioridad, notas:v.notas
-  }).eq('id', v.id);
+  }).eq('id', v.id).select();
+  if(error || !data || data.length===0){
+    // No se guardó de verdad (por ejemplo, sin permisos) — revertimos el cambio en pantalla
+    if(valorAnterior){
+      const idxRevert = vencimientos.findIndex(x=>x.id===v.id);
+      if(idxRevert>-1) vencimientos[idxRevert] = valorAnterior;
+    }
+    renderVencimientos();
+    alert('No se pudo guardar el cambio. Puede que no tengas permiso para editar este módulo.');
+    return;
+  }
   const idx = vencimientos.findIndex(x=>x.id===v.id); if(idx>-1) vencimientos[idx]=v;
   renderVencimientos();
   flashSaved();
