@@ -436,6 +436,7 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let session = null;
 let profile = null;
+let permisosModulo = {}; // { contratistas: 'lectura', proveedores: 'editor', ... }
 let personas = [];
 let tiposDocumento = [];
 let documentos = [];
@@ -443,6 +444,13 @@ let observaciones = [];
 let currentFilter = { buscar:'', quick:null, sector:null };
 let personaActual = null;
 
+function rolEnModulo(modulo){
+  if(permisosModulo[modulo]) return permisosModulo[modulo];
+  return profile ? profile.role : 'lectura';
+}
+function canEditModulo(modulo){ const r = rolEnModulo(modulo); return r==='admin' || r==='editor'; }
+function canDeleteModulo(modulo){ return rolEnModulo(modulo)==='admin'; }
+// Compatibilidad: si se llama sin módulo, usa el rol general (por si queda algún uso viejo)
 function canEdit(){ return profile && (profile.role === 'admin' || profile.role === 'editor'); }
 function canDelete(){ return profile && profile.role === 'admin'; }
 function uid(){ return 'id'+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
@@ -478,6 +486,9 @@ async function onLoggedIn(sess){
   session = sess;
   const { data: prof } = await sb.from('profiles').select('*').eq('id', session.user.id).single();
   profile = prof || { id: session.user.id, email: session.user.email, full_name:'', role:'lectura' };
+  const { data: permisosData } = await sb.from('permisos_modulo').select('modulo, rol').eq('user_id', profile.id);
+  permisosModulo = {};
+  (permisosData||[]).forEach(p=> permisosModulo[p.modulo] = p.rol);
   document.getElementById('loginScreen').classList.add('hidden');
   document.getElementById('appShell').classList.remove('hidden');
   document.getElementById('userName').textContent = profile.full_name || profile.email;
@@ -489,9 +500,11 @@ async function onLoggedIn(sess){
   document.getElementById('rolePillProv').textContent = profile.role;
   document.getElementById('userName').title = 'Click para editar tu nombre';
   document.getElementById('userName').addEventListener('click', editName);
-  if(canEdit()){
+  if(canEditModulo('contratistas')){
     document.getElementById('btnNuevaPersona').classList.remove('hidden');
     document.getElementById('btnNuevoCliente').classList.remove('hidden');
+  }
+  if(canEditModulo('proveedores')){
     document.getElementById('btnNuevoVenc').classList.remove('hidden');
   }
   showView('home');
@@ -722,7 +735,7 @@ function renderPersonas(){
   const estadoCls = {vencido:'estado-vencido', porvencer:'estado-porvencer', vigente:'estado-vigente'};
   const estadoPersonaCls = {Activo:'estado-vigente', Standby:'estado-porvencer', Baja:'estado-cerrada-pill'};
 
-  const puedeEditar = canEdit();
+  const puedeEditar = canEditModulo('contratistas');
   tbody.innerHTML = list.map(({p,vencido,items})=>{
     const est = p.estado || 'Activo';
     const nObs = obsDePersona(p.id).length;
@@ -805,7 +818,7 @@ document.getElementById('tabBtnEmpresasCC').addEventListener('click', ()=>{
 
 function openObsPanel(personaId){
   const p = personas.find(x=>x.id===personaId); if(!p) return;
-  const ro = !canEdit();
+  const ro = !canEditModulo('contratistas');
   const items = obsDePersona(personaId);
   const panel = document.getElementById('panel');
   panel.innerHTML = `
@@ -852,10 +865,10 @@ function abrirPersona(id){
   const badgeCls = {Activo:'estado-vigente', Standby:'estado-porvencer', Baja:'estado-cerrada-pill'}[est];
   document.getElementById('personaDetalleTitulo').innerHTML = `${escapeHtml(p.nombre)} <span class="estado-pill ${badgeCls}">${est}</span>${p.fecha_baja && est==='Baja' ? ` <span style="font-size:11px;color:var(--ink-soft);">(${formatDate(p.fecha_baja)})</span>` : ''}`;
   document.getElementById('personaDetalleSub').textContent = `${p.sector||'—'}${p.categoria?' · '+p.categoria:''}${p.dni_cuil?' · DNI/CUIL: '+p.dni_cuil:''}`;
-  if(canEdit()){
+  if(canEditModulo('contratistas')){
     document.getElementById('btnEditarPersona').classList.remove('hidden');
   }
-  if(canDelete()){
+  if(canDeleteModulo('contratistas')){
     const btnDel = document.getElementById('btnEliminarPersonaDirecto');
     btnDel.classList.remove('hidden');
     btnDel.onclick = async ()=>{
@@ -900,7 +913,7 @@ function openDocDetail(id, tipoId, personaId){
   const esNuevo = !d;
   if(!d) d = { id:null, persona_id:personaId, tipo_documento_id:tipoId, fecha_emision:null, fecha_vencimiento:null, no_aplica:false };
   const tipo = tiposDocumento.find(t=>t.id===d.tipo_documento_id);
-  const ro = !canEdit();
+  const ro = !canEditModulo('contratistas');
   const panel = document.getElementById('panel');
   panel.innerHTML = `
     <div class="panel-header"><h2>${escapeHtml(tipo?tipo.nombre:'Documento')}</h2><button class="close-x" id="closeBtn">&times;</button></div>
@@ -910,7 +923,7 @@ function openDocDetail(id, tipoId, personaId){
     </div>
     <div class="field"><label style="display:flex;align-items:center;gap:6px;font-weight:400;color:var(--ink);"><input type="checkbox" id="dd-noaplica" ${d.no_aplica?'checked':''} ${ro?'disabled':''}> No aplica a esta persona</label></div>
     <div class="save-indicator" id="saveIndicator"></div>
-    ${(canDelete() && !esNuevo) ? `<div class="modal-actions"><button class="btn" id="btnDeleteDoc" style="color:var(--rojo);">Eliminar registro</button></div>` : ''}
+    ${(canDeleteModulo('contratistas') && !esNuevo) ? `<div class="modal-actions"><button class="btn" id="btnDeleteDoc" style="color:var(--rojo);">Eliminar registro</button></div>` : ''}
   `;
   document.getElementById('closeBtn').addEventListener('click', closeOverlay);
   if(!ro){
@@ -982,7 +995,7 @@ document.getElementById('btnEditarPersona').addEventListener('click', ()=>{
       <label>Fecha de baja</label><input type="date" id="ep-fechabaja" value="${p.fecha_baja||''}">
     </div>
     <div class="save-indicator" id="saveIndicator"></div>
-    ${canDelete() ? `<div class="modal-actions"><button class="btn" id="btnDeletePersona" style="color:var(--rojo);">Eliminar persona</button></div>` : ''}
+    ${canDeleteModulo('contratistas') ? `<div class="modal-actions"><button class="btn" id="btnDeletePersona" style="color:var(--rojo);">Eliminar persona</button></div>` : ''}
   `;
   document.getElementById('closeBtn').addEventListener('click', closeOverlay);
   document.getElementById('ep-estado').addEventListener('change', (e)=>{
@@ -1577,7 +1590,7 @@ async function guardarVenc(v){
 
 function openVencDetail(id){
   const v = vencimientos.find(x=>x.id===id); if(!v) return;
-  const ro = !canEdit();
+  const ro = !canEditModulo('proveedores');
   const panel = document.getElementById('panel');
   panel.innerHTML = `
     <div class="panel-header"><h2>${escapeHtml(v.titulo)}</h2><button class="close-x" id="closeBtn">&times;</button></div>
@@ -1606,7 +1619,7 @@ function openVencDetail(id){
     <div class="field"><label><input type="checkbox" id="vd-recurrente" ${v.es_recurrente?'checked':''} ${ro?'disabled':''}> Es un pago recurrente (se repite todos los meses)</label></div>
     <div class="field"><label>Notas</label><textarea id="vd-notas" ${ro?'disabled':''}>${escapeHtml(v.notas||'')}</textarea></div>
     <div class="save-indicator" id="saveIndicator"></div>
-    ${canDelete() ? `<div class="modal-actions"><button class="btn" id="btnDeleteVenc" style="color:var(--rojo);">Eliminar</button></div>` : ''}
+    ${canDeleteModulo('proveedores') ? `<div class="modal-actions"><button class="btn" id="btnDeleteVenc" style="color:var(--rojo);">Eliminar</button></div>` : ''}
   `;
   document.getElementById('closeBtn').addEventListener('click', closeOverlay);
   if(!ro){
