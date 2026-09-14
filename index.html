@@ -123,6 +123,18 @@
   .estado-noaplica{background:#EEE;color:#999;border-color:transparent;}
   .empty{padding:48px 20px;text-align:center;color:var(--ink-soft);font-size:14px;}
   .tabs{display:flex;gap:4px;margin-bottom:18px;border-bottom:1px solid var(--line);}
+  .year-toggle{display:flex;gap:6px;}
+  .year-btn{font-family:var(--sans);font-size:14px;font-weight:600;padding:8px 20px;border-radius:8px;border:1px solid var(--line-strong);background:var(--card);color:var(--ink-soft);cursor:pointer;}
+  .year-btn.active{background:var(--brand-dark,#0B3D6E);color:#fff;border-color:var(--brand-dark,#0B3D6E);}
+  .mes-titulo{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--brand-dark,#0B3D6E);margin:22px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--brand-light,#A9D3F5);}
+  .venc-row{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:8px;cursor:pointer;}
+  .venc-row:hover{box-shadow:0 2px 10px rgba(11,61,110,0.08);}
+  .venc-row.pagado{opacity:0.55;}
+  .venc-titulo{font-weight:600;font-size:13px;}
+  .venc-medio{font-size:11px;color:var(--ink-soft);margin-top:2px;}
+  .venc-monto{font-family:var(--mono);font-weight:700;font-size:13px;white-space:nowrap;}
+  .venc-fecha{font-size:12px;color:var(--ink-soft);white-space:nowrap;min-width:70px;text-align:right;}
+  .venc-importante{border-left:3px solid var(--rojo);}
   .tab-btn{font-family:var(--sans);font-size:13px;font-weight:500;padding:9px 4px;margin-right:20px;border:none;background:none;color:var(--ink-soft);cursor:pointer;border-bottom:2px solid transparent;}
   .tab-btn.active{color:var(--ink);border-bottom-color:var(--brand-dark);}
   th.sortable{cursor:pointer;user-select:none;}
@@ -356,9 +368,23 @@
           <button class="btn" id="btnLogoutProv">Salir</button>
         </div>
       </div>
-      <div class="empty" style="padding:60px 20px;">
-        <p style="font-size:15px;">💳 Próximamente</p>
-        <p style="font-size:13px;">Este módulo todavía no está armado. Avisame cuándo querés que lo construyamos.</p>
+
+      <div class="tabs">
+        <button class="tab-btn active" id="tabBtnVenc">Vencimientos Mensuales</button>
+      </div>
+
+      <div id="tab-venc">
+        <div class="toolbar" style="margin-bottom:14px;">
+          <div class="year-toggle" id="yearToggle">
+            <button class="year-btn active" data-anio="2026">2026</button>
+            <button class="year-btn" data-anio="2027">2027</button>
+          </div>
+          <div class="spacer"></div>
+          <button class="btn" id="btnExportVenc">Exportar CSV</button>
+          <button class="btn btn-primary hidden" id="btnNuevoVenc">+ Nuevo vencimiento</button>
+        </div>
+        <div class="stats" id="vencStats"></div>
+        <div id="vencContenido"></div>
       </div>
     </div>
 
@@ -434,10 +460,13 @@ async function onLoggedIn(sess){
   if(canEdit()){
     document.getElementById('btnNuevaPersona').classList.remove('hidden');
     document.getElementById('btnNuevoCliente').classList.remove('hidden');
+    document.getElementById('btnNuevoVenc').classList.remove('hidden');
   }
   showView('home');
   await loadAll();
   renderPersonas();
+  await loadVencimientos();
+  renderVencimientos();
   setInterval(async ()=>{
     if(document.getElementById('overlay').classList.contains('show')) return;
     if(!document.getElementById('quickListWrap').classList.contains('hidden')) return;
@@ -469,6 +498,7 @@ function showView(view){
   document.getElementById('navPersonas').classList.toggle('active', view==='personas');
   document.getElementById('navSiniestros').classList.toggle('active', view==='siniestros');
   document.getElementById('navProveedores').classList.toggle('active', view==='proveedores');
+  if(view==='proveedores' && typeof renderVencimientos==='function') renderVencimientos();
 }
 document.getElementById('navHome').addEventListener('click', ()=> showView('home'));
 document.getElementById('navPersonas').addEventListener('click', ()=> showView('personas'));
@@ -1300,6 +1330,189 @@ document.getElementById('fileImportExcel').addEventListener('change', async (e)=
   }finally{
     e.target.value = '';
   }
+});
+
+/* ======================= PAGO A PROVEEDORES · VENCIMIENTOS MENSUALES ======================= */
+let vencimientos = [];
+let vencAnioActual = 2026;
+const MESES_NOMBRES = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+async function loadVencimientos(){
+  const { data } = await sb.from('proveedores_vencimientos').select('*').order('fecha_vencimiento', {ascending:true, nullsFirst:false});
+  vencimientos = data || [];
+}
+
+document.getElementById('yearToggle').querySelectorAll('.year-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    vencAnioActual = parseInt(btn.dataset.anio,10);
+    document.getElementById('yearToggle').querySelectorAll('.year-btn').forEach(b=>b.classList.toggle('active', b===btn));
+    renderVencimientos();
+  });
+});
+
+function vencimientosDelAnio(){
+  return vencimientos.filter(v=>v.anio===vencAnioActual);
+}
+
+function renderVencStats(){
+  const el = document.getElementById('vencStats');
+  const list = vencimientosDelAnio();
+  const pendientes = list.filter(v=>v.estado==='Pendiente');
+  const totalPendiente = pendientes.reduce((s,v)=> s + (v.monto||0), 0);
+  el.innerHTML = `
+    <div class="stat"><div class="n" style="color:var(--rojo);">${pendientes.length}</div><div class="l">Vencimientos pendientes</div></div>
+    <div class="stat"><div class="n" style="color:var(--verde);">${list.filter(v=>v.estado==='Pagado').length}</div><div class="l">Pagados</div></div>
+    <div class="stat"><div class="n" style="font-size:16px;">$ ${totalPendiente.toLocaleString('es-AR',{minimumFractionDigits:2, maximumFractionDigits:2})}</div><div class="l">Monto total pendiente</div></div>`;
+}
+
+function renderVencimientos(){
+  renderVencStats();
+  const el = document.getElementById('vencContenido');
+  const list = vencimientosDelAnio();
+  if(list.length===0){
+    el.innerHTML = `<div class="empty">Todavía no hay vencimientos cargados para ${vencAnioActual}.</div>`;
+    return;
+  }
+  const meses = [...new Set(list.map(v=>v.mes))].sort((a,b)=>a-b);
+  el.innerHTML = meses.map(mes=>{
+    const items = list.filter(v=>v.mes===mes).sort((a,b)=>{
+      if(a.fecha_vencimiento && b.fecha_vencimiento) return a.fecha_vencimiento.localeCompare(b.fecha_vencimiento);
+      if(a.fecha_vencimiento) return -1;
+      if(b.fecha_vencimiento) return 1;
+      return a.titulo.localeCompare(b.titulo);
+    });
+    return `
+      <div class="mes-titulo">${MESES_NOMBRES[mes]} ${vencAnioActual}</div>
+      ${items.map(v=>`
+        <div class="venc-row ${v.estado==='Pagado'?'pagado':''} ${v.prioridad==='Importante'?'venc-importante':''}" data-id="${v.id}">
+          <div style="flex:1;min-width:0;">
+            <div class="venc-titulo">${escapeHtml(v.titulo)}</div>
+            <div class="venc-medio">${escapeHtml(v.medio_pago||'—')}</div>
+          </div>
+          <div class="venc-monto">${v.monto ? '$ '+Number(v.monto).toLocaleString('es-AR',{minimumFractionDigits:2, maximumFractionDigits:2}) : '—'}</div>
+          <div class="venc-fecha">${v.fecha_vencimiento ? formatDate(v.fecha_vencimiento) : 'Sin fecha'}</div>
+          <span class="estado-pill ${v.estado==='Pagado'?'estado-vigente':'estado-porvencer'}">${v.estado}</span>
+        </div>`).join('')}
+    `;
+  }).join('');
+  el.querySelectorAll('.venc-row').forEach(row=>{
+    row.addEventListener('click', ()=> openVencDetail(row.dataset.id));
+  });
+}
+
+document.getElementById('btnNuevoVenc').addEventListener('click', ()=>{
+  const panel = document.getElementById('panel');
+  panel.innerHTML = `
+    <div class="panel-header"><h2>Nuevo vencimiento</h2><button class="close-x" id="closeBtn">&times;</button></div>
+    <div class="row2">
+      <div class="field"><label>Año</label><input type="number" id="nv-anio" value="${vencAnioActual}"></div>
+      <div class="field"><label>Mes</label>
+        <select id="nv-mes">${MESES_NOMBRES.slice(1).map((m,i)=>`<option value="${i+1}">${m}</option>`).join('')}</select>
+      </div>
+    </div>
+    <div class="field"><label>Título</label><input type="text" id="nv-titulo" placeholder="Ej: SUSS - Plan Cuota 8"></div>
+    <div class="field"><label>Medio de pago</label><input type="text" id="nv-medio" placeholder="Ej: Banco Credicoop"></div>
+    <div class="err hidden" id="err-nv">Completá el título.</div>
+    <div class="modal-actions"><button class="btn" id="cancelNvBtn">Cancelar</button><button class="btn btn-primary" id="btnCrearVenc">Crear</button></div>
+  `;
+  document.getElementById('closeBtn').addEventListener('click', closeOverlay);
+  document.getElementById('cancelNvBtn').addEventListener('click', closeOverlay);
+  document.getElementById('btnCrearVenc').addEventListener('click', async ()=>{
+    const titulo = document.getElementById('nv-titulo').value.trim();
+    if(!titulo){ document.getElementById('err-nv').classList.remove('hidden'); return; }
+    const nuevo = {
+      anio: parseInt(document.getElementById('nv-anio').value,10),
+      mes: parseInt(document.getElementById('nv-mes').value,10),
+      titulo, medio_pago: document.getElementById('nv-medio').value.trim(),
+      registrado_por: profile.id, registrado_por_nombre: profile.full_name || profile.email
+    };
+    const { data, error } = await sb.from('proveedores_vencimientos').insert(nuevo).select().single();
+    if(error){ alert('No se pudo crear: ' + error.message); return; }
+    vencimientos.push(data);
+    closeOverlay(); renderVencimientos(); openVencDetail(data.id);
+  });
+  document.getElementById('overlay').classList.add('show');
+});
+
+async function guardarVenc(v){
+  await sb.from('proveedores_vencimientos').update({
+    anio:v.anio, mes:v.mes, titulo:v.titulo, medio_pago:v.medio_pago, como_se_paga:v.como_se_paga,
+    monto:v.monto||null, fecha_vencimiento:v.fecha_vencimiento||null, es_recurrente:v.es_recurrente,
+    estado:v.estado, prioridad:v.prioridad, notas:v.notas
+  }).eq('id', v.id);
+  const idx = vencimientos.findIndex(x=>x.id===v.id); if(idx>-1) vencimientos[idx]=v;
+  renderVencimientos();
+  flashSaved();
+}
+
+function openVencDetail(id){
+  const v = vencimientos.find(x=>x.id===id); if(!v) return;
+  const ro = !canEdit();
+  const panel = document.getElementById('panel');
+  panel.innerHTML = `
+    <div class="panel-header"><h2>${escapeHtml(v.titulo)}</h2><button class="close-x" id="closeBtn">&times;</button></div>
+    <p style="font-size:12px;color:var(--ink-soft);margin-top:-10px;">${MESES_NOMBRES[v.mes]} ${v.anio}</p>
+    <div class="row2">
+      <div class="field"><label>Año</label><input type="number" id="vd-anio" value="${v.anio}" ${ro?'disabled':''}></div>
+      <div class="field"><label>Mes</label>
+        <select id="vd-mes" ${ro?'disabled':''}>${MESES_NOMBRES.slice(1).map((m,i)=>`<option value="${i+1}" ${v.mes===i+1?'selected':''}>${m}</option>`).join('')}</select>
+      </div>
+    </div>
+    <div class="field"><label>Título</label><input type="text" id="vd-titulo" value="${escapeHtml(v.titulo)}" ${ro?'disabled':''}></div>
+    <div class="field"><label>Medio de pago</label><input type="text" id="vd-medio" value="${escapeHtml(v.medio_pago||'')}" placeholder="Ej: Banco Credicoop" ${ro?'disabled':''}></div>
+    <div class="field"><label>Cómo se paga (CBU, alias, pasos)</label><textarea id="vd-comose" ${ro?'disabled':''}>${escapeHtml(v.como_se_paga||'')}</textarea></div>
+    <div class="row2">
+      <div class="field"><label>Monto</label><input type="number" step="0.01" id="vd-monto" value="${v.monto??''}" ${ro?'disabled':''}></div>
+      <div class="field"><label>Fecha de vencimiento</label><input type="date" id="vd-fecha" value="${v.fecha_vencimiento||''}" ${ro?'disabled':''}></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Estado</label>
+        <select id="vd-estado" ${ro?'disabled':''}><option value="Pendiente" ${v.estado==='Pendiente'?'selected':''}>Pendiente</option><option value="Pagado" ${v.estado==='Pagado'?'selected':''}>Pagado</option></select>
+      </div>
+      <div class="field"><label>Prioridad</label>
+        <select id="vd-prioridad" ${ro?'disabled':''}><option value="Normal" ${v.prioridad==='Normal'?'selected':''}>Normal</option><option value="Importante" ${v.prioridad==='Importante'?'selected':''}>Importante</option></select>
+      </div>
+    </div>
+    <div class="field"><label><input type="checkbox" id="vd-recurrente" ${v.es_recurrente?'checked':''} ${ro?'disabled':''}> Es un pago recurrente (se repite todos los meses)</label></div>
+    <div class="field"><label>Notas</label><textarea id="vd-notas" ${ro?'disabled':''}>${escapeHtml(v.notas||'')}</textarea></div>
+    <div class="save-indicator" id="saveIndicator"></div>
+    ${canDelete() ? `<div class="modal-actions"><button class="btn" id="btnDeleteVenc" style="color:var(--rojo);">Eliminar</button></div>` : ''}
+  `;
+  document.getElementById('closeBtn').addEventListener('click', closeOverlay);
+  if(!ro){
+    const bindSave = (elId, campo) => { document.getElementById(elId).addEventListener('blur', ()=>{ v[campo] = document.getElementById(elId).value.trim(); guardarVenc(v); }); };
+    document.getElementById('vd-anio').addEventListener('blur', ()=>{ v.anio = parseInt(document.getElementById('vd-anio').value,10); guardarVenc(v); });
+    document.getElementById('vd-mes').addEventListener('change', ()=>{ v.mes = parseInt(document.getElementById('vd-mes').value,10); guardarVenc(v); });
+    bindSave('vd-titulo','titulo');
+    bindSave('vd-medio','medio_pago');
+    bindSave('vd-comose','como_se_paga');
+    document.getElementById('vd-monto').addEventListener('blur', ()=>{ const val = document.getElementById('vd-monto').value; v.monto = val===''?null:parseFloat(val); guardarVenc(v); });
+    document.getElementById('vd-fecha').addEventListener('change', ()=>{ v.fecha_vencimiento = document.getElementById('vd-fecha').value || null; guardarVenc(v); });
+    document.getElementById('vd-estado').addEventListener('change', ()=>{ v.estado = document.getElementById('vd-estado').value; guardarVenc(v); });
+    document.getElementById('vd-prioridad').addEventListener('change', ()=>{ v.prioridad = document.getElementById('vd-prioridad').value; guardarVenc(v); });
+    document.getElementById('vd-recurrente').addEventListener('change', ()=>{ v.es_recurrente = document.getElementById('vd-recurrente').checked; guardarVenc(v); });
+    bindSave('vd-notas','notas');
+    if(document.getElementById('btnDeleteVenc')){
+      document.getElementById('btnDeleteVenc').addEventListener('click', async ()=>{
+        if(!confirm('¿Eliminar este vencimiento? No se puede deshacer.')) return;
+        await sb.from('proveedores_vencimientos').delete().eq('id', v.id);
+        vencimientos = vencimientos.filter(x=>x.id!==v.id);
+        closeOverlay(); renderVencimientos();
+      });
+    }
+  }
+  document.getElementById('overlay').classList.add('show');
+}
+
+document.getElementById('btnExportVenc').addEventListener('click', ()=>{
+  const headers = ['Año','Mes','Título','Medio de pago','Cómo se paga','Monto','Fecha vencimiento','Recurrente','Estado','Prioridad','Notas'];
+  const rows = vencimientosDelAnio().map(v=> [v.anio, MESES_NOMBRES[v.mes], v.titulo, v.medio_pago, v.como_se_paga, v.monto, formatDate(v.fecha_vencimiento), v.es_recurrente?'Sí':'No', v.estado, v.prioridad, v.notas]
+    .map(x=>`"${String(x??'').replace(/"/g,'""')}"`).join(','));
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download=`vencimientos_${vencAnioActual}.csv`; a.click();
+  URL.revokeObjectURL(url);
 });
 </script>
 </body>
