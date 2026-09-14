@@ -399,8 +399,8 @@
             <button class="year-btn active" data-anio="2026">2026</button>
             <button class="year-btn" data-anio="2027">2027</button>
           </div>
+          <button class="btn" id="btnInstructivoProv">📖 Instructivo</button>
           <div class="spacer"></div>
-          <button class="btn" id="btnReplicarRecurrentes">🔁 Replicar recurrentes hasta diciembre</button>
           <button class="btn" id="btnExportVenc">Exportar CSV</button>
           <button class="btn btn-primary hidden" id="btnNuevoVenc">+ Nuevo vencimiento</button>
         </div>
@@ -1374,7 +1374,27 @@ async function loadVencimientos(){
   vencimientos = data || [];
 }
 
-document.getElementById('btnReplicarRecurrentes').addEventListener('click', replicarRecurrentesHastaDiciembre);
+document.getElementById('btnInstructivoProv').addEventListener('click', ()=>{
+  const panel = document.getElementById('panel');
+  panel.innerHTML = `
+    <div class="panel-header"><h2>📖 Instructivo</h2><button class="close-x" id="closeBtn">&times;</button></div>
+    <div class="instructivo-body">
+      <p><b>Selector de año (2026 / 2027):</b> cambia qué año se muestra en la lista de Vencimientos Mensuales.</p>
+      <p><b>Vencimientos Mensuales:</b> lista todos los pagos agrupados por mes, con Título, Medio de pago, Monto y Fecha de vencimiento.</p>
+      <p><b>Cambiar el estado:</b> se hace directo desde el desplegable Pendiente/Pagado de cada fila, sin necesidad de abrir el detalle.</p>
+      <p><b>Panel "Por vencer (7 días)":</b> hacé clic para filtrar solo los pagos pendientes que vencen en la próxima semana.</p>
+      <p><b>+ Nuevo vencimiento:</b> carga un pago nuevo. Si tildás <i>"Aplicar para todos los meses del año"</i>, el sistema lo agrega automáticamente en todos los meses que le falten de ese año, y también en todos los meses del año siguiente — con la misma fecha del mes, ajustada si el mes tiene menos días.</p>
+      <p><b>Detalle de un vencimiento:</b> hacé clic en cualquier fila (fuera del desplegable de estado) para ver y editar todos los datos, incluido el campo "Cómo se paga" con el detalle real (CBU, alias, pasos).</p>
+      <p><b>Calendario:</b> la otra pestaña muestra los mismos vencimientos organizados por día del mes, navegando con las flechas de mes anterior/siguiente. Cada pago del día es un clic directo a su detalle.</p>
+      <p><b>Exportar CSV:</b> descarga en planilla los vencimientos del año seleccionado.</p>
+    </div>
+    <div class="modal-actions"><button class="btn btn-primary" id="cerrarInstructivoProv">Entendido</button></div>
+  `;
+  document.getElementById('closeBtn').addEventListener('click', closeOverlay);
+  document.getElementById('cerrarInstructivoProv').addEventListener('click', closeOverlay);
+  document.getElementById('overlay').classList.add('show');
+});
+
 document.getElementById('yearToggle').querySelectorAll('.year-btn').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     vencAnioActual = parseInt(btn.dataset.anio,10);
@@ -1477,7 +1497,7 @@ document.getElementById('btnNuevoVenc').addEventListener('click', ()=>{
     </div>
     <div class="field"><label>Título</label><input type="text" id="nv-titulo" placeholder="Ej: SUSS - Plan Cuota 8"></div>
     <div class="field"><label>Medio de pago</label><input type="text" id="nv-medio" placeholder="Ej: Banco Credicoop"></div>
-    <div class="field"><label><input type="checkbox" id="nv-recurrente"> Es un pago recurrente (lo agrega automáticamente en los meses siguientes hasta diciembre)</label></div>
+    <div class="field"><label><input type="checkbox" id="nv-todoelanio"> Aplicar para todos los meses del año (y del año siguiente)</label></div>
     <div class="err hidden" id="err-nv">Completá el título.</div>
     <div class="modal-actions"><button class="btn" id="cancelNvBtn">Cancelar</button><button class="btn btn-primary" id="btnCrearVenc">Crear</button></div>
   `;
@@ -1486,7 +1506,7 @@ document.getElementById('btnNuevoVenc').addEventListener('click', ()=>{
   document.getElementById('btnCrearVenc').addEventListener('click', async ()=>{
     const titulo = document.getElementById('nv-titulo').value.trim();
     if(!titulo){ document.getElementById('err-nv').classList.remove('hidden'); return; }
-    const esRecurrente = document.getElementById('nv-recurrente').checked;
+    const esRecurrente = document.getElementById('nv-todoelanio').checked;
     const nuevo = {
       anio: parseInt(document.getElementById('nv-anio').value,10),
       mes: parseInt(document.getElementById('nv-mes').value,10),
@@ -1498,66 +1518,38 @@ document.getElementById('btnNuevoVenc').addEventListener('click', ()=>{
     if(error){ alert('No se pudo crear: ' + error.message); return; }
     vencimientos.push(data);
     if(esRecurrente){
-      await replicarUnoHastaDiciembre(data);
+      await replicarTodoElAnio(data);
     }
     closeOverlay(); renderVencimientos(); openVencDetail(data.id);
   });
   document.getElementById('overlay').classList.add('show');
 });
 
-async function replicarUnoHastaDiciembre(v){
+async function replicarTodoElAnio(v){
   const existentes = new Set(vencimientos.map(x=>`${x.titulo}|${x.anio}|${x.mes}`));
   const nuevos = [];
-  for(let m=v.mes+1; m<=12; m++){
-    const clave = `${v.titulo}|${v.anio}|${m}`;
-    if(existentes.has(clave)) continue;
+  const objetivos = [];
+  for(let m=v.mes+1; m<=12; m++) objetivos.push([v.anio, m]);       // resto de este año
+  for(let m=1; m<=12; m++) objetivos.push([v.anio+1, m]);           // todo el año siguiente
+  objetivos.forEach(([anio, mes])=>{
+    const clave = `${v.titulo}|${anio}|${mes}`;
+    if(existentes.has(clave)) return;
+    existentes.add(clave);
     let fecha = null;
     if(v.fecha_vencimiento){
       const dia = parseInt(v.fecha_vencimiento.split('-')[2],10);
-      const ultimoDia = new Date(v.anio, m, 0).getDate();
-      fecha = `${v.anio}-${String(m).padStart(2,'0')}-${String(Math.min(dia,ultimoDia)).padStart(2,'0')}`;
+      const ultimoDia = new Date(anio, mes, 0).getDate();
+      fecha = `${anio}-${String(mes).padStart(2,'0')}-${String(Math.min(dia,ultimoDia)).padStart(2,'0')}`;
     }
     nuevos.push({
-      anio:v.anio, mes:m, titulo:v.titulo, medio_pago:v.medio_pago, como_se_paga:v.como_se_paga,
+      anio, mes, titulo:v.titulo, medio_pago:v.medio_pago, como_se_paga:v.como_se_paga,
       monto:v.monto, fecha_vencimiento:fecha, es_recurrente:true, estado:'Pendiente', prioridad:v.prioridad,
       registrado_por: profile.id, registrado_por_nombre: profile.full_name || profile.email
     });
-  }
+  });
   if(nuevos.length===0) return;
   const { data } = await sb.from('proveedores_vencimientos').insert(nuevos).select();
   if(data) vencimientos.push(...data);
-}
-
-async function replicarRecurrentesHastaDiciembre(){
-  if(!confirm('Esto va a completar, para cada pago marcado como recurrente, los meses que le falten hasta diciembre de su mismo año (sin duplicar los que ya existen). ¿Continuar?')) return;
-  const recurrentes = vencimientos.filter(v=>v.es_recurrente);
-  const existentes = new Set(vencimientos.map(v=>`${v.titulo}|${v.anio}|${v.mes}`));
-  const nuevos = [];
-  recurrentes.forEach(v=>{
-    for(let m=v.mes+1; m<=12; m++){
-      const clave = `${v.titulo}|${v.anio}|${m}`;
-      if(existentes.has(clave)) continue;
-      existentes.add(clave);
-      let fecha = null;
-      if(v.fecha_vencimiento){
-        const dia = parseInt(v.fecha_vencimiento.split('-')[2],10);
-        const ultimoDia = new Date(v.anio, m, 0).getDate();
-        const diaAjustado = Math.min(dia, ultimoDia);
-        fecha = `${v.anio}-${String(m).padStart(2,'0')}-${String(diaAjustado).padStart(2,'0')}`;
-      }
-      nuevos.push({
-        anio:v.anio, mes:m, titulo:v.titulo, medio_pago:v.medio_pago, como_se_paga:v.como_se_paga,
-        monto:v.monto, fecha_vencimiento:fecha, es_recurrente:true, estado:'Pendiente', prioridad:v.prioridad,
-        registrado_por: profile.id, registrado_por_nombre: profile.full_name || profile.email
-      });
-    }
-  });
-  if(nuevos.length===0){ alert('No había nada nuevo para agregar — ya estaban todos los meses completos.'); return; }
-  const { data, error } = await sb.from('proveedores_vencimientos').insert(nuevos).select();
-  if(error){ alert('No se pudo replicar: ' + error.message); return; }
-  vencimientos.push(...(data||[]));
-  renderVencimientos();
-  alert(`Listo, se agregaron ${nuevos.length} vencimientos nuevos.`);
 }
 
 async function guardarVenc(v){
