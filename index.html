@@ -399,8 +399,9 @@
             <button class="year-btn active" data-anio="2026">2026</button>
             <button class="year-btn" data-anio="2027">2027</button>
           </div>
-          <button class="btn" id="btnInstructivoProv">📖 Instructivo</button>
           <div class="spacer"></div>
+          <button class="btn" id="btnActualizarVenc">↻ Actualizar</button>
+          <button class="btn" id="btnInstructivoProv">📖 Instructivo</button>
           <button class="btn" id="btnExportVenc">Exportar CSV</button>
           <button class="btn btn-primary hidden" id="btnNuevoVenc">+ Nuevo vencimiento</button>
         </div>
@@ -1374,6 +1375,11 @@ async function loadVencimientos(){
   vencimientos = data || [];
 }
 
+document.getElementById('btnActualizarVenc').addEventListener('click', async ()=>{
+  vencFiltro = null;
+  await loadVencimientos();
+  renderVencimientos();
+});
 document.getElementById('btnInstructivoProv').addEventListener('click', ()=>{
   const panel = document.getElementById('panel');
   panel.innerHTML = `
@@ -1419,17 +1425,21 @@ function renderVencStats(){
   const el = document.getElementById('vencStats');
   const list = vencimientosDelAnio();
   const pendientes = list.filter(v=>v.estado==='Pendiente');
+  const pagados = list.filter(v=>v.estado==='Pagado');
   const porVencer = list.filter(esPorVencer);
   const totalPendiente = pendientes.reduce((s,v)=> s + (v.monto||0), 0);
-  const activeCls = vencFiltro==='porvencer' ? ' stat-active' : '';
+  const cls = (k)=> vencFiltro===k ? ' stat-active' : '';
   el.innerHTML = `
-    <div class="stat clickable${activeCls}" id="statPorVencer"><div class="n" style="color:var(--amarillo);">${porVencer.length}</div><div class="l">Por vencer (7 días)</div></div>
-    <div class="stat"><div class="n" style="color:var(--rojo);">${pendientes.length}</div><div class="l">Vencimientos pendientes</div></div>
-    <div class="stat"><div class="n" style="color:var(--verde);">${list.filter(v=>v.estado==='Pagado').length}</div><div class="l">Pagados</div></div>
+    <div class="stat clickable${cls('porvencer')}" data-filtro="porvencer"><div class="n" style="color:var(--amarillo);">${porVencer.length}</div><div class="l">Por vencer (7 días)</div></div>
+    <div class="stat clickable${cls('pendiente')}" data-filtro="pendiente"><div class="n" style="color:var(--rojo);">${pendientes.length}</div><div class="l">Vencimientos pendientes</div></div>
+    <div class="stat clickable${cls('pagado')}" data-filtro="pagado"><div class="n" style="color:var(--verde);">${pagados.length}</div><div class="l">Pagados</div></div>
     <div class="stat"><div class="n" style="font-size:16px;">$ ${totalPendiente.toLocaleString('es-AR',{minimumFractionDigits:2, maximumFractionDigits:2})}</div><div class="l">Monto total pendiente</div></div>`;
-  document.getElementById('statPorVencer').addEventListener('click', ()=>{
-    vencFiltro = vencFiltro==='porvencer' ? null : 'porvencer';
-    renderVencimientos();
+  el.querySelectorAll('.stat[data-filtro]').forEach(card=>{
+    card.addEventListener('click', ()=>{
+      const k = card.dataset.filtro;
+      vencFiltro = vencFiltro===k ? null : k;
+      renderVencimientos();
+    });
   });
 }
 
@@ -1438,6 +1448,8 @@ function renderVencimientos(){
   const el = document.getElementById('vencContenido');
   let list = vencimientosDelAnio();
   if(vencFiltro==='porvencer') list = list.filter(esPorVencer);
+  else if(vencFiltro==='pendiente') list = list.filter(v=>v.estado==='Pendiente');
+  else if(vencFiltro==='pagado') list = list.filter(v=>v.estado==='Pagado');
   if(list.length===0){
     el.innerHTML = `<div class="empty">Todavía no hay vencimientos cargados para ${vencAnioActual}.</div>`;
     return;
