@@ -399,6 +399,8 @@
 #view-tareas .opcion:has(input:checked){border-color:var(--gq-brand);background:var(--gq-brand-soft)}
 #view-tareas .aviso-rec{margin-top:10px;font-size:12px;background:var(--gq-brand-soft);color:var(--gq-brand);border-radius:8px;padding:8px 10px}
 #view-tareas .btn-cerrar{border-color:var(--gq-verde);color:var(--gq-verde)}
+#view-tareas .btn-eliminar{color:var(--gq-rojo);border-color:#E8B4AF;margin-right:auto}
+#view-tareas .estado-sel{appearance:none;-webkit-appearance:none;border:none;cursor:pointer;font-family:var(--sans);font-size:11px;padding:2px 18px 2px 8px;border-radius:9px;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 9px) 55%,calc(100% - 5px) 55%;background-size:4px 4px;background-repeat:no-repeat}
 #view-tareas .cierre-box{margin-top:14px;background:var(--gq-verde-soft);border-radius:8px;padding:10px 12px;font-size:13px}
 #view-tareas .cierre-tit{font-weight:600;margin-bottom:4px}
 #view-tareas .cierre-acc{margin-top:4px;font-size:12px}
@@ -5549,7 +5551,7 @@ async function cargarDatos(){
   ]);
   const err = rf.error || rp.error || rt.error;
   if(err){ document.getElementById('gqLista').innerHTML = `<div class="gq-err">No se pudieron cargar los datos: ${esc(mensajeError(err))}</div>`; return; }
-  frentes = rf.data || []; proyectos = rp.data || []; tareas = rt.data || []; notas = (rnn && !rnn.error && rnn.data) || [];
+  frentes = rf.data || []; proyectos = rp.data || []; tareas = (rt.data || []).filter(t => !t.eliminada); notas = (rnn && !rnn.error && rnn.data) || [];
   llenarFiltros();
   render();
 }
@@ -5673,7 +5675,11 @@ function filaTarea(t){
     <div class="chips c-chips">${chips}</div>
     <div class="cell num c-fecha">${t.fecha_compromiso ? esc(fmtFecha(t.fecha_compromiso)) : '—'}</div>
     <div class="cell c-vence">${chipFecha(t)}</div>
-    <div class="cell c-estado"><span class="estado ${esc(t.estado)}">${esc(ESTADOS[t.estado])}</span></div>
+    <div class="cell c-estado">${!ro && abierta(t)
+      ? `<select class="estado-sel estado ${esc(t.estado)}" data-estado-id="${t.id}" data-stop title="Cambiar estado">
+          ${[['pendiente','Pendiente'],['en_curso','En curso'],['esperando','Esperando'],['completada','✓ Cerrar…'],['cancelada','Cancelar…']].map(([v, l]) => `<option value="${v}"${v === t.estado ? ' selected' : ''}>${l}</option>`).join('')}
+        </select>`
+      : `<span class="estado ${esc(t.estado)}">${esc(ESTADOS[t.estado])}</span>`}</div>
   </div>`;
 }
 function renderLista(){
@@ -5721,6 +5727,10 @@ function renderLista(){
     abrirTarea(Number(row.dataset.tarea));
   }));
   el.querySelectorAll('[data-completar]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); completar(Number(b.dataset.completar)); }));
+  el.querySelectorAll('[data-estado-id]').forEach(sel => {
+    sel.addEventListener('click', e => e.stopPropagation());
+    sel.addEventListener('change', e => { e.stopPropagation(); cambiarEstadoRapido(Number(sel.dataset.estadoId), sel); });
+  });
   el.querySelectorAll('[data-proyecto]').forEach(b => b.addEventListener('click', () => abrirProyecto(Number(b.dataset.proyecto))));
   el.querySelectorAll('[data-nuevo-sub]').forEach(b => b.addEventListener('click', () => abrirProyecto(null, Number(b.dataset.nuevoSub))));
   el.querySelectorAll('[data-nueva-en]').forEach(b => b.addEventListener('click', () => abrirTarea(null, Number(b.dataset.nuevaEn))));
@@ -5783,6 +5793,41 @@ function completar(id){
     cerrarModal(); await cargarDatos();
     toast(sig ? 'Tarea cerrada. Se generó la siguiente.' : 'Tarea cerrada.');
   });
+}
+
+
+/* ------------------------- Cambio de estado desde la lista ------------------------- */
+async function cambiarEstadoRapido(id, sel){
+  const t = tareas.find(x => x.id === id); if(!t) return;
+  const nuevo = sel.value;
+  const volver = () => { sel.value = t.estado; };
+  if(nuevo === 'completada'){ volver(); completar(id); return; }
+  const cambios = { estado: nuevo };
+  if(nuevo === 'cancelada'){
+    const motivo = prompt(`Motivo de la cancelación de ${idv(t.codigo)} · ${t.titulo}:`);
+    if(!motivo || !motivo.trim()){ volver(); return; }
+    cambios.motivo_cambio = motivo.trim();
+  }
+  if(nuevo === 'esperando'){
+    const quien = prompt('¿A quién o a qué se está esperando?', t.esperando_a || '');
+    if(quien === null || !quien.trim()){ volver(); return; }
+    cambios.esperando_a = quien.trim();
+  }
+  sel.disabled = true;
+  const { data, error } = await sb.from('gq_tareas').update(cambios).eq('id', id).select();
+  sel.disabled = false;
+  if(error || !data?.length){ volver(); toast(mensajeError(error || { code:'PGRST116' })); return; }
+  await cargarDatos();
+  toast(`${idv(t.codigo)}: ${ESTADOS[nuevo]}`);
+}
+
+/* ------------------------- Eliminar (borrado lógico) ------------------------- */
+async function eliminarTarea(t){
+  if(!puedeEditar()) return;
+  if(!confirm(`¿Eliminar la tarea ${idv(t.codigo)} · ${t.titulo}?\n\nDeja de verse en la lista, los contadores y los informes. El sistema guarda el registro de quién la eliminó y cuándo.`)) return;
+  const { data, error } = await sb.from('gq_tareas').update({ eliminada: true }).eq('id', t.id).select();
+  if(error || !data?.length){ toast(mensajeError(error || { code:'PGRST116' })); return; }
+  cerrarModal(); await cargarDatos(); toast(`Tarea ${idv(t.codigo)} eliminada.`);
 }
 
 /* ------------------------- Modal genérico ------------------------- */
@@ -5853,6 +5898,7 @@ function abrirTarea(id, proyectoIdNuevo, precarga){
     <div class="gq-actions">
       ${ro ? '<span style="font-size:12px;color:var(--ink-soft);margin-right:auto">Solo lectura</span>' : ''}
       <button class="btn" data-cerrar>${ro ? 'Cerrar' : 'Cancelar'}</button>
+      ${!ro && !nueva ? `<button class="btn btn-eliminar" id="gqMEliminar">Eliminar</button>` : ''}
       ${!ro && !nueva && abierta(t) ? `<button class="btn btn-cerrar" id="gqMCompletar">✓ Cerrar tarea</button>` : ''}
       ${ro ? '' : `<button class="btn btn-primary" id="gqMGuardar">${nueva ? 'Crear tarea' : 'Guardar cambios'}</button>`}
     </div>
@@ -5866,6 +5912,7 @@ function abrirTarea(id, proyectoIdNuevo, precarga){
   if(!nueva){ cargarHistorial(t); renderNotas(t); }
   if(!nueva && !ro){
     const bc = document.getElementById('gqMCompletar'); if(bc) bc.addEventListener('click', () => completar(t.id));
+    document.getElementById('gqMEliminar').addEventListener('click', () => eliminarTarea(t));
     document.getElementById('gqMNotaAdd').addEventListener('click', async () => {
       const txt = document.getElementById('gqMNotaTxt').value.trim();
       if(!txt) return;
@@ -5941,11 +5988,13 @@ function abrirTarea(id, proyectoIdNuevo, precarga){
 }
 
 const EVENTOS = { nota_agregada:'Nota agregada', nota_editada:'Nota editada', nota_borrada:'Nota borrada', creada:'Creada', creada_por_recurrencia:'Creada por recurrencia', reprogramacion:'Reprogramación', fecha_asignada:'Fecha asignada', cancelacion:'Cancelación', reapertura:'Reapertura', completada:'Completada', cambio_estado:'Cambio de estado', edicion:'Edición' };
-const CAMPOS = { resultado:'Resultado', conclusion:'Conclusión', acciones_derivadas:'Acciones derivadas', titulo:'Título', descripcion:'Descripción', estado:'Estado', prioridad:'Prioridad', responsable:'Responsable', esperando_a:'Esperando a', fecha_compromiso:'Fecha compromiso', repeticion:'Repetición', tipo:'Tipo', clausula_iso:'Cláusula ISO', origen_tipo:'Origen', origen_ref:'Ref. origen', evidencia_url:'Evidencia', proyecto_id:'Proyecto' };
+const CAMPOS = { eliminada:'Eliminada', eliminada_en:'Fecha de eliminación', resultado:'Resultado', conclusion:'Conclusión', acciones_derivadas:'Acciones derivadas', titulo:'Título', descripcion:'Descripción', estado:'Estado', prioridad:'Prioridad', responsable:'Responsable', esperando_a:'Esperando a', fecha_compromiso:'Fecha compromiso', repeticion:'Repetición', tipo:'Tipo', clausula_iso:'Cláusula ISO', origen_tipo:'Origen', origen_ref:'Ref. origen', evidencia_url:'Evidencia', proyecto_id:'Proyecto' };
 function valorLegible(campo, v){
   if(v === null || v === undefined || v === '') return '—';
   if(campo === 'estado') return ESTADOS[v] || v;
   if(campo === 'resultado') return RESULTADOS[v] || v;
+  if(campo === 'eliminada') return v === 'true' ? 'Sí' : 'No';
+  if(campo === 'eliminada_en') return fmtFechaHora(v);
   if(campo === 'fecha_compromiso') return fmtFecha(v);
   if(campo === 'repeticion') return REPETICIONES[v] || v;
   if(campo === 'origen_tipo') return ORIGENES[v] || v;
@@ -6028,7 +6077,7 @@ function abrirReporte(t){
     <div class="gq-err hidden" id="gqMErr"></div>
     <div class="gq-field motivo hidden" id="gqMReabrirBox" style="margin-top:12px"><label>Motivo de la reapertura (obligatorio)</label><textarea id="gqMReabrirMotivo"></textarea></div>
     <div class="gq-actions">
-      ${ro ? '' : `<button class="btn" id="gqMReabrir">Reabrir tarea</button>`}
+      ${ro ? '' : `<button class="btn btn-eliminar" id="gqMEliminar">Eliminar</button><button class="btn" id="gqMReabrir">Reabrir tarea</button>`}
       <button class="btn btn-primary" data-cerrar>Cerrar</button>
     </div>`);
   renderNotas(t, true);
@@ -6038,6 +6087,7 @@ function abrirReporte(t){
     const mc = document.getElementById('gqMMotivoCancel'); if(mc) mc.textContent = ev?.motivo || '—';
   });
   if(ro) return;
+  document.getElementById('gqMEliminar').addEventListener('click', () => eliminarTarea(t));
   document.getElementById('gqMReabrir').addEventListener('click', async () => {
     const box = document.getElementById('gqMReabrirBox');
     if(box.classList.contains('hidden')){ box.classList.remove('hidden'); document.getElementById('gqMReabrir').textContent = 'Confirmar reapertura'; return; }
