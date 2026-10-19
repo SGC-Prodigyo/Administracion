@@ -5710,7 +5710,6 @@ function renderLista(){
         <div class="proyecto-head">
           <b>${esc(p.nombre)}</b>
           <span class="estado ${esc(p.estado)}">${esc(ESTADOS_PROY[p.estado])}</span>
-          ${p.responsable ? `<span class="meta">· ${esc(p.responsable)}</span>` : ''}
           <div class="spacer"></div>
           ${puedeEditar() && p.estado !== 'cerrado' ? `<button class="btn btn-sm" data-nueva-en="${p.id}">+ Tarea</button>` : ''}
           <button class="btn btn-sm" data-proyecto="${p.id}">${puedeEditar() ? 'Editar' : 'Ver'}</button>
