@@ -672,7 +672,7 @@
     <div class="gq-tiles" id="gqTiles"></div>
 
     <div class="toolbar gq-toolbar">
-      <input type="search" id="gqFTexto" placeholder="Buscar código, tarea, responsable, origen…">
+      <input type="search" id="gqFTexto" placeholder="Buscar ID, tarea, origen…">
       <select id="gqFFrente"><option value="">Todos los frentes</option></select>
       <select id="gqFEstado">
         <option value="">Todos los estados</option>
@@ -682,7 +682,6 @@
         <option value="completada">Completada</option>
         <option value="cancelada">Cancelada</option>
       </select>
-      <select id="gqFResp"><option value="">Todos los responsables</option></select>
       <label class="chk"><input type="checkbox" id="gqFCerradas"> Ver cerradas</label>
     </div>
     <div class="toolbar gq-toolbar">
@@ -5559,11 +5558,6 @@ function llenarFiltros(){
   const v = selF.value;
   selF.innerHTML = '<option value="">Todos los frentes</option>' + frentes.filter(f => f.activo).map(f => `<option value="${f.id}">${esc(f.nombre)}</option>`).join('');
   selF.value = v;
-  const selR = document.getElementById('gqFResp');
-  const vr = selR.value;
-  const resps = [...new Set(tareas.map(t => (t.responsable || '').trim()).filter(Boolean))].sort((a,b) => a.localeCompare(b,'es'));
-  selR.innerHTML = '<option value="">Todos los responsables</option>' + resps.map(r => `<option value="${esc(r)}">${esc(r)}</option>`).join('');
-  selR.value = vr;
 }
 
 /* ------------------------- Filtros ------------------------- */
@@ -5637,7 +5631,7 @@ function renderFiltroActivo(){
   document.getElementById('gqBtnQuitarFiltros').addEventListener('click', () => {
     Object.assign(F, { texto:'', frente:'', estado:'', resp:'', cerradas:false, tile:'' });
     document.getElementById('gqFTexto').value = ''; document.getElementById('gqFFrente').value = '';
-    document.getElementById('gqFEstado').value = ''; document.getElementById('gqFResp').value = '';
+    document.getElementById('gqFEstado').value = '';
     document.getElementById('gqFCerradas').checked = false;
     render();
   });
@@ -5736,7 +5730,6 @@ function renderLista(){
 document.getElementById('gqFTexto').addEventListener('input', e => { F.texto = e.target.value; render(); });
 document.getElementById('gqFFrente').addEventListener('change', e => { F.frente = e.target.value; render(); });
 document.getElementById('gqFEstado').addEventListener('change', e => { F.estado = e.target.value; render(); });
-document.getElementById('gqFResp').addEventListener('change', e => { F.resp = e.target.value; render(); });
 document.getElementById('gqFCerradas').addEventListener('change', e => { F.cerradas = e.target.checked; render(); });
 
 /* ------------------------- Completar (✓) ------------------------- */
@@ -5890,7 +5883,6 @@ function abrirTarea(id, proyectoIdNuevo, precarga){
     const fecha = document.getElementById('gqMFecha').value || null;
     if(est === 'cancelada' && t.estado !== 'cancelada') return 'Motivo de la cancelación (obligatorio)';
     if(CERRADOS.includes(t.estado) && est !== t.estado) return 'Motivo de la reapertura (obligatorio)';
-    if(t.fecha_compromiso && fecha !== t.fecha_compromiso) return 'Motivo de la reprogramación (obligatorio)';
     return null;
   }
   function actualizarMotivo(){
