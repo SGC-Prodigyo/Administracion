@@ -205,6 +205,55 @@
     .module-grid{grid-template-columns:1fr;}
     .row2{grid-template-columns:1fr;}
   }
+  /* ===== Pago a proveedores · vista compacta ===== */
+  .vt-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+  .vt-kpi{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:10px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+  .vt-kpi:hover{border-color:var(--line-strong);} .vt-kpi.on{border-color:var(--ink);box-shadow:0 0 0 2px rgba(11,61,110,.12) inset;}
+  .vt-kpi span{font-size:12px;color:var(--ink-soft);} .vt-kpi small{display:block;font:600 12px var(--mono);color:var(--ink-soft);margin-top:3px;}
+  .vt-kpi b{font:700 22px var(--mono);} .vt-kpi.rojo b{color:var(--rojo);} .vt-kpi.amar b{color:var(--amarillo);} .vt-kpi.verde b{color:var(--verde);}
+  .vt-barra{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;}
+  .vt-seg{display:inline-flex;border:1px solid var(--line-strong);border-radius:7px;overflow:hidden;background:var(--card);}
+  .vt-seg button{font:500 12.5px var(--sans);padding:7px 12px;border:none;border-right:1px solid var(--line);background:none;color:var(--ink-soft);cursor:pointer;}
+  .vt-seg button:last-child{border-right:none;} .vt-seg button.on{background:var(--ink);color:#fff;}
+  .vt-meses{display:flex;gap:4px;flex-wrap:wrap;}
+  .vt-mes{position:relative;font:500 12px var(--sans);padding:5px 9px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;}
+  .vt-mes.on{background:var(--ink);color:#fff;border-color:var(--ink);} .vt-mes.vacio{color:var(--line-strong);}
+  .vt-mes .dot{position:absolute;top:-3px;right:-3px;width:8px;height:8px;border-radius:50%;background:var(--rojo);border:1.5px solid #fff;}
+  .vt-buscar{font:13px var(--sans);padding:7px 10px;border:1px solid var(--line-strong);border-radius:6px;min-width:230px;}
+  .vt-tabla{background:var(--card);border:1px solid var(--line);border-radius:9px;overflow:auto;}
+  .vt-tabla table{min-width:860px;}
+  .vt-tabla th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);padding:8px 10px;background:#EEF5FC;border-bottom:1px solid var(--line);white-space:nowrap;font-weight:600;}
+  .vt-tabla td{padding:7px 10px;border-bottom:1px solid #EEF2F7;vertical-align:middle;}
+  .vt-tabla tr.vt-grupo td{background:#F7FAFD;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);padding:6px 10px;cursor:default;}
+  .vt-tabla tr.vt-grupo td .tot{float:right;font:600 11.5px var(--mono);text-transform:none;letter-spacing:0;}
+  .vt-tabla tbody tr.vt-grupo:hover{background:transparent;}
+  .vt-tabla tr.vt-fila.pagado td{color:var(--ink-soft);} .vt-tabla tr.vt-fila.pagado .vt-prov{font-weight:500;}
+  .vt-tabla tr.vt-fila.sel td{background:#EAF3FC;}
+  .vt-tabla tr.vt-fila.imp td:first-child{box-shadow:inset 3px 0 0 var(--rojo);}
+  .vt-chk{width:34px;} .vt-chk input{width:15px;height:15px;cursor:pointer;accent-color:var(--ink);}
+  .vt-fecha{font:600 12.5px var(--mono);white-space:nowrap;}
+  .vt-cuando{font-size:11px;margin-top:1px;white-space:nowrap;} .vt-cuando.v{color:var(--rojo);font-weight:600;} .vt-cuando.p{color:var(--amarillo);font-weight:600;} .vt-cuando.n{color:var(--ink-soft);}
+  .vt-prov{font-weight:600;} .vt-medio{font-size:11px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.02em;}
+  .vt-imp{display:inline-block;background:var(--rojo);color:#fff;border-radius:50%;width:15px;height:15px;font-size:10px;text-align:center;line-height:15px;font-weight:700;}
+  .vt-link a{font-size:12px;color:var(--brand-mid);text-decoration:none;white-space:nowrap;} .vt-link a:hover{text-decoration:underline;}
+  .vt-monto{font:600 13px var(--mono);text-align:right;white-space:nowrap;} .vt-monto[data-vmonto]{cursor:text;}
+  .vt-monto.vacio{color:var(--brand-mid);font:500 12px var(--sans);} .vt-monto input{width:130px;font:600 12.5px var(--mono);text-align:right;padding:4px 6px;border:1px solid var(--brand-mid);border-radius:5px;}
+  .vt-resp input{width:150px;font:12.5px var(--sans);padding:4px 7px;border:1px solid transparent;border-radius:5px;background:transparent;color:var(--ink);}
+  .vt-resp input:hover{border-color:var(--line);} .vt-resp input:focus{border-color:var(--brand-mid);background:#fff;outline:none;}
+  .vt-resp input::placeholder{color:var(--line-strong);}
+  .vt-pill{font-size:11px;font-weight:600;padding:3px 9px;border-radius:11px;white-space:nowrap;display:inline-block;}
+  .vt-pill.ok{background:var(--verde-bg);color:var(--verde);} .vt-pill.v{background:var(--rojo-bg);color:var(--rojo);} .vt-pill.p{background:var(--amarillo-bg);color:var(--amarillo);} .vt-pill.f{background:#EEF2F7;color:var(--ink-soft);}
+  .vt-acc{text-align:right;white-space:nowrap;}
+  .vt-pagar{padding:4px 10px;font-size:12px;border-color:#9fd4b2;color:var(--verde);font-weight:600;} .vt-pagar:hover{background:var(--verde-bg);}
+  .vt-lnk{background:none;border:none;color:var(--brand-mid);font:500 12px var(--sans);cursor:pointer;padding:0;} .vt-lnk:hover{text-decoration:underline;}
+  .vt-ocultos{padding:10px 12px;text-align:center;font-size:12px;color:var(--ink-soft);background:#FBFDFF;}
+  .vt-vacio{padding:34px !important;text-align:center;color:var(--ink-soft);cursor:default;}
+  .vt-masivo{position:sticky;bottom:14px;margin-top:10px;background:var(--ink);color:#fff;border-radius:9px;padding:10px 14px;display:none;align-items:center;gap:12px;box-shadow:0 8px 24px rgba(11,61,110,.25);z-index:5;}
+  .vt-masivo.show{display:flex;} .vt-masivo .btn{padding:5px 12px;font-size:12.5px;}
+  /* detalle como panel lateral */
+  .overlay.lado{justify-content:flex-end;align-items:stretch;padding:0;}
+  .overlay.lado .panel{width:440px;max-width:100vw;max-height:none;height:100%;border-radius:0;}
+  @media (max-width:900px){ .vt-kpis{grid-template-columns:1fr 1fr;} .vt-buscar{min-width:0;width:100%;} }
 </style>
 </head>
 <body>
@@ -402,11 +451,14 @@
           <div class="spacer"></div>
           <button class="btn" id="btnActualizarVenc">↻ Actualizar</button>
           <button class="btn" id="btnInstructivoProv">📖 Instructivo</button>
+          <button class="btn" id="btnImprimirVenc">🖨️ Imprimir A3</button>
           <button class="btn" id="btnExportVenc">Exportar CSV</button>
           <button class="btn btn-primary hidden" id="btnNuevoVenc">+ Nuevo vencimiento</button>
         </div>
-        <div class="stats" id="vencStats"></div>
+        <div class="vt-kpis" id="vencStats"></div>
+        <div class="vt-barra" id="vencBarra"></div>
         <div id="vencContenido"></div>
+        <div class="vt-masivo" id="vencMasivo"><span id="vencMasTxt"></span><span class="spacer" style="flex:1"></span><button class="btn" id="vencMasPagar">✓ Marcar como pagados</button><button class="btn" id="vencMasCancelar">Cancelar</button></div>
       </div>
 
       <div id="tab-calendario" class="hidden">
@@ -511,6 +563,7 @@ async function onLoggedIn(sess){
   await loadAll();
   renderPersonas();
   await loadVencimientos();
+  if(typeof cargarPersonasVenc==='function') cargarPersonasVenc();
   renderVencimientos();
   setInterval(async ()=>{
     if(document.getElementById('overlay').classList.contains('show')) return;
@@ -959,7 +1012,7 @@ function openDocDetail(id, tipoId, personaId){
   }
   document.getElementById('overlay').classList.add('show');
 }
-function closeOverlay(){ document.getElementById('overlay').classList.remove('show'); }
+function closeOverlay(){ document.getElementById('overlay').classList.remove('show','lado'); }
 document.getElementById('overlay').addEventListener('click', e=>{ if(e.target.id==='overlay') closeOverlay(); });
 
 function flashSaved(){
@@ -1398,14 +1451,17 @@ document.getElementById('btnInstructivoProv').addEventListener('click', ()=>{
   panel.innerHTML = `
     <div class="panel-header"><h2>📖 Instructivo</h2><button class="close-x" id="closeBtn">&times;</button></div>
     <div class="instructivo-body">
-      <p><b>Selector de año (2026 / 2027):</b> cambia qué año se muestra en la lista de Vencimientos Mensuales.</p>
-      <p><b>Vencimientos Mensuales:</b> lista todos los pagos agrupados por mes, con Título, Medio de pago, Monto y Fecha de vencimiento.</p>
-      <p><b>Cambiar el estado:</b> se hace directo desde el desplegable Pendiente/Pagado de cada fila, sin necesidad de abrir el detalle.</p>
-      <p><b>Panel "Por vencer (7 días)":</b> hacé clic para filtrar solo los pagos pendientes que vencen en la próxima semana.</p>
-      <p><b>+ Nuevo vencimiento:</b> carga un pago nuevo. Si tildás <i>"Aplicar para todos los meses del año"</i>, el sistema lo agrega automáticamente en todos los meses que le falten de ese año, y también en todos los meses del año siguiente — con la misma fecha del mes, ajustada si el mes tiene menos días.</p>
-      <p><b>Detalle de un vencimiento:</b> hacé clic en cualquier fila (fuera del desplegable de estado) para ver y editar todos los datos, incluido el campo "Cómo se paga" con el detalle real (CBU, alias, pasos).</p>
-      <p><b>Calendario:</b> la otra pestaña muestra los mismos vencimientos organizados por día del mes, navegando con las flechas de mes anterior/siguiente. Cada pago del día es un clic directo a su detalle.</p>
-      <p><b>Exportar CSV:</b> descarga en planilla los vencimientos del año seleccionado.</p>
+      <p><b>Qué se ve al entrar:</b> los <b>pendientes del mes actual</b> y, arriba de todo, los <b>vencidos sin pagar</b> de meses anteriores. Lo pagado queda oculto ("X pagados ocultos · ver todo el mes").</p>
+      <p><b>Indicadores de arriba:</b> Vencidos, Vencen en 7 días, Pendientes del mes y Pagados del mes, con el monto de cada grupo. Hacé clic en uno para filtrar la lista.</p>
+      <p><b>Filtros:</b> Pendientes / Vencidos / Pagados / Todos, los botones de mes (el punto rojo indica que ese mes tiene algo vencido; "Año" muestra todo) y el buscador (proveedor, responsable o notas).</p>
+      <p><b>Marcar como pagado:</b> botón <b>✓ Pagado</b> de cada fila. Para varios a la vez, tildá las casillas y usá la barra de abajo. La fecha de pago queda registrada. "deshacer" lo vuelve a pendiente.</p>
+      <p><b>Monto y responsable:</b> se cargan directo en la fila (clic en "cargar monto" o en "Asignar…").</p>
+      <p><b>Link:</b> se carga en el detalle (home banking, portal de ARCA, factura, carpeta). En la lista aparece como "🔗 Abrir".</p>
+      <p><b>🖨️ Imprimir A3:</b> imprime en A3 horizontal lo que estás viendo (por ejemplo, los pendientes del mes), con letra grande, una casilla para tildar y una columna para anotar la fecha de pago. Para pegar en el pizarrón.</p>
+      <p><b>+ Nuevo vencimiento:</b> si tildás <i>"Aplicar para todos los meses del año"</i>, se repite en los meses que faltan de ese año y en todo el año siguiente (con el mismo responsable y link).</p>
+      <p><b>Detalle:</b> clic en cualquier parte de la fila abre el panel lateral con todos los datos, incluido "Cómo se paga" (CBU, alias, pasos).</p>
+      <p><b>Calendario:</b> los mismos vencimientos por día del mes.</p>
+      <p><b>Exportar CSV:</b> descarga los vencimientos del año seleccionado.</p>
     </div>
     <div class="modal-actions"><button class="btn btn-primary" id="cerrarInstructivoProv">Entendido</button></div>
   `;
@@ -1426,93 +1482,256 @@ function vencimientosDelAnio(){
   return vencimientos.filter(v=>v.anio===vencAnioActual);
 }
 
-function esPorVencer(v){
-  if(v.estado!=='Pendiente' || !v.fecha_vencimiento) return false;
-  const hoy = new Date(); hoy.setHours(0,0,0,0);
-  const f = new Date(v.fecha_vencimiento+'T00:00:00');
-  const dias = Math.round((f-hoy)/86400000);
-  return dias>=0 && dias<=7;
+/* ---- Vista de vencimientos (tabla compacta) ---- */
+let vencMes = null;            // 1..12 · null = todo el año
+let vencSel = new Set();       // ids seleccionados para marcar como pagados
+let vencBuscar = '';
+let vencEditMonto = null;
+let vencPersonas = [];         // nombres sugeridos para "Responsable"
+const vencPlata = n => '$ ' + Number(n||0).toLocaleString('es-AR',{minimumFractionDigits:2, maximumFractionDigits:2});
+function vencHoyISO(){ const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+function vencDias(v){ if(!v.fecha_vencimiento) return null; return Math.round((new Date(v.fecha_vencimiento+'T00:00:00') - new Date(vencHoyISO()+'T00:00:00'))/86400000); }
+// pagado · vencido · semana (vence en 7 días) · pendiente
+function vencEstado(v){
+  if(v.estado==='Pagado') return 'pagado';
+  const d = vencDias(v), hoy = new Date();
+  if(d!==null) return d<0 ? 'vencido' : d<=7 ? 'semana' : 'pendiente';
+  // sin fecha: si el mes ya pasó, está atrasado
+  return (v.anio*12+v.mes) < (hoy.getFullYear()*12+hoy.getMonth()+1) ? 'vencido' : 'pendiente';
+}
+function esPorVencer(v){ return vencEstado(v)==='semana'; }
+function vencCuando(v){
+  if(v.estado==='Pagado') return `<div class="vt-cuando n">pagado${v.fecha_pago?' '+formatDate(v.fecha_pago):''}</div>`;
+  const d = vencDias(v);
+  if(d===null) return vencEstado(v)==='vencido' ? '<div class="vt-cuando v">sin fecha · mes vencido</div>' : '<div class="vt-cuando n">sin fecha</div>';
+  if(d<0) return `<div class="vt-cuando v">vencido hace ${-d} día${d===-1?'':'s'}</div>`;
+  if(d===0) return '<div class="vt-cuando p">vence hoy</div>';
+  return `<div class="vt-cuando ${d<=7?'p':'n'}">en ${d} día${d===1?'':'s'}</div>`;
+}
+function vencLink(url){
+  const u = String(url||'').trim(); if(!u) return '';
+  return /^https?:\/\//i.test(u) ? u : 'https://' + u;
+}
+function vencimientosVisibles(){
+  const q = vencBuscar.trim().toLowerCase();
+  return vencimientosDelAnio().filter(v=>{
+    if(q && !`${v.titulo} ${v.medio_pago||''} ${v.responsable||''} ${v.notas||''}`.toLowerCase().includes(q)) return false;
+    const e = vencEstado(v);
+    if(vencFiltro==='vencido') return e==='vencido';
+    if(vencFiltro==='porvencer') return e==='semana';
+    if(vencFiltro==='pendiente' || vencFiltro===null) return e!=='pagado' && (vencMes===null || v.mes===vencMes || e==='vencido');
+    if(vencMes!==null && v.mes!==vencMes) return false;
+    if(vencFiltro==='pagado') return e==='pagado';
+    return true; // 'todos'
+  }).sort((a,b)=> (a.anio-b.anio) || (a.mes-b.mes) || String(a.fecha_vencimiento||'9999').localeCompare(String(b.fecha_vencimiento||'9999')) || a.titulo.localeCompare(b.titulo));
+}
+function vencMesPorDefecto(){
+  const hoy = new Date();
+  return vencAnioActual===hoy.getFullYear() ? hoy.getMonth()+1 : 1;
 }
 
 function renderVencStats(){
   const el = document.getElementById('vencStats');
   const list = vencimientosDelAnio();
-  const pendientes = list.filter(v=>v.estado==='Pendiente');
-  const pagados = list.filter(v=>v.estado==='Pagado');
-  const porVencer = list.filter(esPorVencer);
-  const totalPendiente = pendientes.reduce((s,v)=> s + (v.monto||0), 0);
-  const cls = (k)=> vencFiltro===k ? ' stat-active' : '';
+  const mes = vencMes || vencMesPorDefecto();
+  const suma = a => a.reduce((s,v)=> s + (Number(v.monto)||0), 0);
+  const venc = list.filter(v=>vencEstado(v)==='vencido'), sem = list.filter(v=>vencEstado(v)==='semana');
+  const delMes = list.filter(v=>v.mes===mes), pendMes = delMes.filter(v=>v.estado!=='Pagado'), pagMes = delMes.filter(v=>v.estado==='Pagado');
+  const k = (f, cls, titulo, items, n) => `<div class="vt-kpi ${cls} ${vencFiltro===f?'on':''}" data-filtro="${f}"><div><span>${titulo}</span><small>${vencPlata(suma(items))}</small></div><b>${n ?? items.length}</b></div>`;
+  el.className = 'vt-kpis';
+  el.innerHTML = k('vencido','rojo','Vencidos sin pagar',venc)
+    + k('porvencer','amar','Vencen en 7 días',sem)
+    + k('pendiente','','Pendientes de '+MESES_NOMBRES[mes].toLowerCase(),pendMes)
+    + k('pagado','verde','Pagados en '+MESES_NOMBRES[mes].toLowerCase(),pagMes);
+  el.querySelectorAll('[data-filtro]').forEach(card=> card.addEventListener('click', ()=>{
+    const f = card.dataset.filtro;
+    if((f==='pendiente' || f==='pagado') && vencMes===null) vencMes = mes;
+    vencFiltro = f; vencSel.clear(); renderVencimientos();
+  }));
+}
+
+function renderVencBarra(){
+  const el = document.getElementById('vencBarra');
+  const list = vencimientosDelAnio(), f = vencFiltro || 'pendiente';
   el.innerHTML = `
-    <div class="stat clickable${cls('porvencer')}" data-filtro="porvencer"><div class="n" style="color:var(--amarillo);">${porVencer.length}</div><div class="l">Por vencer (7 días)</div></div>
-    <div class="stat clickable${cls('pendiente')}" data-filtro="pendiente"><div class="n" style="color:var(--rojo);">${pendientes.length}</div><div class="l">Vencimientos pendientes</div></div>
-    <div class="stat clickable${cls('pagado')}" data-filtro="pagado"><div class="n" style="color:var(--verde);">${pagados.length}</div><div class="l">Pagados</div></div>
-    <div class="stat"><div class="n" style="font-size:16px;">$ ${totalPendiente.toLocaleString('es-AR',{minimumFractionDigits:2, maximumFractionDigits:2})}</div><div class="l">Monto total pendiente</div></div>`;
-  el.querySelectorAll('.stat[data-filtro]').forEach(card=>{
-    card.addEventListener('click', ()=>{
-      const k = card.dataset.filtro;
-      vencFiltro = vencFiltro===k ? null : k;
-      renderVencimientos();
-    });
-  });
+    <div class="vt-seg">${[['pendiente','Pendientes'],['vencido','Vencidos'],['pagado','Pagados'],['todos','Todos']].map(([k,l])=>`<button class="${f===k?'on':''}" data-vf="${k}">${l}</button>`).join('')}</div>
+    <div class="vt-meses">
+      <button class="vt-mes ${vencMes===null?'on':''}" data-vmes="0">Año</button>
+      ${MESES_NOMBRES.slice(1).map((m,i)=>{ const pm = list.filter(v=>v.mes===i+1); const hayV = pm.some(v=>vencEstado(v)==='vencido');
+        return `<button class="vt-mes ${vencMes===i+1?'on':''} ${pm.length?'':'vacio'}" data-vmes="${i+1}" title="${pm.filter(v=>v.estado!=='Pagado').length} pendientes">${m.slice(0,3)}${hayV?'<span class="dot"></span>':''}</button>`; }).join('')}
+    </div>
+    <div class="spacer"></div>
+    <input type="text" class="vt-buscar" id="vencBuscar" placeholder="Buscar proveedor, responsable…" value="${escapeHtml(vencBuscar)}">`;
+  el.querySelectorAll('[data-vf]').forEach(b=> b.addEventListener('click', ()=>{ vencFiltro = b.dataset.vf; vencSel.clear(); renderVencimientos(); }));
+  el.querySelectorAll('[data-vmes]').forEach(b=> b.addEventListener('click', ()=>{
+    const m = parseInt(b.dataset.vmes,10) || null; vencMes = m;
+    if(vencFiltro==='vencido' || vencFiltro==='porvencer') vencFiltro = 'todos';
+    vencSel.clear(); renderVencimientos();
+  }));
+  const inp = document.getElementById('vencBuscar');
+  inp.addEventListener('input', ()=>{ vencBuscar = inp.value; renderVencTabla(); });
 }
 
 function renderVencimientos(){
+  if(vencMes===undefined) vencMes = null;
+  if(renderVencimientos.primera !== vencAnioActual){ renderVencimientos.primera = vencAnioActual; vencMes = vencMesPorDefecto(); }
   renderVencStats();
+  renderVencBarra();
+  renderVencTabla();
+}
+
+function renderVencTabla(){
   const el = document.getElementById('vencContenido');
-  let list = vencimientosDelAnio();
-  if(vencFiltro==='porvencer') list = list.filter(esPorVencer);
-  else if(vencFiltro==='pendiente') list = list.filter(v=>v.estado==='Pendiente');
-  else if(vencFiltro==='pagado') list = list.filter(v=>v.estado==='Pagado');
-  if(list.length===0){
+  const puede = canEditModulo('proveedores');
+  const all = vencimientosDelAnio();
+  if(all.length===0){
     el.innerHTML = `<div class="empty">Todavía no hay vencimientos cargados para ${vencAnioActual}.</div>`;
+    document.getElementById('vencMasivo').classList.remove('show');
     return;
   }
-  const meses = [...new Set(list.map(v=>v.mes))].sort((a,b)=>a-b);
-  el.innerHTML = meses.map(mes=>{
-    const items = list.filter(v=>v.mes===mes).sort((a,b)=>{
-      if(a.fecha_vencimiento && b.fecha_vencimiento) return a.fecha_vencimiento.localeCompare(b.fecha_vencimiento);
-      if(a.fecha_vencimiento) return -1;
-      if(b.fecha_vencimiento) return 1;
-      return a.titulo.localeCompare(b.titulo);
-    });
-    const puedeEditarVenc = canEditModulo('proveedores');
-    return `
-      <div class="mes-titulo">${MESES_NOMBRES[mes]} ${vencAnioActual}</div>
-      ${items.map(v=>`
-        <div class="venc-row ${v.estado==='Pagado'?'pagado':''} ${v.prioridad==='Importante'?'venc-importante':''}" data-id="${v.id}">
-          <div style="flex:1;min-width:0;">
-            <div class="venc-titulo">${escapeHtml(v.titulo)}</div>
-            <div class="venc-medio">${escapeHtml(v.medio_pago||'—')}</div>
-          </div>
-          <div class="venc-monto">${v.monto ? '$ '+Number(v.monto).toLocaleString('es-AR',{minimumFractionDigits:2, maximumFractionDigits:2}) : '—'}</div>
-          <div class="venc-fecha">${v.fecha_vencimiento ? formatDate(v.fecha_vencimiento) : 'Sin fecha'}</div>
-          ${puedeEditarVenc ? `
-          <select class="estado-inline-select ${v.estado==='Pagado'?'estado-vigente':'estado-porvencer'}" data-cambiar-estado="${v.id}">
-            <option value="Pendiente" ${v.estado==='Pendiente'?'selected':''}>Pendiente</option>
-            <option value="Pagado" ${v.estado==='Pagado'?'selected':''}>Pagado</option>
-          </select>` : `
-          <span class="estado-pill ${v.estado==='Pagado'?'estado-vigente':'estado-porvencer'}">${v.estado}</span>`}
-        </div>`).join('')}
-    `;
-  }).join('');
-  el.querySelectorAll('.venc-row').forEach(row=>{
-    row.addEventListener('click', (e)=>{
-      if(e.target.closest('[data-cambiar-estado]')) return;
-      openVencDetail(row.dataset.id);
-    });
+  const list = vencimientosVisibles(), f = vencFiltro || 'pendiente';
+  const suma = a => a.reduce((s,v)=> s + (Number(v.monto)||0), 0);
+  const grupoDe = v => vencEstado(v)==='vencido' && f!=='pagado' && f!=='todos' ? 'Vencidos' : `${MESES_NOMBRES[v.mes]} ${v.anio}`;
+  let filas = '', grupo = '';
+  list.forEach(v=>{
+    const g = grupoDe(v);
+    if(g!==grupo){
+      grupo = g; const de = list.filter(x=>grupoDe(x)===g), sinMonto = de.filter(x=>!x.monto).length;
+      filas += `<tr class="vt-grupo"><td colspan="8">${g} · ${de.length}<span class="tot">${vencPlata(suma(de))}${sinMonto?` · ${sinMonto} sin monto`:''}</span></td></tr>`;
+    }
+    const e = vencEstado(v), link = vencLink(v.link);
+    filas += `<tr class="vt-fila ${e==='pagado'?'pagado':''} ${vencSel.has(v.id)?'sel':''} ${v.prioridad==='Importante'?'imp':''}" data-id="${v.id}">
+      <td class="vt-chk">${e!=='pagado' && puede ? `<input type="checkbox" data-vsel="${v.id}" ${vencSel.has(v.id)?'checked':''}>` : ''}</td>
+      <td><div class="vt-fecha">${v.fecha_vencimiento ? formatDate(v.fecha_vencimiento).slice(0,5) : '—'}</div>${vencCuando(v)}</td>
+      <td><div class="vt-prov">${v.prioridad==='Importante'?'<span class="vt-imp" title="Importante">!</span> ':''}${escapeHtml(v.titulo)}</div><div class="vt-medio">${escapeHtml(v.medio_pago||'')}</div></td>
+      <td class="vt-link">${link ? `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" title="${escapeHtml(v.link)}">🔗 Abrir</a>` : ''}</td>
+      <td class="vt-monto ${v.monto?'':'vacio'}" ${puede?`data-vmonto="${v.id}"`:''}>${vencEditMonto===v.id ? `<input id="vtInMonto" type="number" step="0.01" value="${v.monto??''}">` : v.monto ? vencPlata(v.monto) : (puede?'cargar monto':'—')}</td>
+      <td class="vt-resp">${puede ? `<input list="vencRespList" data-vresp="${v.id}" value="${escapeHtml(v.responsable||'')}" placeholder="Asignar…">` : escapeHtml(v.responsable||'—')}</td>
+      <td>${e==='pagado'?'<span class="vt-pill ok">Pagado</span>':e==='vencido'?'<span class="vt-pill v">Vencido</span>':e==='semana'?'<span class="vt-pill p">Esta semana</span>':'<span class="vt-pill f">Pendiente</span>'}</td>
+      <td class="vt-acc">${!puede ? '' : e==='pagado' ? `<button class="vt-lnk" data-vdeshacer="${v.id}">deshacer</button>` : `<button class="btn vt-pagar" data-vpagar="${v.id}">✓ Pagado</button>`}</td>
+    </tr>`;
   });
-  el.querySelectorAll('[data-cambiar-estado]').forEach(sel=>{
-    sel.addEventListener('click', e=> e.stopPropagation());
-    sel.addEventListener('change', async (e)=>{
-      e.stopPropagation();
-      if(!canEditModulo('proveedores')) return;
-      const v = vencimientos.find(x=>x.id===sel.dataset.cambiarEstado);
-      if(!v) return;
-      v.estado = sel.value;
-      await guardarVenc(v);
+  const ocultos = (f==='pendiente') && vencMes ? all.filter(v=>v.mes===vencMes && v.estado==='Pagado').length : 0;
+  el.innerHTML = `<div class="vt-tabla"><table>
+      <thead><tr><th class="vt-chk">${puede?'<input type="checkbox" id="vencSelTodos">':''}</th><th>Vence</th><th>Proveedor / concepto</th><th>Link</th><th style="text-align:right">Monto</th><th>Responsable</th><th>Estado</th><th></th></tr></thead>
+      <tbody>${filas || `<tr><td colspan="8" class="vt-vacio">${f==='vencido'?'No hay vencidos sin pagar. 🎉':'No hay vencimientos con este filtro.'}</td></tr>`}</tbody></table>
+    ${ocultos ? `<div class="vt-ocultos">${ocultos} pagado${ocultos>1?'s':''} de ${MESES_NOMBRES[vencMes].toLowerCase()} oculto${ocultos>1?'s':''} · <button class="vt-lnk" id="vencVerMes">ver todo el mes</button></div>` : ''}</div>
+    <datalist id="vencRespList">${vencOpcionesResp().map(n=>`<option value="${escapeHtml(n)}">`).join('')}</datalist>`;
+
+  // eventos
+  el.querySelectorAll('tr.vt-fila').forEach(row=> row.addEventListener('click', ev=>{
+    if(ev.target.closest('button,input,a,[data-vmonto]')) return;
+    openVencDetail(row.dataset.id);
+  }));
+  el.querySelectorAll('[data-vsel]').forEach(c=> c.addEventListener('change', ()=>{ c.checked ? vencSel.add(c.dataset.vsel) : vencSel.delete(c.dataset.vsel); renderVencTabla(); }));
+  const todos = document.getElementById('vencSelTodos');
+  if(todos){ const pend = list.filter(v=>v.estado!=='Pagado'); todos.checked = pend.length>0 && pend.every(v=>vencSel.has(v.id));
+    todos.addEventListener('change', ()=>{ pend.forEach(v=> todos.checked ? vencSel.add(v.id) : vencSel.delete(v.id)); renderVencTabla(); }); }
+  el.querySelectorAll('[data-vpagar]').forEach(b=> b.addEventListener('click', ()=> marcarPagados([b.dataset.vpagar])));
+  el.querySelectorAll('[data-vdeshacer]').forEach(b=> b.addEventListener('click', async ()=>{
+    const v = vencimientos.find(x=>x.id===b.dataset.vdeshacer); if(!v) return;
+    await guardarVenc({...v, estado:'Pendiente', fecha_pago:null});
+  }));
+  el.querySelectorAll('[data-vresp]').forEach(inp=> inp.addEventListener('change', async ()=>{
+    const v = vencimientos.find(x=>x.id===inp.dataset.vresp); if(!v) return;
+    await guardarVenc({...v, responsable: inp.value.trim() || null});
+  }));
+  el.querySelectorAll('[data-vmonto]').forEach(td=> td.addEventListener('click', ()=>{
+    if(vencEditMonto===td.dataset.vmonto) return;
+    vencEditMonto = td.dataset.vmonto; renderVencTabla();
+  }));
+  const inM = document.getElementById('vtInMonto');
+  if(inM){
+    inM.focus(); inM.select();
+    inM.addEventListener('keydown', ev=>{ if(ev.key==='Enter') inM.blur(); if(ev.key==='Escape'){ vencEditMonto = null; renderVencTabla(); } });
+    inM.addEventListener('blur', async ()=>{
+      const v = vencimientos.find(x=>x.id===vencEditMonto); vencEditMonto = null;
+      if(!v) return renderVencTabla();
+      const val = inM.value===''?null:parseFloat(inM.value);
+      if(val===(v.monto??null)) return renderVencTabla();
+      await guardarVenc({...v, monto: val});
     });
-  });
+  }
+  const verMes = document.getElementById('vencVerMes');
+  if(verMes) verMes.addEventListener('click', ()=>{ vencFiltro = 'todos'; renderVencimientos(); });
+
+  const mas = document.getElementById('vencMasivo');
+  mas.classList.toggle('show', vencSel.size>0);
+  document.getElementById('vencMasTxt').textContent = `${vencSel.size} seleccionado${vencSel.size===1?'':'s'} · ${vencPlata(suma(vencimientos.filter(v=>vencSel.has(v.id))))}`;
 }
+
+function vencOpcionesResp(){
+  const set = new Set(vencPersonas);
+  vencimientos.forEach(v=>{ if(v.responsable) set.add(v.responsable); });
+  return [...set].filter(Boolean).sort((a,b)=>a.localeCompare(b));
+}
+async function cargarPersonasVenc(){
+  try{
+    const { data } = await sb.from('profiles').select('full_name,email');
+    vencPersonas = (data||[]).map(p=>p.full_name || p.email).filter(Boolean);
+  }catch(e){ vencPersonas = []; }
+  if(profile) vencPersonas.push(profile.full_name || profile.email);
+}
+
+async function marcarPagados(ids){
+  if(!canEditModulo('proveedores')) return;
+  const hoy = vencHoyISO();
+  const { data, error } = await sb.from('proveedores_vencimientos').update({ estado:'Pagado', fecha_pago: hoy }).in('id', ids).select();
+  if(error || !data || data.length===0){ alert('No se pudo marcar como pagado. Puede que no tengas permiso para editar este módulo.'); return; }
+  data.forEach(d=>{ const i = vencimientos.findIndex(x=>x.id===d.id); if(i>-1) vencimientos[i] = d; vencSel.delete(d.id); });
+  renderVencimientos();
+}
+document.getElementById('vencMasPagar').addEventListener('click', ()=> marcarPagados([...vencSel]));
+document.getElementById('vencMasCancelar').addEventListener('click', ()=>{ vencSel.clear(); renderVencTabla(); });
+
+/* ---- Impresión A3 para el pizarrón ---- */
+document.getElementById('btnImprimirVenc').addEventListener('click', ()=>{
+  const list = vencimientosVisibles();
+  if(!list.length){ alert('No hay vencimientos para imprimir con el filtro actual.'); return; }
+  const f = vencFiltro || 'pendiente';
+  const titulo = f==='vencido' ? 'Vencidos sin pagar' : f==='porvencer' ? 'Vencen en los próximos 7 días'
+    : `${f==='pagado'?'Pagados':f==='todos'?'Vencimientos':'Pendientes'} · ${vencMes ? MESES_NOMBRES[vencMes] + ' ' : ''}${vencAnioActual}`;
+  const suma = list.filter(v=>v.estado!=='Pagado').reduce((s,v)=>s+(Number(v.monto)||0),0);
+  const w = window.open('', '_blank');
+  if(!w){ alert('Permití las ventanas emergentes para imprimir.'); return; }
+  let grupo = '';
+  const filas = list.map(v=>{
+    const e = vencEstado(v);
+    const g = e==='vencido' && f!=='pagado' && f!=='todos' ? 'VENCIDOS' : `${MESES_NOMBRES[v.mes].toUpperCase()} ${v.anio}`;
+    const cab = g!==grupo ? (grupo = g, `<tr class="g"><td colspan="7">${g}</td></tr>`) : '';
+    return cab + `<tr class="${e}">
+      <td class="box">${e==='pagado'?'✔':''}</td>
+      <td class="f">${v.fecha_vencimiento ? formatDate(v.fecha_vencimiento).slice(0,5) : '—'}${e==='vencido'?'<div class="vv">VENCIDO</div>':''}</td>
+      <td><b>${escapeHtml(v.titulo)}</b>${v.prioridad==='Importante'?' <span class="imp">IMPORTANTE</span>':''}</td>
+      <td>${escapeHtml(v.medio_pago||'')}</td>
+      <td class="m">${v.monto ? vencPlata(v.monto) : ''}</td>
+      <td>${escapeHtml(v.responsable||'')}</td>
+      <td class="firma">${e==='pagado' && v.fecha_pago ? formatDate(v.fecha_pago) : ''}</td></tr>`;
+  }).join('');
+  w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${escapeHtml(titulo)}<\/title><style>
+    @page{size:A3 landscape;margin:12mm}
+    body{font-family:Aptos,'Segoe UI',Calibri,Arial,sans-serif;color:#0B3D6E;margin:0;font-size:15px}
+    .top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #0B3D6E;padding-bottom:8px;margin-bottom:10px}
+    h1{font-size:30px;margin:0} .s{color:#5C7A9C;font-size:14px} .tot{font:700 22px Consolas,monospace}
+    table{width:100%;border-collapse:collapse} th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#5C7A9C;border-bottom:2px solid #B9CFE3;padding:6px 8px}
+    td{border-bottom:1px solid #DCE7F2;padding:9px 8px;vertical-align:middle} tr{break-inside:avoid}
+    tr.g td{background:#EEF5FC;font-weight:700;font-size:13px;letter-spacing:.05em;padding:6px 8px}
+    td.box{width:34px;text-align:center;font-size:20px;color:#2F9E58} td.box:before{content:'';display:inline-block}
+    tr:not(.g) td.box{border:2px solid #0B3D6E;border-radius:4px}
+    td.f{font:700 18px Consolas,monospace;white-space:nowrap;width:90px} .vv{font:700 10px Arial;color:#C0392B;letter-spacing:.05em}
+    td.m{font:700 16px Consolas,monospace;text-align:right;white-space:nowrap}
+    td.firma{width:170px;border-bottom:1px solid #0B3D6E;font-size:13px;color:#2F9E58}
+    tr.vencido td{color:#C0392B} tr.pagado td{color:#8AA0B8}
+    .imp{font-size:10px;font-weight:700;color:#fff;background:#C0392B;border-radius:3px;padding:1px 5px}
+    .pie{margin-top:10px;font-size:11px;color:#8AA0B8}
+  <\/style><\/head><body>
+    <div class="top"><div><h1>Pago a proveedores · ${escapeHtml(titulo)}</h1><div class="s">PRODIGYO · Administración · impreso el ${formatDate(vencHoyISO())} · ${list.length} vencimiento${list.length===1?'':'s'}</div></div>
+      <div style="text-align:right"><div class="s">Total pendiente</div><div class="tot">${vencPlata(suma)}</div></div></div>
+    <table><thead><tr><th></th><th>Vence</th><th>Proveedor / concepto</th><th>Medio de pago</th><th style="text-align:right">Monto</th><th>Responsable</th><th>Pagado el / firma</th></tr></thead><tbody>${filas}</tbody></table>
+    <div class="pie">Tildá el cuadro y anotá la fecha al pagar. Después marcalo como pagado en la app.</div>
+    <script>window.onload=()=>setTimeout(()=>print(),300)<\/script></body></html>`);
+  w.document.close();
+});
 
 document.getElementById('btnNuevoVenc').addEventListener('click', ()=>{
   const panel = document.getElementById('panel');
@@ -1526,6 +1745,10 @@ document.getElementById('btnNuevoVenc').addEventListener('click', ()=>{
     </div>
     <div class="field"><label>Título</label><input type="text" id="nv-titulo" placeholder="Ej: SUSS - Plan Cuota 8"></div>
     <div class="field"><label>Medio de pago</label><input type="text" id="nv-medio" placeholder="Ej: Banco Credicoop"></div>
+    <div class="row2">
+      <div class="field"><label>Responsable</label><input type="text" id="nv-resp" list="vencRespListNv" placeholder="A quién se le asigna"><datalist id="vencRespListNv">${vencOpcionesResp().map(n=>`<option value="${escapeHtml(n)}">`).join('')}</datalist></div>
+      <div class="field"><label>Link</label><input type="text" id="nv-link" placeholder="https://…"></div>
+    </div>
     <div class="field"><label><input type="checkbox" id="nv-todoelanio"> Aplicar para todos los meses del año (y del año siguiente)</label></div>
     <div class="err hidden" id="err-nv">Completá el título.</div>
     <div class="modal-actions"><button class="btn" id="cancelNvBtn">Cancelar</button><button class="btn btn-primary" id="btnCrearVenc">Crear</button></div>
@@ -1540,6 +1763,7 @@ document.getElementById('btnNuevoVenc').addEventListener('click', ()=>{
       anio: parseInt(document.getElementById('nv-anio').value,10),
       mes: parseInt(document.getElementById('nv-mes').value,10),
       titulo, medio_pago: document.getElementById('nv-medio').value.trim(),
+      responsable: document.getElementById('nv-resp').value.trim() || null, link: document.getElementById('nv-link').value.trim() || null,
       es_recurrente: esRecurrente,
       registrado_por: profile.id, registrado_por_nombre: profile.full_name || profile.email
     };
@@ -1573,6 +1797,7 @@ async function replicarTodoElAnio(v){
     nuevos.push({
       anio, mes, titulo:v.titulo, medio_pago:v.medio_pago, como_se_paga:v.como_se_paga,
       monto:v.monto, fecha_vencimiento:fecha, es_recurrente:true, estado:'Pendiente', prioridad:v.prioridad,
+      responsable:v.responsable||null, link:v.link||null,
       registrado_por: profile.id, registrado_por_nombre: profile.full_name || profile.email
     });
   });
@@ -1587,7 +1812,8 @@ async function guardarVenc(v){
   const { data, error } = await sb.from('proveedores_vencimientos').update({
     anio:v.anio, mes:v.mes, titulo:v.titulo, medio_pago:v.medio_pago, como_se_paga:v.como_se_paga,
     monto:v.monto||null, fecha_vencimiento:v.fecha_vencimiento||null, es_recurrente:v.es_recurrente,
-    estado:v.estado, prioridad:v.prioridad, notas:v.notas
+    estado:v.estado, prioridad:v.prioridad, notas:v.notas,
+    responsable:v.responsable||null, link:v.link||null, fecha_pago: v.estado==='Pagado' ? (v.fecha_pago||vencHoyISO()) : null
   }).eq('id', v.id).select();
   if(error || !data || data.length===0){
     // No se guardó de verdad (por ejemplo, sin permisos) — revertimos el cambio en pantalla
@@ -1599,7 +1825,8 @@ async function guardarVenc(v){
     alert('No se pudo guardar el cambio. Puede que no tengas permiso para editar este módulo.');
     return;
   }
-  const idx = vencimientos.findIndex(x=>x.id===v.id); if(idx>-1) vencimientos[idx]=v;
+  const idx = vencimientos.findIndex(x=>x.id===v.id); if(idx>-1) vencimientos[idx]=data[0];
+  Object.assign(v, data[0]);
   renderVencimientos();
   flashSaved();
 }
@@ -1619,6 +1846,10 @@ function openVencDetail(id){
     </div>
     <div class="field"><label>Título</label><input type="text" id="vd-titulo" value="${escapeHtml(v.titulo)}" ${ro?'disabled':''}></div>
     <div class="field"><label>Medio de pago</label><input type="text" id="vd-medio" value="${escapeHtml(v.medio_pago||'')}" placeholder="Ej: Banco Credicoop" ${ro?'disabled':''}></div>
+    <div class="row2">
+      <div class="field"><label>Responsable</label><input type="text" id="vd-resp" list="vencRespListVd" value="${escapeHtml(v.responsable||'')}" placeholder="A quién se le asigna" ${ro?'disabled':''}><datalist id="vencRespListVd">${vencOpcionesResp().map(n=>`<option value="${escapeHtml(n)}">`).join('')}</datalist></div>
+      <div class="field"><label>Link ${vencLink(v.link) ? `· <a href="${escapeHtml(vencLink(v.link))}" target="_blank" rel="noopener">abrir 🔗</a>` : ''}</label><input type="text" id="vd-link" value="${escapeHtml(v.link||'')}" placeholder="https://…" ${ro?'disabled':''}></div>
+    </div>
     <div class="field"><label>Cómo se paga (CBU, alias, pasos)</label><textarea id="vd-comose" ${ro?'disabled':''}>${escapeHtml(v.como_se_paga||'')}</textarea></div>
     <div class="row2">
       <div class="field"><label>Monto</label><input type="number" step="0.01" id="vd-monto" value="${v.monto??''}" ${ro?'disabled':''}></div>
@@ -1632,6 +1863,7 @@ function openVencDetail(id){
         <select id="vd-prioridad" ${ro?'disabled':''}><option value="Normal" ${v.prioridad==='Normal'?'selected':''}>Normal</option><option value="Importante" ${v.prioridad==='Importante'?'selected':''}>Importante</option></select>
       </div>
     </div>
+    ${v.estado==='Pagado' ? `<div class="field"><label>Fecha de pago</label><input type="date" id="vd-fpago" value="${v.fecha_pago||''}" ${ro?'disabled':''}></div>` : ''}
     <div class="field"><label><input type="checkbox" id="vd-recurrente" ${v.es_recurrente?'checked':''} ${ro?'disabled':''}> Es un pago recurrente (se repite todos los meses)</label></div>
     <div class="field"><label>Notas</label><textarea id="vd-notas" ${ro?'disabled':''}>${escapeHtml(v.notas||'')}</textarea></div>
     <div class="save-indicator" id="saveIndicator"></div>
@@ -1645,9 +1877,12 @@ function openVencDetail(id){
     bindSave('vd-titulo','titulo');
     bindSave('vd-medio','medio_pago');
     bindSave('vd-comose','como_se_paga');
+    bindSave('vd-resp','responsable');
+    document.getElementById('vd-link').addEventListener('blur', ()=>{ v.link = document.getElementById('vd-link').value.trim(); guardarVenc(v).then(()=>{ if(document.getElementById('vd-link')) openVencDetail(v.id); }); });
+    if(document.getElementById('vd-fpago')) document.getElementById('vd-fpago').addEventListener('change', ()=>{ v.fecha_pago = document.getElementById('vd-fpago').value || null; guardarVenc(v); });
     document.getElementById('vd-monto').addEventListener('blur', ()=>{ const val = document.getElementById('vd-monto').value; v.monto = val===''?null:parseFloat(val); guardarVenc(v); });
     document.getElementById('vd-fecha').addEventListener('change', ()=>{ v.fecha_vencimiento = document.getElementById('vd-fecha').value || null; guardarVenc(v); });
-    document.getElementById('vd-estado').addEventListener('change', ()=>{ v.estado = document.getElementById('vd-estado').value; guardarVenc(v); });
+    document.getElementById('vd-estado').addEventListener('change', ()=>{ v.estado = document.getElementById('vd-estado').value; if(v.estado!=='Pagado') v.fecha_pago = null; guardarVenc(v).then(()=> openVencDetail(v.id)); });
     document.getElementById('vd-prioridad').addEventListener('change', ()=>{ v.prioridad = document.getElementById('vd-prioridad').value; guardarVenc(v); });
     document.getElementById('vd-recurrente').addEventListener('change', ()=>{ v.es_recurrente = document.getElementById('vd-recurrente').checked; guardarVenc(v); });
     bindSave('vd-notas','notas');
@@ -1660,12 +1895,13 @@ function openVencDetail(id){
       });
     }
   }
+  document.getElementById('overlay').classList.add('lado');
   document.getElementById('overlay').classList.add('show');
 }
 
 document.getElementById('btnExportVenc').addEventListener('click', ()=>{
-  const headers = ['Año','Mes','Título','Medio de pago','Cómo se paga','Monto','Fecha vencimiento','Recurrente','Estado','Prioridad','Notas'];
-  const rows = vencimientosDelAnio().map(v=> [v.anio, MESES_NOMBRES[v.mes], v.titulo, v.medio_pago, v.como_se_paga, v.monto, formatDate(v.fecha_vencimiento), v.es_recurrente?'Sí':'No', v.estado, v.prioridad, v.notas]
+  const headers = ['Año','Mes','Título','Medio de pago','Cómo se paga','Monto','Fecha vencimiento','Responsable','Link','Recurrente','Estado','Fecha de pago','Prioridad','Notas'];
+  const rows = vencimientosDelAnio().map(v=> [v.anio, MESES_NOMBRES[v.mes], v.titulo, v.medio_pago, v.como_se_paga, v.monto, formatDate(v.fecha_vencimiento), v.responsable, v.link, v.es_recurrente?'Sí':'No', v.estado, formatDate(v.fecha_pago), v.prioridad, v.notas]
     .map(x=>`"${String(x??'').replace(/"/g,'""')}"`).join(','));
   const csv = [headers.join(','), ...rows].join('\n');
   const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
