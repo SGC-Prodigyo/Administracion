@@ -233,6 +233,11 @@
   .vt-chk{width:34px;} .vt-chk input{width:15px;height:15px;cursor:pointer;accent-color:var(--ink);}
   .vt-fecha{font:600 12.5px var(--mono);white-space:nowrap;}
   .vt-cuando{font-size:11px;margin-top:1px;white-space:nowrap;} .vt-cuando.v{color:var(--rojo);font-weight:600;} .vt-cuando.p{color:var(--amarillo);font-weight:600;} .vt-cuando.n{color:var(--ink-soft);}
+  .vt-cuando.vi{color:#6B3FA0;font-weight:600;}
+  .vt-total{display:flex;gap:16px;align-items:center;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:9px;padding:9px 14px;margin-bottom:8px;font-size:12.5px;color:var(--ink-soft);}
+  .vt-total.busq{border-color:var(--brand-mid);background:#F3F8FD;}
+  .vt-total b{font-family:var(--mono);color:var(--ink);} .vt-total .sp{flex:1;}
+  .vt-total .vt-tot-p b{color:var(--rojo);} .vt-total .vt-tot-ok b{color:var(--verde);}
   .vt-prov{font-weight:600;} .vt-medio{font-size:11px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.02em;}
   .vt-imp{display:inline-block;background:var(--rojo);color:#fff;border-radius:50%;width:15px;height:15px;font-size:10px;text-align:center;line-height:15px;font-weight:700;}
   .vt-link a{font-size:12px;color:var(--brand-mid);text-decoration:none;white-space:nowrap;} .vt-link a:hover{text-decoration:underline;}
@@ -458,7 +463,6 @@
         <div class="vt-kpis" id="vencStats"></div>
         <div class="vt-barra" id="vencBarra"></div>
         <div id="vencContenido"></div>
-        <div class="vt-masivo" id="vencMasivo"><span id="vencMasTxt"></span><span class="spacer" style="flex:1"></span><button class="btn" id="vencMasPagar">✓ Marcar como pagados</button><button class="btn" id="vencMasCancelar">Cancelar</button></div>
       </div>
 
       <div id="tab-calendario" class="hidden">
@@ -1451,13 +1455,15 @@ document.getElementById('btnInstructivoProv').addEventListener('click', ()=>{
   panel.innerHTML = `
     <div class="panel-header"><h2>📖 Instructivo</h2><button class="close-x" id="closeBtn">&times;</button></div>
     <div class="instructivo-body">
-      <p><b>Qué se ve al entrar:</b> los <b>pendientes del mes actual</b> y, arriba de todo, los <b>vencidos sin pagar</b> de meses anteriores. Lo pagado queda oculto ("X pagados ocultos · ver todo el mes").</p>
+      <p><b>Qué se ve al entrar:</b> los <b>pendientes del mes actual</b> y, arriba de todo, los <b>vencidos sin pagar</b>. Lo pagado queda oculto ("X pagados ocultos · ver todo el mes").</p>
+      <p><b>Fecha y estado:</b> cada fila muestra la fecha de vencimiento completa y debajo, en violeta, cuántos días faltan (en rojo si ya venció). El estado es <span style="color:var(--rojo);font-weight:600">Pendiente</span> o <span style="color:var(--verde);font-weight:600">Pagado</span>.</p>
       <p><b>Indicadores de arriba:</b> Vencidos, Vencen en 7 días, Pendientes del mes y Pagados del mes, con el monto de cada grupo. Hacé clic en uno para filtrar la lista.</p>
       <p><b>Filtros:</b> Pendientes / Vencidos / Pagados / Todos, los botones de mes (el punto rojo indica que ese mes tiene algo vencido; "Año" muestra todo) y el buscador (proveedor, responsable o notas).</p>
-      <p><b>Marcar como pagado:</b> botón <b>✓ Pagado</b> de cada fila. Para varios a la vez, tildá las casillas y usá la barra de abajo. La fecha de pago queda registrada. "deshacer" lo vuelve a pendiente.</p>
+      <p><b>Totales:</b> arriba de la lista se ve la cantidad y el total de lo que estás viendo (pendiente, pagado y total). Si buscás un proveedor, por ejemplo "OSDE" con el mes en "Año", te da el total de todos sus vencimientos.</p>
+      <p><b>Marcar como pagado:</b> botón <b>✓ Pagado</b> de cada fila. La fecha de pago queda registrada. "deshacer" lo vuelve a pendiente.</p>
       <p><b>Monto y responsable:</b> se cargan directo en la fila (clic en "cargar monto" o en "Asignar…").</p>
       <p><b>Link:</b> se carga en el detalle (home banking, portal de ARCA, factura, carpeta). En la lista aparece como "🔗 Abrir".</p>
-      <p><b>🖨️ Imprimir A3:</b> imprime en A3 horizontal lo que estás viendo (por ejemplo, los pendientes del mes), con letra grande, una casilla para tildar y una columna para anotar la fecha de pago. Para pegar en el pizarrón.</p>
+      <p><b>🖨️ Imprimir A3:</b> imprime en A3 horizontal lo que estás viendo (por ejemplo, los pendientes del mes), con letra grande, un cuadro para tildar a mano y una columna para anotar la fecha de pago. Para pegar en el pizarrón.</p>
       <p><b>+ Nuevo vencimiento:</b> si tildás <i>"Aplicar para todos los meses del año"</i>, se repite en los meses que faltan de ese año y en todo el año siguiente (con el mismo responsable y link).</p>
       <p><b>Detalle:</b> clic en cualquier parte de la fila abre el panel lateral con todos los datos, incluido "Cómo se paga" (CBU, alias, pasos).</p>
       <p><b>Calendario:</b> los mismos vencimientos por día del mes.</p>
@@ -1505,8 +1511,8 @@ function vencCuando(v){
   const d = vencDias(v);
   if(d===null) return vencEstado(v)==='vencido' ? '<div class="vt-cuando v">sin fecha · mes vencido</div>' : '<div class="vt-cuando n">sin fecha</div>';
   if(d<0) return `<div class="vt-cuando v">vencido hace ${-d} día${d===-1?'':'s'}</div>`;
-  if(d===0) return '<div class="vt-cuando p">vence hoy</div>';
-  return `<div class="vt-cuando ${d<=7?'p':'n'}">en ${d} día${d===1?'':'s'}</div>`;
+  if(d===0) return '<div class="vt-cuando vi">vence hoy</div>';
+  return `<div class="vt-cuando vi">faltan ${d} día${d===1?'':'s'}</div>`;
 }
 function vencLink(url){
   const u = String(url||'').trim(); if(!u) return '';
@@ -1586,7 +1592,6 @@ function renderVencTabla(){
   const all = vencimientosDelAnio();
   if(all.length===0){
     el.innerHTML = `<div class="empty">Todavía no hay vencimientos cargados para ${vencAnioActual}.</div>`;
-    document.getElementById('vencMasivo').classList.remove('show');
     return;
   }
   const list = vencimientosVisibles(), f = vencFiltro || 'pendiente';
@@ -1597,24 +1602,30 @@ function renderVencTabla(){
     const g = grupoDe(v);
     if(g!==grupo){
       grupo = g; const de = list.filter(x=>grupoDe(x)===g), sinMonto = de.filter(x=>!x.monto).length;
-      filas += `<tr class="vt-grupo"><td colspan="8">${g} · ${de.length}<span class="tot">${vencPlata(suma(de))}${sinMonto?` · ${sinMonto} sin monto`:''}</span></td></tr>`;
+      filas += `<tr class="vt-grupo"><td colspan="7">${g} · ${de.length}<span class="tot">${vencPlata(suma(de))}${sinMonto?` · ${sinMonto} sin monto`:''}</span></td></tr>`;
     }
     const e = vencEstado(v), link = vencLink(v.link);
     filas += `<tr class="vt-fila ${e==='pagado'?'pagado':''} ${vencSel.has(v.id)?'sel':''} ${v.prioridad==='Importante'?'imp':''}" data-id="${v.id}">
-      <td class="vt-chk">${e!=='pagado' && puede ? `<input type="checkbox" data-vsel="${v.id}" ${vencSel.has(v.id)?'checked':''}>` : ''}</td>
-      <td><div class="vt-fecha">${v.fecha_vencimiento ? formatDate(v.fecha_vencimiento).slice(0,5) : '—'}</div>${vencCuando(v)}</td>
+      <td><div class="vt-fecha">${v.fecha_vencimiento ? formatDate(v.fecha_vencimiento) : 'Sin fecha'}</div>${vencCuando(v)}</td>
       <td><div class="vt-prov">${v.prioridad==='Importante'?'<span class="vt-imp" title="Importante">!</span> ':''}${escapeHtml(v.titulo)}</div><div class="vt-medio">${escapeHtml(v.medio_pago||'')}</div></td>
       <td class="vt-link">${link ? `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" title="${escapeHtml(v.link)}">🔗 Abrir</a>` : ''}</td>
       <td class="vt-monto ${v.monto?'':'vacio'}" ${puede?`data-vmonto="${v.id}"`:''}>${vencEditMonto===v.id ? `<input id="vtInMonto" type="number" step="0.01" value="${v.monto??''}">` : v.monto ? vencPlata(v.monto) : (puede?'cargar monto':'—')}</td>
       <td class="vt-resp">${puede ? `<input list="vencRespList" data-vresp="${v.id}" value="${escapeHtml(v.responsable||'')}" placeholder="Asignar…">` : escapeHtml(v.responsable||'—')}</td>
-      <td>${e==='pagado'?'<span class="vt-pill ok">Pagado</span>':e==='vencido'?'<span class="vt-pill v">Vencido</span>':e==='semana'?'<span class="vt-pill p">Esta semana</span>':'<span class="vt-pill f">Pendiente</span>'}</td>
+      <td>${e==='pagado'?'<span class="vt-pill ok">Pagado</span>':'<span class="vt-pill v">Pendiente</span>'}</td>
       <td class="vt-acc">${!puede ? '' : e==='pagado' ? `<button class="vt-lnk" data-vdeshacer="${v.id}">deshacer</button>` : `<button class="btn vt-pagar" data-vpagar="${v.id}">✓ Pagado</button>`}</td>
     </tr>`;
   });
   const ocultos = (f==='pendiente') && vencMes ? all.filter(v=>v.mes===vencMes && v.estado==='Pagado').length : 0;
-  el.innerHTML = `<div class="vt-tabla"><table>
-      <thead><tr><th class="vt-chk">${puede?'<input type="checkbox" id="vencSelTodos">':''}</th><th>Vence</th><th>Proveedor / concepto</th><th>Link</th><th style="text-align:right">Monto</th><th>Responsable</th><th>Estado</th><th></th></tr></thead>
-      <tbody>${filas || `<tr><td colspan="8" class="vt-vacio">${f==='vencido'?'No hay vencidos sin pagar. 🎉':'No hay vencimientos con este filtro.'}</td></tr>`}</tbody></table>
+  const pendL = list.filter(v=>v.estado!=='Pagado'), pagL = list.filter(v=>v.estado==='Pagado'), sinM = list.filter(v=>!v.monto).length;
+  const totalHTML = list.length ? `<div class="vt-total ${vencBuscar.trim()?'busq':''}">
+      <span>${vencBuscar.trim() ? `Resultado de «${escapeHtml(vencBuscar.trim())}»` : 'Total de lo que se ve'} · <b>${list.length}</b> vencimiento${list.length===1?'':'s'}${sinM?` (${sinM} sin monto)`:''}</span>
+      <span class="sp"></span>
+      ${pendL.length ? `<span class="vt-tot-p">Pendiente <b>${vencPlata(suma(pendL))}</b></span>` : ''}
+      ${pagL.length ? `<span class="vt-tot-ok">Pagado <b>${vencPlata(suma(pagL))}</b></span>` : ''}
+      <span>Total <b>${vencPlata(suma(list))}</b></span></div>` : '';
+  el.innerHTML = totalHTML + `<div class="vt-tabla"><table>
+      <thead><tr><th>Vence</th><th>Proveedor / concepto</th><th>Link</th><th style="text-align:right">Monto</th><th>Responsable</th><th>Estado</th><th></th></tr></thead>
+      <tbody>${filas || `<tr><td colspan="7" class="vt-vacio">${f==='vencido'?'No hay vencidos sin pagar. 🎉':'No hay vencimientos con este filtro.'}</td></tr>`}</tbody></table>
     ${ocultos ? `<div class="vt-ocultos">${ocultos} pagado${ocultos>1?'s':''} de ${MESES_NOMBRES[vencMes].toLowerCase()} oculto${ocultos>1?'s':''} · <button class="vt-lnk" id="vencVerMes">ver todo el mes</button></div>` : ''}</div>
     <datalist id="vencRespList">${vencOpcionesResp().map(n=>`<option value="${escapeHtml(n)}">`).join('')}</datalist>`;
 
@@ -1623,10 +1634,6 @@ function renderVencTabla(){
     if(ev.target.closest('button,input,a,[data-vmonto]')) return;
     openVencDetail(row.dataset.id);
   }));
-  el.querySelectorAll('[data-vsel]').forEach(c=> c.addEventListener('change', ()=>{ c.checked ? vencSel.add(c.dataset.vsel) : vencSel.delete(c.dataset.vsel); renderVencTabla(); }));
-  const todos = document.getElementById('vencSelTodos');
-  if(todos){ const pend = list.filter(v=>v.estado!=='Pagado'); todos.checked = pend.length>0 && pend.every(v=>vencSel.has(v.id));
-    todos.addEventListener('change', ()=>{ pend.forEach(v=> todos.checked ? vencSel.add(v.id) : vencSel.delete(v.id)); renderVencTabla(); }); }
   el.querySelectorAll('[data-vpagar]').forEach(b=> b.addEventListener('click', ()=> marcarPagados([b.dataset.vpagar])));
   el.querySelectorAll('[data-vdeshacer]').forEach(b=> b.addEventListener('click', async ()=>{
     const v = vencimientos.find(x=>x.id===b.dataset.vdeshacer); if(!v) return;
@@ -1655,9 +1662,6 @@ function renderVencTabla(){
   const verMes = document.getElementById('vencVerMes');
   if(verMes) verMes.addEventListener('click', ()=>{ vencFiltro = 'todos'; renderVencimientos(); });
 
-  const mas = document.getElementById('vencMasivo');
-  mas.classList.toggle('show', vencSel.size>0);
-  document.getElementById('vencMasTxt').textContent = `${vencSel.size} seleccionado${vencSel.size===1?'':'s'} · ${vencPlata(suma(vencimientos.filter(v=>vencSel.has(v.id))))}`;
 }
 
 function vencOpcionesResp(){
@@ -1681,8 +1685,6 @@ async function marcarPagados(ids){
   data.forEach(d=>{ const i = vencimientos.findIndex(x=>x.id===d.id); if(i>-1) vencimientos[i] = d; vencSel.delete(d.id); });
   renderVencimientos();
 }
-document.getElementById('vencMasPagar').addEventListener('click', ()=> marcarPagados([...vencSel]));
-document.getElementById('vencMasCancelar').addEventListener('click', ()=>{ vencSel.clear(); renderVencTabla(); });
 
 /* ---- Impresión A3 para el pizarrón ---- */
 document.getElementById('btnImprimirVenc').addEventListener('click', ()=>{
@@ -1701,7 +1703,7 @@ document.getElementById('btnImprimirVenc').addEventListener('click', ()=>{
     const cab = g!==grupo ? (grupo = g, `<tr class="g"><td colspan="7">${g}</td></tr>`) : '';
     return cab + `<tr class="${e}">
       <td class="box">${e==='pagado'?'✔':''}</td>
-      <td class="f">${v.fecha_vencimiento ? formatDate(v.fecha_vencimiento).slice(0,5) : '—'}${e==='vencido'?'<div class="vv">VENCIDO</div>':''}</td>
+      <td class="f">${v.fecha_vencimiento ? formatDate(v.fecha_vencimiento) : '—'}${e==='vencido'?'<div class="vv">VENCIDO</div>':''}</td>
       <td><b>${escapeHtml(v.titulo)}</b>${v.prioridad==='Importante'?' <span class="imp">IMPORTANTE</span>':''}</td>
       <td>${escapeHtml(v.medio_pago||'')}</td>
       <td class="m">${v.monto ? vencPlata(v.monto) : ''}</td>
@@ -1718,7 +1720,7 @@ document.getElementById('btnImprimirVenc').addEventListener('click', ()=>{
     tr.g td{background:#EEF5FC;font-weight:700;font-size:13px;letter-spacing:.05em;padding:6px 8px}
     td.box{width:34px;text-align:center;font-size:20px;color:#2F9E58} td.box:before{content:'';display:inline-block}
     tr:not(.g) td.box{border:2px solid #0B3D6E;border-radius:4px}
-    td.f{font:700 18px Consolas,monospace;white-space:nowrap;width:90px} .vv{font:700 10px Arial;color:#C0392B;letter-spacing:.05em}
+    td.f{font:700 17px Consolas,monospace;white-space:nowrap;width:130px} .vv{font:700 10px Arial;color:#C0392B;letter-spacing:.05em}
     td.m{font:700 16px Consolas,monospace;text-align:right;white-space:nowrap}
     td.firma{width:170px;border-bottom:1px solid #0B3D6E;font-size:13px;color:#2F9E58}
     tr.vencido td{color:#C0392B} tr.pagado td{color:#8AA0B8}
