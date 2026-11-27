@@ -259,6 +259,92 @@
   .overlay.lado{justify-content:flex-end;align-items:stretch;padding:0;}
   .overlay.lado .panel{width:440px;max-width:100vw;max-height:none;height:100%;border-radius:0;}
   @media (max-width:900px){ .vt-kpis{grid-template-columns:1fr 1fr;} .vt-buscar{min-width:0;width:100%;} }
+  .ccm{--violeta:#6B3FA0}
+  .ccm .btn{font:500 12.5px var(--sans);padding:7px 13px;border-radius:6px;border:1px solid var(--line-strong);background:#fff;color:var(--ink);cursor:pointer;white-space:nowrap;width:auto;margin:0}
+  .ccm .btn:hover{background:#EEF5FC} .ccm .btn-s{padding:4px 10px;font-size:12px}
+  .ccm .cc-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:12.5px;color:var(--ink-soft);margin-bottom:14px;line-height:1.6} .ccm .cc-top b{color:var(--ink)} .ccm .sp{flex:1}
+  .ccm .kpis{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+  .ccm .kpi{background:#fff;border:1px solid var(--line);border-radius:18px;padding:5px 12px;display:flex;align-items:center;gap:6px;cursor:pointer;margin:0}
+  .ccm .kpi.sel{border-color:var(--ink);box-shadow:0 0 0 2px rgba(11,61,110,.12) inset;background:#F7FAFD}
+  .ccm .kpi .l{order:0;font-size:12px;font-weight:600;padding:2px 9px;border-radius:10px;background:#EAF3FC;color:#1F6FB2;white-space:nowrap}
+  .ccm .kpi .n{order:1;font:600 12.5px var(--mono);color:var(--ink)} .ccm .kpi .s{order:2;font-size:11px;color:var(--ink-soft)}
+  .ccm .kpi.no .l{background:var(--rojo-bg);color:var(--rojo)} .ccm .kpi.am .l{background:var(--amarillo-bg);color:var(--amarillo)} .ccm .kpi.ok .l{background:var(--verde-bg);color:var(--verde)}
+  .ccm .kpi.vi .l{background:#F3EEFB;color:#6B3FA0} .ccm .kpi.gr .l{background:#EEF2F7;color:var(--ink-soft)}
+  .ccm .cc-tit{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;margin-bottom:10px} .ccm .cc-tit h3{margin:0;font-size:16px}
+  .ccm .cc-tit input{font:13px var(--sans);padding:7px 10px;border:1px solid var(--line-strong);border-radius:6px;width:260px}
+  .ccm .cc-aviso{background:#F3F8FD;border:1px solid #C9DDF2;border-radius:8px;padding:9px 14px;font-size:12.5px;margin-bottom:12px}
+  .ccm table.lt{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;min-width:0}
+  .ccm table.lt th{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);text-align:left;padding:8px 10px;background:#F3F8FD;border-bottom:1px solid var(--line)}
+  .ccm table.lt td{padding:8px 10px;border-bottom:1px solid #EEF2F7;vertical-align:middle;font-size:13px}
+  .ccm .cc-g{cursor:pointer} .ccm .cc-g:hover{background:#F7FAFD} .ccm .cc-d td{background:#FAFCFE;font-size:12.5px;padding:6px 10px 6px 28px}
+  .ccm .mono{font-family:var(--mono)} .ccm .nota{font-size:11.5px;color:var(--ink-soft)}
+  .ccm .pill{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:10px;display:inline-block} .ccm .p-ok{background:var(--verde-bg);color:var(--verde)} .ccm .p-fut{background:#EEF2F7;color:var(--ink-soft)}
+  .ccm .cc-rev{display:inline-flex;gap:5px;align-items:center;font-size:12px;color:var(--ink-soft);cursor:pointer;white-space:nowrap} .ccm .cc-rev input{width:auto;margin:0}
+  .ccm .cc-com{font:12px var(--sans);padding:4px 7px;border:1px solid var(--line);border-radius:5px;width:170px;margin-left:6px}
+  
+  .ccm .cc-arch{background:#fff;border:2px dashed var(--line-strong);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px} .ccm .cc-arch.ok{border-style:solid;border-color:#9fd4b2}
+  .ccm .cc-err{color:var(--rojo);font-size:13px;background:var(--rojo-bg);border-radius:8px;padding:9px 14px;margin-bottom:12px} .ccm .empty{padding:24px;text-align:center;color:var(--ink-soft);background:#fff;border:1px solid var(--line);border-radius:10px}
+  
+
+  .ccm .btn-p{background:var(--ink);color:#fff;border-color:var(--ink)} .ccm .btn-p:hover{background:#163f68} .ccm .btn-p:disabled{opacity:.6}
+  .ccm .btn-g{color:var(--ink-soft);margin-left:4px}
+  .ccm .cc-ok{background:var(--verde-bg);color:var(--verde);border-radius:8px;padding:9px 14px;font-size:13px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+  .ccm .cc-x{margin-left:auto;background:none;border:0;color:inherit;cursor:pointer;font-size:14px;width:auto;padding:0}
+  .ccm .cc-imp{margin-bottom:16px;display:flex;flex-direction:column;gap:10px;max-width:1000px}
+  .ccm .cc-prev{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px;background:#F7FAFD;border-radius:8px;padding:8px 12px}
+  .ccm .cc-hist summary{cursor:pointer;font-size:12.5px;color:var(--ink-soft);margin-bottom:8px}
+  .ccm .cc-suma{display:flex;flex-wrap:wrap;gap:18px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12.5px;color:var(--ink-soft)}
+  .ccm .cc-suma .n{font:600 15px var(--mono);color:var(--ink);margin-right:3px} .ccm .cc-suma .pend .n{color:var(--rojo)}
+  .ccm .cc-guia{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin-bottom:16px;font-size:13px;line-height:1.5}
+  .ccm .cc-guia ol{margin:6px 0 12px 18px;padding:0} .ccm .cc-guia li{margin-bottom:4px}
+  .ccm .cc-guia-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+  .ccm .cc-guia-i{border:1px solid #EEF2F7;border-radius:8px;padding:9px 12px;display:flex;flex-direction:column;gap:4px}
+  .ccm .cc-guia-i .pill{align-self:flex-start;font-size:11.5px}
+  .ccm .k-no{background:var(--rojo-bg);color:var(--rojo)} .ccm .k-am{background:var(--amarillo-bg);color:var(--amarillo)} .ccm .k-ok{background:var(--verde-bg);color:var(--verde)}
+  .ccm .k-vi{background:#F3EEFB;color:#6B3FA0} .ccm .k-gr{background:#EEF2F7;color:var(--ink-soft)}
+  .ccm .cc-estado{line-height:1.6}
+  @media(max-width:700px){.ccm .cc-tit input{width:100%}}
+  .ccm .cc-seg{display:inline-flex;border:1px solid var(--line-strong);border-radius:7px;overflow:hidden;background:#fff}
+  .ccm .cc-seg button{font:500 12px var(--sans);padding:6px 11px;border:0;background:none;color:var(--ink-soft);cursor:pointer;width:auto;margin:0;border-right:1px solid var(--line)}
+  .ccm .cc-seg button:last-child{border-right:0} .ccm .cc-seg button.on{background:var(--ink);color:#fff}
+  .ccm tr.cc-gh td{background:#F3F8FD;font-size:12.5px;padding:7px 10px;border-bottom:1px solid var(--line)}
+  .ccm table.lt td.mono{white-space:nowrap}
+  /* ===== Menú agrupado ===== */
+  .sidebar .navitem.nav-viejo{display:none !important;}
+  .sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;}
+  #nav2{flex:1;}
+  .nav2-it{padding:8px 10px;border-radius:6px;font-size:13px;color:#D7D9E0;cursor:pointer;margin-bottom:1px;line-height:1.3;}
+  .nav2-it:hover{background:rgba(255,255,255,.07);color:#fff;}
+  .nav2-it.on{background:rgba(255,255,255,.14);color:#fff;font-weight:500;}
+  .nav2-g{margin-top:6px;}
+  .nav2-gt{display:flex;align-items:center;justify-content:space-between;padding:8px 10px 6px;font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#8FA8C6;cursor:pointer;border-radius:6px;}
+  .nav2-gt:hover{color:#fff;}
+  .nav2-gt i{font-style:normal;transition:transform .15s;font-size:10px;}
+  .nav2-g.ab .nav2-gt i{transform:rotate(90deg);}
+  .nav2-g.act .nav2-gt{color:#fff;}
+  .nav2-sub{display:none;padding-left:8px;border-left:1px solid rgba(255,255,255,.12);margin-left:10px;}
+  .nav2-g.ab .nav2-sub{display:block;}
+  .nav2-sub .nav2-it{font-size:12.5px;padding:7px 10px;}
+  .nav2-pin{margin-top:14px;background:none;border:1px solid rgba(255,255,255,.2);color:#B9C7DA;border-radius:6px;padding:7px 10px;font:12px var(--sans);cursor:pointer;text-align:left;width:100%;}
+  .nav2-pin:hover{background:rgba(255,255,255,.08);color:#fff;}
+  .nav2-abrir{display:none;position:fixed;top:14px;left:14px;z-index:60;background:var(--ink);color:#fff;border:none;border-radius:8px;padding:8px 12px;font:600 13px var(--sans);cursor:pointer;box-shadow:0 3px 10px rgba(11,61,110,.25);}
+  body.nav-oculto #appShell .sidebar{display:none;}
+  body.nav-oculto .nav2-abrir{display:block;}
+  body.nav-oculto #appShell .main{max-width:none;padding-left:84px;}
+  body.nav-oculto.nav-flota #appShell .sidebar{display:flex;position:fixed;left:0;top:0;bottom:0;z-index:70;width:240px;box-shadow:6px 0 24px rgba(0,0,0,.25);}
+  body.nav-oculto.nav-flota .nav2-abrir{left:254px;}
+  @media (max-width:800px){
+    #appShell .sidebar{display:none;} .nav2-abrir{display:block;} .nav2-pin{display:none;}
+    body.nav-flota #appShell .sidebar{display:flex;position:fixed;left:0;top:0;bottom:0;z-index:70;width:240px;box-shadow:6px 0 24px rgba(0,0,0,.25);}
+    body.nav-flota .nav2-abrir{left:254px;} #appShell .main{padding-top:60px;}
+  }
+  @media print{ .nav2-abrir{display:none !important;} }
+  #appShell.hidden ~ .nav2-abrir{display:none !important;}
+
+  .vt-cuota{display:inline-block;font-size:10.5px;font-weight:600;padding:1px 7px;border-radius:9px;background:#EEF2F7;color:var(--ink-soft);margin-left:4px;vertical-align:1px}
+  .vt-borrar{background:none;border:0;cursor:pointer;color:var(--ink-soft);font-size:13px;padding:2px 4px;opacity:.55;width:auto;margin:0 0 0 4px}
+  .vt-borrar:hover{opacity:1;color:var(--rojo)}
+  .vd-plan{background:#F3F8FD;border:1px solid #C9DDF2;border-radius:8px;padding:9px 12px;font-size:12.5px;margin:4px 0 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -283,6 +369,7 @@
     <div class="navitem" data-view="personas" id="navPersonas"><span class="txt">Control Contratistas</span></div>
     <div class="navitem" data-view="siniestros" id="navSiniestros"><span class="txt">Siniestros ART</span></div>
     <div class="navitem" data-view="proveedores" id="navProveedores"><span class="txt">Pago a proveedores</span></div>
+    <div class="navitem" data-view="comprobantes" id="navComprobantes"><span class="txt">Control de comprobantes</span></div>
   </div>
   <div class="main">
 
@@ -307,8 +394,15 @@
         <div class="module-card" id="cardProveedores">
           <div class="module-card-accent"></div>
           <div class="module-card-body">
-            <h3>Pago a proveedores</h3>
-            <p>Vencimientos mensuales y calendario de pagos a proveedores.</p>
+            <h3>Pagos general</h3>
+            <p>Vencimientos mensuales (también en cuotas) y calendario de pagos.</p>
+          </div>
+        </div>
+        <div class="module-card" id="cardComprobantes">
+          <div class="module-card-accent"></div>
+          <div class="module-card-body">
+            <h3>Contabilidad</h3>
+            <p>Control de comprobantes compras: Libro IVA vs. ARCA, qué falta cargar y qué está mal cargado.</p>
           </div>
         </div>
       </div>
@@ -429,11 +523,26 @@
       </div>
     </div>
 
+    <div id="view-comprobantes" class="view hidden">
+      <div class="topbar">
+        <div>
+          <h1 class="pagetitle">Control de comprobantes compras</h1>
+          <p class="sub">Contabilidad · Libro IVA Compras vs. ARCA · Mis Comprobantes Recibidos.</p>
+        </div>
+        <div class="userbox">
+          <span class="role-pill" id="rolePillComp">...</span>
+          <span class="name" id="userNameComp">...</span>
+          <button class="btn" id="btnLogoutComp">Salir</button>
+        </div>
+      </div>
+      <div id="ccCont"></div>
+    </div>
+
     <div id="view-proveedores" class="view hidden">
       <div class="topbar">
         <div>
-          <h1 class="pagetitle">Pago a proveedores</h1>
-          <p class="sub">Control de pagos a proveedores.</p>
+          <h1 class="pagetitle">Vencimientos mensuales</h1>
+          <p class="sub">Pagos general · control de pagos a proveedores.</p>
         </div>
         <div class="userbox">
           <span class="role-pill" id="rolePillProv">...</span>
@@ -555,6 +664,8 @@ async function onLoggedIn(sess){
   document.getElementById('rolePillSin').textContent = profile.role;
   document.getElementById('userNameProv').textContent = profile.full_name || profile.email;
   document.getElementById('rolePillProv').textContent = profile.role;
+  document.getElementById('userNameComp').textContent = profile.full_name || profile.email;
+  document.getElementById('rolePillComp').textContent = rolEnModulo('comprobantes');
   document.getElementById('userName').title = 'Click para editar tu nombre';
   document.getElementById('userName').addEventListener('click', editName);
   if(canEditModulo('contratistas')){
@@ -592,10 +703,10 @@ async function editName(){
 })();
 
 /* ======================= NAV ======================= */
-const MODULO_DE_VISTA = { personas:'contratistas', proveedores:'proveedores' };
+const MODULO_DE_VISTA = { personas:'contratistas', proveedores:'proveedores', comprobantes:'comprobantes' };
 function tieneAcceso(modulo){ return rolEnModulo(modulo) !== 'sin_acceso'; }
 function aplicarAccesoModulos(){
-  [['contratistas','navPersonas','cardPersonas'],['proveedores','navProveedores','cardProveedores']].forEach(([m, nav, card])=>{
+  [['contratistas','navPersonas','cardPersonas'],['proveedores','navProveedores','cardProveedores'],['comprobantes','navComprobantes','cardComprobantes']].forEach(([m, nav, card])=>{
     const ok = tieneAcceso(m);
     [nav, card].forEach(id=>{ const el = document.getElementById(id); if(el) el.style.display = ok ? '' : 'none'; });
   });
@@ -606,10 +717,13 @@ function showView(view){
   document.getElementById('view-personas').classList.toggle('hidden', view!=='personas');
   document.getElementById('view-siniestros').classList.toggle('hidden', view!=='siniestros');
   document.getElementById('view-proveedores').classList.toggle('hidden', view!=='proveedores');
+  document.getElementById('view-comprobantes').classList.toggle('hidden', view!=='comprobantes');
   document.getElementById('navHome').classList.toggle('active', view==='home');
   document.getElementById('navPersonas').classList.toggle('active', view==='personas');
   document.getElementById('navSiniestros').classList.toggle('active', view==='siniestros');
   document.getElementById('navProveedores').classList.toggle('active', view==='proveedores');
+  document.getElementById('navComprobantes').classList.toggle('active', view==='comprobantes');
+  if(view==='comprobantes' && typeof ccMostrar==='function') ccMostrar();
   if(view==='proveedores' && typeof renderVencimientos==='function') renderVencimientos();
 }
 document.getElementById('navHome').addEventListener('click', ()=> showView('home'));
@@ -619,6 +733,9 @@ document.getElementById('navSiniestros').addEventListener('click', ()=> showView
 document.getElementById('cardSiniestros').addEventListener('click', ()=> showView('siniestros'));
 document.getElementById('navProveedores').addEventListener('click', ()=> showView('proveedores'));
 document.getElementById('cardProveedores').addEventListener('click', ()=> showView('proveedores'));
+document.getElementById('navComprobantes').addEventListener('click', ()=> showView('comprobantes'));
+document.getElementById('cardComprobantes').addEventListener('click', ()=> showView('comprobantes'));
+document.getElementById('btnLogoutComp').addEventListener('click', async ()=>{ await sb.auth.signOut(); location.reload(); });
 document.getElementById('btnLogoutSin').addEventListener('click', async ()=>{ await sb.auth.signOut(); location.reload(); });
 document.getElementById('btnLogoutProv').addEventListener('click', async ()=>{ await sb.auth.signOut(); location.reload(); });
 
@@ -1622,7 +1739,7 @@ function renderVencTabla(){
       <td class="vt-monto ${v.monto?'':'vacio'}" ${puede?`data-vmonto="${v.id}"`:''}>${vencEditMonto===v.id ? `<input id="vtInMonto" type="number" step="0.01" value="${v.monto??''}">` : v.monto ? vencPlata(v.monto) : (puede?'cargar monto':'—')}</td>
       <td class="vt-resp">${puede ? `<input list="vencRespList" data-vresp="${v.id}" value="${escapeHtml(v.responsable||'')}" placeholder="Asignar…">` : escapeHtml(v.responsable||'—')}</td>
       <td>${e==='pagado'?'<span class="vt-pill ok">Pagado</span>':'<span class="vt-pill v">Pendiente</span>'}</td>
-      <td class="vt-acc">${!puede ? '' : e==='pagado' ? `<button class="vt-lnk" data-vdeshacer="${v.id}">deshacer</button>` : `<button class="btn vt-pagar" data-vpagar="${v.id}">✓ Pagado</button>`}</td>
+      <td class="vt-acc">${!puede ? '' : e==='pagado' ? `<button class="vt-lnk" data-vdeshacer="${v.id}">deshacer</button>` : `<button class="btn vt-pagar" data-vpagar="${v.id}">✓ Pagado</button>`}${puede ? `<button class="vt-borrar" data-vborrar="${v.id}" title="Borrar este vencimiento">🗑</button>` : ''}</td>
     </tr>`;
   });
   const ocultos = (f==='pendiente') && vencMes ? all.filter(v=>v.mes===vencMes && v.estado==='Pagado').length : 0;
@@ -1755,7 +1872,15 @@ document.getElementById('btnNuevoVenc').addEventListener('click', ()=>{
         <select id="nv-mes">${MESES_NOMBRES.slice(1).map((m,i)=>`<option value="${i+1}">${m}</option>`).join('')}</select>
       </div>
     </div>
-    <div class="field"><label>Título</label><input type="text" id="nv-titulo" placeholder="Ej: SUSS - Plan Cuota 8"></div>
+    <div class="field"><label>Aplican cuotas</label>
+      <select id="nv-cuotas"><option value="1">No (pago único)</option>${Array.from({length:11},(_,i)=>i+2).map(n=>`<option value="${n}">${n} cuotas</option>`).join('')}</select>
+    </div>
+    <div class="row2 hidden" id="nv-cuotas-det">
+      <div class="field"><label>Monto de cada cuota</label><input type="number" step="0.01" id="nv-cmonto" placeholder="Opcional"></div>
+      <div class="field"><label>Día de vencimiento</label><input type="number" min="1" max="31" id="nv-cdia" placeholder="Ej: 10"></div>
+    </div>
+    <div class="field nota hidden" id="nv-cuotas-txt" style="font-size:12px;color:var(--ink-soft);margin-top:-4px"></div>
+    <div class="field"><label>Título</label><input type="text" id="nv-titulo" placeholder="Ej: SUSS - Plan de pagos"></div>
     <div class="field"><label>Medio de pago</label><input type="text" id="nv-medio" placeholder="Ej: Banco Credicoop"></div>
     <div class="row2">
       <div class="field"><label>Responsable</label><input type="text" id="nv-resp" list="vencRespListNv" placeholder="A quién se le asigna"><datalist id="vencRespListNv">${vencOpcionesResp().map(n=>`<option value="${escapeHtml(n)}">`).join('')}</datalist></div>
@@ -1767,9 +1892,22 @@ document.getElementById('btnNuevoVenc').addEventListener('click', ()=>{
   `;
   document.getElementById('closeBtn').addEventListener('click', closeOverlay);
   document.getElementById('cancelNvBtn').addEventListener('click', closeOverlay);
+  const nvCuotasTxt = ()=>{
+    const n = parseInt(document.getElementById('nv-cuotas').value,10), a = parseInt(document.getElementById('nv-anio').value,10), m = parseInt(document.getElementById('nv-mes').value,10);
+    document.getElementById('nv-cuotas-det').classList.toggle('hidden', n<2);
+    const t = document.getElementById('nv-cuotas-txt'); t.classList.toggle('hidden', n<2);
+    const ult = new Date(a, m-1+n-1, 1);
+    t.textContent = n<2 ? '' : `Se crean ${n} vencimientos, uno por mes: cuota 1 en ${MESES_NOMBRES[m]} ${a} … cuota ${n} en ${MESES_NOMBRES[ult.getMonth()+1]} ${ult.getFullYear()}.`;
+    const r = document.getElementById('nv-todoelanio'); r.disabled = n>1; if(n>1) r.checked = false;
+  };
+  ['nv-cuotas','nv-anio','nv-mes'].forEach(id=> document.getElementById(id).addEventListener('change', nvCuotasTxt));
   document.getElementById('btnCrearVenc').addEventListener('click', async ()=>{
     const titulo = document.getElementById('nv-titulo').value.trim();
     if(!titulo){ document.getElementById('err-nv').classList.remove('hidden'); return; }
+    const nCuotas = parseInt(document.getElementById('nv-cuotas').value,10) || 1;
+    if(nCuotas > 1){ const btn = document.getElementById('btnCrearVenc'); btn.disabled = true; btn.textContent = 'Creando…';
+      const r = await crearPlanCuotas(titulo, nCuotas); if(!r){ btn.disabled = false; btn.textContent = 'Crear'; return; }
+      closeOverlay(); renderVencimientos(); openVencDetail(r.id); return; }
     const esRecurrente = document.getElementById('nv-todoelanio').checked;
     const nuevo = {
       anio: parseInt(document.getElementById('nv-anio').value,10),
@@ -1789,6 +1927,39 @@ document.getElementById('btnNuevoVenc').addEventListener('click', ()=>{
   });
   document.getElementById('overlay').classList.add('show');
 });
+
+async function crearPlanCuotas(titulo, n){
+  const a0 = parseInt(document.getElementById('nv-anio').value,10), m0 = parseInt(document.getElementById('nv-mes').value,10);
+  const mv = document.getElementById('nv-cmonto').value, monto = mv==='' ? null : parseFloat(mv);
+  const dia = parseInt(document.getElementById('nv-cdia').value,10);
+  const grupo = (crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-8xxx-xxxxxxxxxxxx'.replace(/x/g, ()=>(Math.random()*16|0).toString(16)));
+  const filas = [];
+  for(let i=0; i<n; i++){
+    const d = new Date(a0, m0-1+i, 1), anio = d.getFullYear(), mes = d.getMonth()+1;
+    const fecha = dia>=1 && dia<=31 ? `${anio}-${String(mes).padStart(2,'0')}-${String(Math.min(dia, new Date(anio, mes, 0).getDate())).padStart(2,'0')}` : null;
+    filas.push({ anio, mes, titulo: `${titulo} · Cuota ${i+1}/${n}`, cuota: i+1, cuotas: n, cuotas_grupo: grupo, monto, fecha_vencimiento: fecha,
+      medio_pago: document.getElementById('nv-medio').value.trim(), responsable: document.getElementById('nv-resp').value.trim() || null, link: document.getElementById('nv-link').value.trim() || null,
+      es_recurrente: false, estado:'Pendiente', prioridad:'Normal', registrado_por: profile.id, registrado_por_nombre: profile.full_name || profile.email });
+  }
+  const { data, error } = await sb.from('proveedores_vencimientos').insert(filas).select();
+  if(error){ alert('No se pudo crear el plan de cuotas: ' + error.message + (/cuota/.test(error.message) ? '\n¿Corriste el script ADM_04 en Supabase?' : '')); return null; }
+  vencimientos.push(...data);
+  return data.slice().sort((x,y)=> (x.cuota||0)-(y.cuota||0))[0];
+}
+
+async function borrarVencimientos(ids){
+  const { error } = await sb.from('proveedores_vencimientos').delete().in('id', ids);
+  if(error){ alert('No se pudo borrar: ' + error.message); return false; }
+  const { data } = await sb.from('proveedores_vencimientos').select('id').in('id', ids);
+  if(data && data.length){ alert('No se pudo borrar: no tenés permiso para borrar vencimientos. Pedile a un administrador que corra el script ADM_04 en Supabase.'); return false; }
+  const set = new Set(ids); vencimientos = vencimientos.filter(x=>!set.has(x.id));
+  return true;
+}
+window.vencBorrar = async function(id){
+  const v = vencimientos.find(x=>x.id===id); if(!v) return;
+  if(!confirm(`¿Borrar el vencimiento "${v.titulo}" de ${MESES_NOMBRES[v.mes]} ${v.anio}?\nNo se puede deshacer.`)) return;
+  if(await borrarVencimientos([id])){ closeOverlay(); renderVencimientos(); }
+};
 
 async function replicarTodoElAnio(v){
   const existentes = new Set(vencimientos.map(x=>`${x.titulo}|${x.anio}|${x.mes}`));
@@ -1850,6 +2021,10 @@ function openVencDetail(id){
   panel.innerHTML = `
     <div class="panel-header"><h2>${escapeHtml(v.titulo)}</h2><button class="close-x" id="closeBtn">&times;</button></div>
     <p style="font-size:12px;color:var(--ink-soft);margin-top:-10px;">${MESES_NOMBRES[v.mes]} ${v.anio}</p>
+    ${v.cuotas_grupo ? (()=>{ const plan = vencimientos.filter(x=>x.cuotas_grupo===v.cuotas_grupo).sort((a,b)=>(a.cuota||0)-(b.cuota||0)), pag = plan.filter(x=>x.estado==='Pagado');
+      return `<div class="vd-plan"><b>Cuota ${v.cuota} de ${v.cuotas}</b><span>· ${pag.length} pagada${pag.length===1?'':'s'} de ${v.cuotas}</span>
+        <span>· pagado ${vencPlata(pag.reduce((s,x)=>s+(Number(x.monto)||0),0))} · resta ${vencPlata(plan.filter(x=>x.estado!=='Pagado').reduce((s,x)=>s+(Number(x.monto)||0),0))}</span>
+        <span style="flex-basis:100%;color:var(--ink-soft)">${plan.map(x=>`${x.estado==='Pagado'?'✓':'○'} ${x.cuota}: ${MESES_NOMBRES[x.mes].slice(0,3)} ${String(x.anio).slice(2)}`).join(' · ')}</span></div>`; })() : ''}
     <div class="row2">
       <div class="field"><label>Año</label><input type="number" id="vd-anio" value="${v.anio}" ${ro?'disabled':''}></div>
       <div class="field"><label>Mes</label>
@@ -1879,7 +2054,7 @@ function openVencDetail(id){
     <div class="field"><label><input type="checkbox" id="vd-recurrente" ${v.es_recurrente?'checked':''} ${ro?'disabled':''}> Es un pago recurrente (se repite todos los meses)</label></div>
     <div class="field"><label>Notas</label><textarea id="vd-notas" ${ro?'disabled':''}>${escapeHtml(v.notas||'')}</textarea></div>
     <div class="save-indicator" id="saveIndicator"></div>
-    ${canDeleteModulo('proveedores') ? `<div class="modal-actions"><button class="btn" id="btnDeleteVenc" style="color:var(--rojo);">Eliminar</button></div>` : ''}
+    ${!ro ? `<div class="modal-actions">${v.cuotas_grupo ? `<button class="btn" id="btnDeletePlan" style="color:var(--rojo);">Borrar cuotas pendientes del plan</button>` : ''}<button class="btn" id="btnDeleteVenc" style="color:var(--rojo);">🗑 Borrar vencimiento</button></div>` : ''}
   `;
   document.getElementById('closeBtn').addEventListener('click', closeOverlay);
   if(!ro){
@@ -1900,10 +2075,14 @@ function openVencDetail(id){
     bindSave('vd-notas','notas');
     if(document.getElementById('btnDeleteVenc')){
       document.getElementById('btnDeleteVenc').addEventListener('click', async ()=>{
-        if(!confirm('¿Eliminar este vencimiento? No se puede deshacer.')) return;
-        await sb.from('proveedores_vencimientos').delete().eq('id', v.id);
-        vencimientos = vencimientos.filter(x=>x.id!==v.id);
-        closeOverlay(); renderVencimientos();
+        window.vencBorrar(v.id);
+      });
+    }
+    if(document.getElementById('btnDeletePlan')){
+      document.getElementById('btnDeletePlan').addEventListener('click', async ()=>{
+        const pend = vencimientos.filter(x=>x.cuotas_grupo===v.cuotas_grupo && x.estado!=='Pagado');
+        if(!confirm(`¿Borrar las ${pend.length} cuotas pendientes de este plan? Las pagadas quedan.\nNo se puede deshacer.`)) return;
+        if(await borrarVencimientos(pend.map(x=>x.id))){ closeOverlay(); renderVencimientos(); }
       });
     }
   }
@@ -1972,6 +2151,563 @@ function renderCalendario(){
     chip.addEventListener('click', ()=> openVencDetail(chip.dataset.id));
   });
 }
+
+/* ===== Control cruzado de comprobantes: Libro IVA Compras vs ARCA (Mis Comprobantes Recibidos) ===== */
+const CC_TIPOS = { 1:['F','A','Factura A'], 2:['ND','A','Nota de débito A'], 3:['NC','A','Nota de crédito A'], 4:['REC','A','Recibo A'], 6:['F','B','Factura B'], 7:['ND','B','Nota de débito B'],
+  8:['NC','B','Nota de crédito B'], 11:['F','C','Factura C'], 12:['ND','C','Nota de débito C'], 13:['NC','C','Nota de crédito C'], 51:['F','M','Factura M'], 52:['ND','M','Nota de débito M'],
+  53:['NC','M','Nota de crédito M'], 63:['F','A','Liquidación A'], 64:['F','B','Liquidación B'], 81:['F','A','Tique factura A'], 82:['F','B','Tique factura B'], 83:['F','','Tique'],
+  111:['F','C','Tique factura C'], 201:['F','A','Factura de crédito electrónica A'], 202:['ND','A','ND de crédito electrónica A'], 203:['NC','A','NC de crédito electrónica A'],
+  206:['F','B','Factura de crédito electrónica B'], 207:['ND','B','ND de crédito electrónica B'], 208:['NC','B','NC de crédito electrónica B'], 211:['F','C','Factura de crédito electrónica C'],
+  212:['ND','C','ND de crédito electrónica C'], 213:['NC','C','NC de crédito electrónica C'] };
+const ccNorm = t => String(t ?? '').replace(/Ã³/g,'ó').replace(/Ãº/g,'ú').replace(/Ã©/g,'é').replace(/Ã¡/g,'á').replace(/Ã­/g,'í').replace(/Ã±/g,'ñ')
+  .toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9%,]+/g,' ').trim();
+const ccNum = v => { if(v === null || v === undefined || v === '') return 0; if(typeof v === 'number') return v;
+  let s = String(v).trim().replace(/[^\d,.\-]/g,''); if(s.includes(',') && s.lastIndexOf(',') > s.lastIndexOf('.')) s = s.replace(/\./g,'').replace(',', '.'); else s = s.replace(/,/g,''); const n = parseFloat(s); return isNaN(n) ? 0 : n; };
+const ccFecha = v => { if(!v) return ''; if(v instanceof Date) return new Date(v.getTime() + 12*36e5).toISOString().slice(0,10);
+  if(typeof v === 'number') return new Date(Math.round((v - 25569) * 864e5) + 12*36e5).toISOString().slice(0,10);
+  const s = String(v); let m = s.match(/^(\d{4})-(\d{2})-(\d{2})/); if(m) return m[0]; m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/); return m ? `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}` : ''; };
+const CC_MOJI = { 'Ã‘':'Ñ', 'Ã±':'ñ', 'Ã“':'Ó', 'Ã³':'ó', 'Ã‰':'É', 'Ã©':'é', 'Ã¡':'á', 'Ã­':'í', 'Ãº':'ú', 'Ãš':'Ú', 'Ãœ':'Ü', 'Ã¼':'ü', 'Â°':'°', 'Âº':'º' };
+const ccTxt = v => { let s = String(v ?? '').trim(); if(!/Ã|Â/.test(s)) return s; try{ return decodeURIComponent(escape(s)); }catch(_){}
+  Object.entries(CC_MOJI).forEach(([a, b]) => { s = s.split(a).join(b); }); return s.replace(/Ã/g, 'Á'); };
+const ccCuit = v => String(v ?? '').replace(/\D/g, '');
+
+function ccLeerLibro(filas){
+  const iCab = filas.findIndex(f => f && f.some(c => ccNorm(c) === 'numerocomp') && f.some(c => ccNorm(c) === 'nrodoc'));
+  if(iCab < 0) throw new Error('No encontré los títulos del Libro IVA Compras (NumeroComp, NroDoc, Total…).');
+  const cab = filas[iCab].map(ccNorm), ix = n => cab.indexOf(n), datos = filas.slice(iCab + 1).filter(f => f && f[ix('numerocomp')]);
+  // El export trae un título "CAI" que no tiene columna en los datos: todo lo que sigue queda corrido un lugar.
+  let corr = 0; const iCai = ix('cai');
+  if(iCai > -1){ const m = datos.slice(0, 60), raros = m.filter(f => typeof f[iCai] === 'number' && !Number.isInteger(f[iCai])).length; if(raros > m.length * 0.3) corr = -1; }
+  const col = n => { const i = ix(n); return i < 0 ? -1 : (iCai > -1 && i > iCai ? i + corr : i); };
+  const C = { fecha: ix('fecha'), tipo: ix('comprobante'), num: ix('numerocomp'), razon: ix('razonsocial'), cuit: ix('nrodoc'), total: col('total'), iva: col('iva'), neto: col('baseimp') };
+  const out = {};
+  datos.forEach(f => {
+    const m = String(f[C.num]).trim().match(/^([A-Z])-?(\d{1,5})-?(\d{1,8})$/i); if(!m) return;
+    const k = `${ccCuit(f[C.cuit])}|${Number(m[2])}|${Number(m[3])}`;
+    if(out[k]){ out[k].iva += ccNum(f[C.iva]); out[k].neto += ccNum(f[C.neto]); return; }   // varias alícuotas: misma factura, mismo total
+    out[k] = { k, lado:'libro', cuit: ccCuit(f[C.cuit]), pv: Number(m[2]), nro: Number(m[3]), letra: m[1].toUpperCase(), clase: String(f[C.tipo] || '').toUpperCase(),
+      fecha: ccFecha(f[C.fecha]), razon: String(f[C.razon] || '').trim(), total: ccNum(f[C.total]), iva: ccNum(f[C.iva]), neto: ccNum(f[C.neto]) };
+  });
+  return Object.values(out);
+}
+function ccLeerArca(filas){
+  const iCab = filas.findIndex(f => f && f.some(c => ccNorm(c).startsWith('punto de venta')) && f.some(c => ccNorm(c).startsWith('nro doc emisor')));
+  if(iCab < 0) throw new Error('No encontré los títulos del archivo de ARCA (Punto de Venta, Nro. Doc. Emisor…).');
+  const cab = filas[iCab].map(ccNorm), ix = p => cab.findIndex(c => c.startsWith(p));
+  const C = { fecha: ix('fecha'), tipo: ix('tipo de comprobante'), pv: ix('punto de venta'), nro: ix('numero desde'), cae: ix('cod autorizacion'), cuit: ix('nro doc emisor'),
+    razon: ix('denominacion emisor'), tc: ix('tipo cambio'), mon: ix('moneda'), total: ix('imp total'), iva: ix('total iva'), neto: ix('imp neto gravado total') };
+  const out = {};
+  filas.slice(iCab + 1).forEach(f => {
+    if(!f || f[C.pv] === null || f[C.pv] === undefined || f[C.pv] === '') return;
+    const tipo = Number(f[C.tipo]) || 0, tc = ccNum(f[C.tc]) || 1, t = CC_TIPOS[tipo] || ['', '', 'Tipo ' + tipo];
+    const k = `${ccCuit(f[C.cuit])}|${Number(f[C.pv])}|${Number(f[C.nro])}`;
+    out[k] = { k, lado:'arca', cuit: ccCuit(f[C.cuit]), pv: Number(f[C.pv]), nro: Number(f[C.nro]), tipo, clase: t[0], letra: t[1], tipoN: t[2],
+      fecha: ccFecha(f[C.fecha]), razon: ccTxt(f[C.razon]), moneda: String(f[C.mon] || '$').trim(), tc,
+      total: ccNum(f[C.total]) * tc, iva: ccNum(f[C.iva]) * tc, neto: ccNum(f[C.neto]) * tc, cae: String(f[C.cae] || '') };
+  });
+  return Object.values(out);
+}
+const ccNoControla = r => r.letra === 'X' || r.letra === 'I' || /^5[05]/.test(r.cuit) || r.clase === 'REC';
+function ccTol(a){ return Math.max(2, Math.abs(a.total) * (a.moneda && a.moneda !== '$' && a.moneda !== 'PES' ? 0.002 : 0.0005)); }
+
+function ccCruzar(libro, arca, excluidos = []){
+  const ex = new Set(excluidos.map(ccCuit));
+  const A = Object.fromEntries(arca.map(a => [a.k, a])), usadosA = new Set();
+  const R = { coinciden: [], diferencias: [], posibles: [], faltan: [], posteriores: [], noArca: [], noControla: [], excluidos: [] };
+  const fechasL = libro.filter(l => !ccNoControla(l)).map(l => l.fecha).filter(Boolean).sort(), fechasA = arca.map(a => a.fecha).filter(Boolean).sort();
+  R.libroHasta = fechasL[fechasL.length - 1] || ''; R.libroDesde = fechasL[0] || ''; R.arcaDesde = fechasA[0] || ''; R.arcaHasta = fechasA[fechasA.length - 1] || '';
+  const sueltosL = [];
+  libro.forEach(l => {
+    if(ccNoControla(l)){ R.noControla.push(l); return; }
+    const a = A[l.k];
+    if(!a){ sueltosL.push(l); return; }
+    usadosA.add(a.k);
+    const d = Math.abs(l.total) - Math.abs(a.total);
+    (Math.abs(d) <= ccTol(a) ? R.coinciden : R.diferencias).push({ l, a, d });
+  });
+  const sueltosA = arca.filter(a => !usadosA.has(a.k));
+  // Posibles errores de carga: mismo proveedor y mismo número con otro punto de venta, o mismo proveedor e importe
+  const porCuit = {}; sueltosA.forEach(a => (porCuit[a.cuit] = porCuit[a.cuit] || []).push(a));
+  sueltosL.forEach(l => {
+    const cand = (porCuit[l.cuit] || []).filter(a => !usadosA.has(a.k));
+    let a = cand.find(x => x.nro === l.nro), motivo = 'Mismo número con otro punto de venta';
+    const cerca = x => !l.fecha || !x.fecha || Math.abs(new Date(x.fecha) - new Date(l.fecha)) <= 20 * 864e5;
+    if(!a){ a = cand.find(x => x.pv === l.pv && Math.abs(Math.abs(x.total) - Math.abs(l.total)) <= 1 && Math.abs(x.total) > 0 && cerca(x)); motivo = 'Mismo punto de venta e importe, otro número'; }
+    if(a){ usadosA.add(a.k); R.posibles.push({ l, a, motivo }); return; }
+    R.noArca.push(l);
+  });
+  arca.filter(a => !usadosA.has(a.k)).forEach(a => {
+    if(ex.has(a.cuit)) R.excluidos.push(a);
+    else if(R.libroHasta && a.fecha > R.libroHasta) R.posteriores.push(a);
+    else R.faltan.push(a);
+  });
+  // Cargados no en ARCA: los cargados antes del inicio del archivo de ARCA pueden ser de meses que ARCA no trae
+  R.noArca.forEach(l => { l.fueraRango = !!(R.arcaDesde && l.fecha && l.fecha < R.arcaDesde); });
+  return R;
+}
+/* ===== Control de comprobantes · interfaz (guardado en Supabase) ===== */
+(function(){
+const e = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+const fmt = s => s ? String(s).slice(0,10).split('-').reverse().join('/') : '—';
+const ars = v => '$ ' + (Number(v) || 0).toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const nro = r => `${r.letra && r.lado !== 'arca' ? r.letra + ' ' : ''}${String(r.pv).padStart(5,'0')}-${String(r.nro).padStart(8,'0')}`;
+const cuitF = c => c && c.length === 11 ? `${c.slice(0,2)}-${c.slice(2,10)}-${c.slice(10)}` : c;
+const hoy = () => new Date().toISOString().slice(0,10);
+const DB = () => (typeof sb !== 'undefined' ? sb : null);
+const puedeEditar = () => typeof canEditModulo === 'function' ? canEditModulo('comprobantes') : true;
+const quien = () => (typeof profile !== 'undefined' && profile) ? (profile.full_name || profile.email) : '';
+
+let ST = { cargado: false, cargando: false, libro: [], arca: [], bajas: [], R: null, tab: 'faltan', q: '', abiertos: {}, excluidos: [], marcas: {}, imps: [],
+  pendiente: [], ord: {}, msg: '', err: '', guia: false, importar: false };
+
+/* ---------- datos ---------- */
+async function todo(tabla, armar){
+  const out = []; for(let i = 0; ; i += 1000){
+    const { data, error } = await armar(DB().from(tabla).select('*')).range(i, i + 999);
+    if(error) throw error; out.push(...data); if(data.length < 1000) break; }
+  return out;
+}
+const aMotor = r => ({ k: `${r.cuit}|${r.pv}|${r.nro}`, id: r.id, lado: r.lado, cuit: r.cuit, pv: Number(r.pv), nro: Number(r.nro), letra: r.letra || '', clase: r.clase || '',
+  tipo: r.tipo, tipoN: r.tipo_nombre || ((r.clase || '') + ' ' + (r.letra || '')).trim(), fecha: r.fecha || '', razon: r.razon || '', moneda: r.moneda || '$', tc: Number(r.tc) || 1,
+  total: Number(r.total) || 0, iva: Number(r.iva) || 0, neto: Number(r.neto) || 0, cae: r.cae || '', baja_en: r.baja_en });
+async function cargar(){
+  ST.cargando = true; ST.err = '';
+  try{
+    const [C, M, X, I] = await Promise.all([
+      todo('cc_comprobantes', q => q.order('id')),
+      todo('cc_marcas', q => q.order('k')),
+      todo('cc_excluidos', q => q.order('cuit')),
+      DB().from('cc_importaciones').select('*').order('en', { ascending: false }).limit(30).then(r => { if(r.error) throw r.error; return r.data; })
+    ]);
+    const vig = C.filter(r => r.vigente !== false).map(aMotor);
+    ST.libro = vig.filter(r => r.lado === 'libro'); ST.arca = vig.filter(r => r.lado === 'arca');
+    ST.bajas = C.filter(r => r.vigente === false).map(aMotor);
+    ST.marcas = Object.fromEntries(M.map(m => [m.k, m])); ST.excluidos = X; ST.imps = I || [];
+    ST.cargado = true; calcular();
+  }catch(err){ ST.err = 'No se pudieron leer los comprobantes guardados: ' + (err.message || err) + (/relation|does not exist/i.test(err.message || '') ? ' · ¿Corriste el script ADM_03 en Supabase?' : ''); }
+  ST.cargando = false;
+}
+function calcular(){ ST.R = (ST.libro.length || ST.arca.length) ? ccCruzar(ST.libro, ST.arca, ST.excluidos.map(x => x.cuit)) : null; }
+
+/* ---------- utilidades de lista ---------- */
+const rev = k => ST.marcas[k] && ST.marcas[k].revisado ? ST.marcas[k] : null;
+const kDe = x => (x.l || x.a || x).k;
+const sgn = r => r && r.clase === 'NC' ? -1 : 1;   // las notas de crédito restan
+const valor = r => sgn(r) * Math.abs(r.total || 0);
+const totDe = x => valor(x.l || x);
+const filtra = L => { const q = ST.q.trim().toLowerCase(); if(!q) return L;
+  return L.filter(x => { const r = x.l || x.a || x, b = x.a || x; return `${r.razon} ${b.razon} ${r.cuit} ${r.nro} ${r.pv}`.toLowerCase().includes(q); }); };
+const REVISABLES = ['faltan','diferencias','posibles','noArca'];
+
+const CAT = {
+  faltan:     ['Faltan cargar', 'no', 'Están en ARCA y no en el Libro IVA Compras.',
+               'El proveedor emitió el comprobante a nombre de Prodigyo y todavía no se cargó en el sistema. Hay que pedirlo / buscarlo y cargarlo. Si el proveedor no se carga nunca en este libro (peajes, gastos por rendición), tocá Excluir.'],
+  diferencias:['Diferencia de importe', 'am', 'Están en los dos lados pero el total no coincide.',
+               'El comprobante existe y está cargado, pero con otro total. Revisá si se cargó mal un importe, una alícuota o el tipo de cambio, y corregilo en el sistema. Al importar el libro corregido, el importe se actualiza solo.'],
+  posibles:   ['Posibles errores de carga', 'vi', 'Cargados con un número o punto de venta que no existe en ARCA, pero hay uno muy parecido del mismo proveedor.',
+               'Casi seguro es un error de tipeo: mismo número con otro punto de venta, o mismo punto de venta e importe con otro número. Corregilo en el sistema y, si el número mal cargado queda viejo en la app, tocá Dar de baja.'],
+  noArca:     ['Cargados que no están en ARCA', 'no', 'Están en el Libro IVA pero no aparecen en ARCA.',
+               'Puede ser un comprobante de un mes que el archivo de ARCA no incluye (el libro trae la fecha de carga, no la de emisión), un comprobante anulado, o un error en el CUIT. Si es de antes del archivo de ARCA, importá ARCA de meses anteriores.'],
+  coinciden:  ['Coinciden', 'ok', 'Mismo proveedor, punto de venta, número e importe.', 'Está todo bien: no hay que hacer nada.'],
+  posteriores:['Posteriores al libro', 'gr', 'Emitidos después de la última fecha cargada en el libro.',
+               'Todavía no corresponde que estén cargados: se controlan cuando importes el libro del mes siguiente.'],
+  noControla: ['No se controlan', 'gr', 'Recibos (X) y comprobantes del exterior.', 'ARCA no los informa, así que no hay contra qué compararlos.'],
+  excluidos:  ['Proveedores excluidos', 'gr', 'Proveedores que se marcaron para no controlar.', 'Tocá Volver a controlar si alguno tiene que volver a aparecer en Faltan cargar.'],
+  bajas:      ['Dados de baja', 'gr', 'Comprobantes del libro que se dieron de baja a mano (ej. un número mal tipeado que ya se corrigió).', 'No se usan en el control. Si vuelven a venir en un archivo, se reactivan solos.']
+};
+
+/* ---------- render ---------- */
+function render(){
+  const c = document.getElementById('ccCont'); if(!c) return;
+  if(!DB()){ c.innerHTML = '<div class="ccm"><div class="empty">Sin conexión a la base.</div></div>'; return; }
+  if(!ST.cargado){ c.innerHTML = `<div class="ccm"><div class="empty">${ST.err ? e(ST.err) : 'Cargando comprobantes guardados…'}</div></div>`; if(!ST.cargando && !ST.err) cargar().then(render); return; }
+  const R = ST.R, ed = puedeEditar();
+  const listas = R ? { ...R, bajas: ST.bajas } : null;
+  const pend = L => L.filter(x => !rev(kDe(x)));
+  const tabs = listas ? Object.keys(CAT).filter(k => k !== 'bajas' || ST.bajas.length) : [];
+  if(listas && !tabs.includes(ST.tab)) ST.tab = 'faltan';
+  const t = ST.tab, L0 = listas ? listas[t] : [];
+  c.innerHTML = `<div class="ccm">
+    <div class="cc-top">
+      <div class="cc-estado">${resumenGuardado()}</div><span class="sp"></span>
+      <button class="btn" id="ccGuia">📖 Cómo se lee</button>
+      ${ed ? `<button class="btn btn-p" id="ccImp">⬆ Importar Libro IVA + ARCA</button>` : ''}
+      ${R ? `<button class="btn" id="ccCsv" title="Todos los listados en un CSV">Exportar todo (CSV)</button>` : ''}
+    </div>
+    ${ST.msg ? `<div class="cc-ok">${ST.msg}<button class="cc-x" id="ccMsgX">✕</button></div>` : ''}
+    ${ST.err ? `<div class="cc-err">${e(ST.err)}</div>` : ''}
+    ${ST.importar || !R ? importarHTML(ed) : ''}
+    ${ST.guia ? guiaHTML() : ''}
+    ${R ? `
+    <div class="kpis">${tabs.map(k => { const L = listas[k], p = REVISABLES.includes(k) ? pend(L).length : 0;
+      return `<div class="kpi ${CAT[k][1]} ${k === t ? 'sel' : ''}" data-t="${k}"><div class="l">${CAT[k][0]}</div><div class="n">${L.length}</div>${p ? `<div class="s">${p} sin revisar</div>` : ''}</div>`; }).join('')}</div>
+    <div class="cc-tit"><h3>${CAT[t][0]}</h3><span class="nota">${CAT[t][2]}</span><span class="sp"></span>
+      <div class="cc-seg" title="Cómo ordenar el listado">${[['prov','Por proveedor'],['fecha','Por fecha'],['monto','Por monto']].map(([k, n]) => `<button class="${ordDe(t) === k ? 'on' : ''}" data-ord="${k}">${n}</button>`).join('')}</div>
+      <input id="ccQ" placeholder="Buscar proveedor, CUIT o número…" value="${e(ST.q)}"></div>
+    <div id="ccSuma">${sumaHTML(t, L0)}</div>
+    ${t === 'noArca' && R.arcaDesde && R.noArca.some(l => l.fueraRango) ? `<div class="cc-aviso">El Libro IVA no trae la fecha del comprobante sino la de carga: lo cargado antes del ${fmt(R.arcaDesde)} puede ser de un mes que ARCA todavía no tiene en la app. Importá ARCA de los meses anteriores y se acomoda solo.</div>` : ''}
+    <div id="ccLista">${lista(t, L0)}</div>` : ''}
+  </div>`;
+  const on = (id, f) => { const el = document.getElementById(id); if(el) el.addEventListener('click', f); };
+  c.querySelectorAll('.kpi[data-t]').forEach(k => k.addEventListener('click', () => { ST.tab = k.dataset.t; render(); }));
+  c.querySelectorAll('[data-ord]').forEach(b => b.addEventListener('click', () => { ST.ord[ST.tab] = b.dataset.ord; c.querySelectorAll('[data-ord]').forEach(x => x.classList.toggle('on', x === b)); refrescar(); }));
+  const q = document.getElementById('ccQ'); if(q) q.addEventListener('input', ev => { ST.q = ev.target.value; refrescar(); });
+  on('ccGuia', () => { ST.guia = !ST.guia; render(); });
+  on('ccImp', () => { ST.importar = !ST.importar; ST.pendiente = []; render(); });
+  on('ccCsv', exportar); on('ccMsgX', () => { ST.msg = ''; render(); });
+  enlazarImportar(); enlazarLista();
+}
+function resumenGuardado(){
+  const r = (L, campo) => { const f = L.map(x => x.fecha).filter(Boolean).sort(); return f.length ? ` · ${campo} del ${fmt(f[0])} al ${fmt(f[f.length - 1])}` : ''; };
+  const u = ST.imps[0];
+  return `<b>Libro IVA Compras</b> · ${ST.libro.length.toLocaleString('es-AR')} comprobantes guardados${r(ST.libro, 'cargados')}<br>
+    <b>ARCA · Mis Comprobantes Recibidos</b> · ${ST.arca.length.toLocaleString('es-AR')} comprobantes guardados${r(ST.arca, 'emitidos')}
+    ${u ? `<br><span class="nota">Última importación: ${u.lado === 'libro' ? 'Libro IVA' : 'ARCA'} · ${e(u.archivo || '')} · ${fmt(String(u.en).slice(0,10))}${u.por ? ' · ' + e(u.por) : ''}</span>` : ''}`;
+}
+function sumaHTML(t, L0){
+  const L = filtra(L0), P = REVISABLES.includes(t) ? L.filter(x => !rev(kDe(x))) : null;
+  const tot = A => A.reduce((s, x) => s + totDe(x), 0), dif = A => A.reduce((s, x) => s + Math.abs(x.d || 0), 0);
+  const prov = new Set(L.map(x => (x.l || x.a || x).cuit)).size;
+  return `<div class="cc-suma">
+    <div><span class="n">${L.length}</span> comprobante${L.length === 1 ? '' : 's'}</div>
+    <div><span class="n">${ars(tot(L))}</span> total</div>
+    ${t === 'diferencias' ? `<div><span class="n">${ars(dif(L))}</span> en diferencias</div>` : ''}
+    <div><span class="n">${prov}</span> proveedor${prov === 1 ? '' : 'es'}</div>
+    ${P ? `<div class="pend"><span class="n">${P.length}</span> sin revisar · ${ars(t === 'diferencias' ? dif(P) : tot(P))}</div>` : ''}
+    <span class="sp"></span>
+    ${L.length ? `<button class="btn" id="ccXlsMonto" title="Excel con los comprobantes de este listado, de mayor a menor importe">⬇ Excel por monto</button>
+      <button class="btn" id="ccXlsProv" title="Excel agrupado por proveedor, con subtotales">⬇ Excel por proveedor</button>` : ''}
+    ${L.length && t !== 'coinciden' ? `<button class="btn" id="ccCopiar">📋 Copiar listado</button>` : ''}
+  </div>`;
+}
+function guiaHTML(){
+  return `<div class="cc-guia">
+    <div class="cc-guia-h"><b>Cómo funciona</b></div>
+    <ol>
+      <li>Bajá del sistema el <b>Libro IVA Compras</b> y de ARCA <b>Mis Comprobantes → Recibidos</b> (Excel). Conviene bajar ARCA desde 2 meses antes del libro.</li>
+      <li>Tocá <b>⬆ Importar Libro IVA + ARCA</b> y elegí <b>los dos archivos juntos</b> (o uno solo): la app reconoce sola cuál es cada uno. Cada importación <b>se suma</b> a lo guardado: lo que ya estaba no se borra ni se duplica (si un importe vino corregido, se actualiza el importe).</li>
+      <li>El cruce se hace con todo lo guardado: por <b>CUIT del proveedor + punto de venta + número</b>, y compara el total.</li>
+      <li>En cada listado marcá <b>Revisado</b> lo que ya viste (con un comentario si hace falta) y usá <b>📋 Copiar listado</b> para mandar por WhatsApp o mail lo que queda pendiente.</li>
+    </ol>
+    <div class="cc-guia-g">${Object.entries(CAT).map(([k, x]) => `<div class="cc-guia-i"><span class="pill k-${x[1]}">${x[0]}</span><div>${x[2]}</div><div class="nota"><b>Qué hacer:</b> ${x[3]}</div></div>`).join('')}</div>
+  </div>`;
+}
+function importarHTML(ed){
+  if(!ed) return ST.R ? '' : '<div class="empty">Todavía no hay comprobantes importados.</div>';
+  const P = ST.pendiente, nom = l => l === 'libro' ? 'Libro IVA Compras' : 'ARCA · Mis Comprobantes Recibidos';
+  return `<div class="cc-imp">
+    <div class="cc-arch ${P.length ? 'ok' : ''}">
+      <b>Importar Libro IVA Compras + ARCA · Mis Comprobantes Recibidos</b>
+      <span class="nota">Elegí <b>los dos archivos juntos</b> (Ctrl + clic) o uno solo. Excel .xls / .xlsx. La app reconoce cuál es cada uno y lo suma a lo que ya está guardado.</span>
+      <input type="file" id="ccF" accept=".xls,.xlsx,.csv" multiple>
+      ${P.map(p => `<div class="cc-prev"><span class="pill p-ok">✓ ${nom(p.lado)}</span><span class="nota">${e(p.archivo)}</span>
+        <b>${p.filas.length}</b> comprobantes · ${p.lado === 'libro' ? 'cargados' : 'emitidos'} del ${fmt(p.desde)} al ${fmt(p.hasta)} ·
+        <b>${p.nuevos}</b> nuevos · ${p.filas.length - p.nuevos} ya estaban guardados</div>`).join('')}
+      ${P.length ? `<div class="cc-prev" style="background:none;padding:0">${P.length === 1 ? `<span class="nota">Falta ${P[0].lado === 'libro' ? 'el de ARCA' : 'el Libro IVA'}: podés importar este solo o elegir los dos.</span>` : ''}<span class="sp"></span>
+        <button class="btn" id="ccCancel">Cancelar</button><button class="btn btn-p" id="ccOk">Importar ${P.length === 2 ? 'los dos' : ''}</button></div>` : ''}
+    </div>
+    ${ST.imps.length ? `<details class="cc-hist"><summary>Historial de importaciones (${ST.imps.length})</summary><table class="lt"><thead><tr><th>Fecha</th><th>Archivo</th><th>Período</th><th style="text-align:right">Filas</th><th style="text-align:right">Nuevos</th><th>Por</th></tr></thead><tbody>
+      ${ST.imps.map(i => `<tr><td>${fmt(String(i.en).slice(0,10))}</td><td>${i.lado === 'libro' ? 'Libro IVA' : 'ARCA'} · ${e(i.archivo || '')}</td><td>${fmt(i.desde)} al ${fmt(i.hasta)}</td><td class="mono" style="text-align:right">${i.filas ?? ''}</td><td class="mono" style="text-align:right">${i.nuevos ?? ''}</td><td>${e(i.por || '')}</td></tr>`).join('')}</tbody></table></details>` : ''}
+  </div>`;
+}
+
+const chkRev = k => !puedeEditar() ? (rev(k) ? `<span class="nota">✓ Revisado${rev(k).comentario ? ' · ' + e(rev(k).comentario) : ''}</span>` : '')
+  : `<label class="cc-rev" title="Marcar como revisado"><input type="checkbox" data-rev="${e(k)}" ${rev(k) ? 'checked' : ''}> ${rev(k) ? 'Revisado' : 'Revisar'}</label>${rev(k) ? `<input class="cc-com" data-com="${e(k)}" value="${e(rev(k).comentario || '')}" placeholder="Comentario">` : ''}`;
+const btnBaja = l => puedeEditar() && l.id ? `<button class="btn btn-s btn-g" data-baja="${l.id}" title="Ya se corrigió en el sistema: sacarlo del control">Dar de baja</button>` : '';
+
+const AGRUP = ['faltan','posteriores','excluidos'];
+const ORD_DEF = { faltan:'prov', posteriores:'prov', excluidos:'prov', diferencias:'monto' };
+const ordDe = t => ST.ord[t] || ORD_DEF[t] || 'fecha';
+const fechaDe = x => (x.a && x.a.fecha) || (x.l && x.l.fecha) || x.fecha || '';
+const montoDe = x => x.d !== undefined && ST.tab === 'diferencias' ? Math.abs(x.d) : Math.abs(totDe(x));
+const razonDe = x => (x.a || x.l || x).razon || '';
+const ordenar = (L, o) => L.slice().sort(o === 'monto' ? (p, q) => montoDe(q) - montoDe(p)
+  : o === 'prov' ? (p, q) => razonDe(p).localeCompare(razonDe(q)) || fechaDe(p).localeCompare(fechaDe(q)) : (p, q) => fechaDe(p).localeCompare(fechaDe(q)) || razonDe(p).localeCompare(razonDe(q)));
+const mon = a => a.moneda !== '$' && a.moneda !== 'PES' && a.moneda ? ` <span class="pill p-fut">${e(a.moneda)} · TC ${a.tc}</span>` : '';
+const prov = r => `<b>${e(r.razon)}</b><div class="nota mono">${cuitF(r.cuit)}</div>`;
+// columnas por listado: [encabezados, fila]
+function cols(tab){
+  const ed = puedeEditar();
+  if(AGRUP.includes(tab)) return [['Fecha','Proveedor','Comprobante','CAE','Total',''], a => [fmt(a.fecha), prov(a), `${e(a.tipoN)} <span class="mono">${nro(a)}</span>${mon(a)}`, `<span class="mono nota">${e(a.cae)}</span>`, ars(valor(a)),
+    tab === 'faltan' ? chkRev(a.k) : '']];
+  if(tab === 'diferencias' || tab === 'coinciden') return [['Fecha ARCA','Proveedor','Comprobante','Libro IVA','ARCA','Diferencia'].concat(tab === 'diferencias' ? [''] : []), x => [fmt(x.a.fecha), prov(x.l), `${e(x.a.tipoN)} <span class="mono">${nro(x.a)}</span>${mon(x.a)}`,
+    ars(valor(x.l)), ars(valor(x.a)), `<span style="${Math.abs(x.d) > 2 ? 'color:var(--rojo);font-weight:600' : ''}">${ars(x.d)}</span>`].concat(tab === 'diferencias' ? [chkRev(x.l.k)] : [])];
+  if(tab === 'posibles') return [['Cargado el','Proveedor','Cargado en el libro','En ARCA','Motivo','Total',''], x => [fmt(x.l.fecha), prov(x.l), `<span class="mono">${nro(x.l)}</span>`,
+    `<span class="mono">${nro(x.a)}</span><div class="nota">${fmt(x.a.fecha)} · ${e(x.a.tipoN)}</div>`, e(x.motivo), `${ars(valor(x.l))}<div class="nota">ARCA ${ars(valor(x.a))}</div>`, `${chkRev(x.l.k)} ${btnBaja(x.l)}`]];
+  return [[tab === 'bajas' ? 'Dado de baja' : 'Cargado el','Proveedor','Comprobante','Total',''], l => [tab === 'bajas' ? fmt(String(l.baja_en || '').slice(0,10)) + `<div class="nota">cargado el ${fmt(l.fecha)}</div>` : fmt(l.fecha) + (l.fueraRango ? '<div class="nota">antes del ARCA guardado</div>' : ''),
+    prov(l), `${e(l.clase)} <span class="mono">${nro(l)}</span>`, ars(valor(l)), tab === 'noArca' ? chkRev(l.k) + ' ' + btnBaja(l) : tab === 'bajas' && ed ? `<button class="btn btn-s" data-alta="${l.id}">Reactivar</button>` : '']];
+}
+const NUM = new Set(['Total','Libro IVA','ARCA','Diferencia']);
+function lista(tab, L0){
+  const L = filtra(L0);
+  if(!L.length) return '<div class="empty">Nada para mostrar.</div>';
+  const ed = puedeEditar(), o = ordDe(tab);
+  if(AGRUP.includes(tab) && o === 'prov'){
+    const g = {}; L.forEach(a => (g[a.cuit] = g[a.cuit] || { razon: a.razon, cuit: a.cuit, L: [] }).L.push(a));
+    const G = Object.values(g).sort((x, y) => y.L.reduce((s, r) => s + valor(r), 0) - x.L.reduce((s, r) => s + valor(r), 0));
+    return `<table class="lt"><thead><tr><th>Proveedor</th><th>CUIT</th><th style="text-align:right">Comprobantes</th><th style="text-align:right">Total</th><th></th></tr></thead><tbody>
+      ${G.map(x => { const ab = ST.abiertos[x.cuit], exc = ST.excluidos.some(y => y.cuit === x.cuit), p = x.L.filter(a => !rev(a.k)).length;
+        return `<tr class="cc-g" data-g="${x.cuit}"><td><b>${ab ? '▾' : '▸'} ${e(x.razon)}</b>${tab === 'faltan' && p < x.L.length ? `<span class="nota"> · ${x.L.length - p} revisado${x.L.length - p === 1 ? '' : 's'}</span>` : ''}</td><td class="mono">${cuitF(x.cuit)}</td><td class="mono" style="text-align:right">${x.L.length}</td><td class="mono" style="text-align:right">${ars(x.L.reduce((s, r) => s + valor(r), 0))}</td>
+          <td style="text-align:right">${!ed ? '' : tab === 'excluidos' || exc ? `<button class="btn btn-s" data-inc="${x.cuit}">Volver a controlar</button>` : tab === 'faltan' ? `<button class="btn btn-s" data-exc="${x.cuit}" data-raz="${e(x.razon)}">Excluir</button>` : ''}</td></tr>
+          ${ab ? x.L.slice().sort((p, q) => p.fecha.localeCompare(q.fecha)).map(a => `<tr class="cc-d"><td colspan="2">${fmt(a.fecha)} · ${e(a.tipoN)} <span class="mono">${nro(a)}</span>${mon(a)}</td>
+            <td class="mono" style="text-align:right">CAE ${e(a.cae)}</td><td class="mono" style="text-align:right">${ars(valor(a))}</td><td>${tab === 'faltan' ? chkRev(a.k) : ''}</td></tr>`).join('') : ''}`; }).join('')}</tbody></table>`;
+  }
+  const [H, fila] = cols(tab), O = ordenar(L, o);
+  const th = H.map(h => `<th${NUM.has(h) ? ' style="text-align:right"' : ''}>${h}</th>`).join('');
+  const tr = x => `<tr>${fila(x).map((c, i) => `<td${NUM.has(H[i]) ? ' class="mono" style="text-align:right"' : ''}>${c}</td>`).join('')}</tr>`;
+  let body = '';
+  if(o === 'prov'){
+    let cu = null;
+    O.forEach(x => { const r = x.a || x.l || x, ck = r.cuit;
+      if(ck !== cu){ cu = ck; const de = O.filter(y => (y.a || y.l || y).cuit === ck);
+        body += `<tr class="cc-gh"><td colspan="${H.length}"><b>${e(razonDe(x))}</b> <span class="nota mono">${cuitF(ck)}</span><span class="nota"> · ${de.length} comprobante${de.length === 1 ? '' : 's'} · ${ars(de.reduce((s, y) => s + totDe(y), 0))}</span></td></tr>`; }
+      body += tr(x); });
+  } else body = O.map(tr).join('');
+  return `<table class="lt"><thead><tr>${th}</tr></thead><tbody>${body}</tbody></table>`;
+}
+function enlazarLista(){
+  const c = document.getElementById('ccLista'); if(!c) return;
+  c.querySelectorAll('.cc-g').forEach(r => r.addEventListener('click', ev => { if(ev.target.closest('button')) return; ST.abiertos[r.dataset.g] = !ST.abiertos[r.dataset.g]; refrescar(); }));
+  c.querySelectorAll('[data-exc]').forEach(b => b.addEventListener('click', () => excluir(b.dataset.exc, b.dataset.raz)));
+  c.querySelectorAll('[data-inc]').forEach(b => b.addEventListener('click', () => incluir(b.dataset.inc)));
+  c.querySelectorAll('[data-rev]').forEach(b => b.addEventListener('change', () => marcar(b.dataset.rev, b.checked)));
+  c.querySelectorAll('[data-com]').forEach(i => i.addEventListener('change', () => comentar(i.dataset.com, i.value.trim())));
+  c.querySelectorAll('[data-baja]').forEach(b => b.addEventListener('click', () => baja(Number(b.dataset.baja), false)));
+  c.querySelectorAll('[data-alta]').forEach(b => b.addEventListener('click', () => baja(Number(b.dataset.alta), true)));
+  const cp = document.getElementById('ccCopiar'); if(cp) cp.onclick = copiar;
+  const xm = document.getElementById('ccXlsMonto'); if(xm) xm.onclick = () => excel('monto');
+  const xp = document.getElementById('ccXlsProv'); if(xp) xp.onclick = () => excel('prov');
+}
+function refrescar(kpis){
+  const y = window.scrollY;
+  if(kpis) render();
+  else { const L0 = ST.tab === 'bajas' ? ST.bajas : ST.R[ST.tab]; document.getElementById('ccLista').innerHTML = lista(ST.tab, L0); document.getElementById('ccSuma').innerHTML = sumaHTML(ST.tab, L0); enlazarLista(); }
+  window.scrollTo(0, y);
+}
+const aviso = m => { ST.err = m; render(); };
+
+/* ---------- acciones guardadas ---------- */
+async function marcar(k, si){
+  if(si){ const r = { k, revisado: true, comentario: (ST.marcas[k] || {}).comentario || null, por: quien(), en: new Date().toISOString() };
+    const { error } = await DB().from('cc_marcas').upsert(r, { onConflict: 'k' }); if(error) return aviso('No se pudo guardar: ' + error.message); ST.marcas[k] = r; }
+  else { const { error } = await DB().from('cc_marcas').delete().eq('k', k); if(error) return aviso('No se pudo guardar: ' + error.message); delete ST.marcas[k]; }
+  refrescar(true);
+}
+async function comentar(k, txt){
+  if(!ST.marcas[k]) return;
+  const { error } = await DB().from('cc_marcas').update({ comentario: txt || null, por: quien(), en: new Date().toISOString() }).eq('k', k);
+  if(error) return aviso('No se pudo guardar el comentario: ' + error.message); ST.marcas[k].comentario = txt || null;
+}
+async function excluir(cuit, razon){
+  const motivo = prompt(`¿Por qué no se controla ${razon}? (opcional, ej. peajes)`, ''); if(motivo === null) return;
+  const r = { cuit, razon, motivo: motivo.trim() || null, por: quien() };
+  const { error } = await DB().from('cc_excluidos').upsert(r, { onConflict: 'cuit' }); if(error) return aviso('No se pudo excluir: ' + error.message);
+  ST.excluidos = ST.excluidos.filter(x => x.cuit !== cuit).concat(r); calcular(); render();
+}
+async function incluir(cuit){
+  const { error } = await DB().from('cc_excluidos').delete().eq('cuit', cuit); if(error) return aviso('No se pudo guardar: ' + error.message);
+  ST.excluidos = ST.excluidos.filter(x => x.cuit !== cuit); calcular(); render();
+}
+async function baja(id, reactivar){
+  if(!reactivar && !confirm('¿Dar de baja este comprobante del libro?\nUsalo cuando ya se corrigió en el sistema (ej. número mal tipeado). No se borra: queda en "Dados de baja".')) return;
+  const { error } = await DB().from('cc_comprobantes').update(reactivar ? { vigente: true, baja_en: null } : { vigente: false, baja_en: new Date().toISOString() }).eq('id', id);
+  if(error) return aviso('No se pudo guardar: ' + error.message);
+  await cargar(); render();
+}
+
+/* ---------- importar ---------- */
+async function leerArchivo(f){
+  if(typeof XLSX === 'undefined' || !XLSX.read) throw new Error('No se pudo cargar el lector de Excel. Recargá la página.');
+  const wb = XLSX.read(await f.arrayBuffer(), { type:'array', cellDates:true });
+  return XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header:1, defval:null, raw:true });
+}
+function reconocer(filas){
+  try{ return { lado: 'libro', filas: ccLeerLibro(filas) }; }catch(_){}
+  try{ return { lado: 'arca', filas: ccLeerArca(filas) }; }catch(_){}
+  throw new Error('No reconocí el archivo: tiene que ser la exportación del Libro IVA Compras o el Excel de ARCA · Mis Comprobantes Recibidos.');
+}
+function prepararPendiente(lado, filas, archivo){
+  const ya = new Set((lado === 'libro' ? ST.libro : ST.arca).concat(ST.bajas.filter(b => b.lado === lado)).map(r => r.k));
+  const f = filas.map(r => r.fecha).filter(Boolean).sort();
+  ST.pendiente = ST.pendiente.filter(p => p.lado !== lado).concat({ lado, filas, archivo, desde: f[0] || '', hasta: f[f.length - 1] || '', nuevos: filas.filter(r => !ya.has(r.k)).length })
+    .sort((a, b) => a.lado === 'libro' ? -1 : 1);
+}
+window.ccPrepararFilas = (filas, archivo) => { const r = reconocer(filas); prepararPendiente(r.lado, r.filas, archivo || 'archivo.xlsx'); ST.importar = true; render(); };
+window.ccImportarPendientes = () => importarPendientes();
+function enlazarImportar(){
+  const i = document.getElementById('ccF');
+  if(i) i.addEventListener('change', async () => {
+    ST.err = ''; ST.pendiente = []; const errs = [];
+    for(const f of [...i.files].slice(0, 4)){
+      try{ const r = reconocer(await leerArchivo(f)); prepararPendiente(r.lado, r.filas, f.name); }
+      catch(err){ errs.push(f.name + ': ' + err.message); }
+    }
+    ST.err = errs.join(' · '); render();
+  });
+  const can = document.getElementById('ccCancel'); if(can) can.addEventListener('click', () => { ST.pendiente = []; render(); });
+  const ok = document.getElementById('ccOk'); if(ok) ok.addEventListener('click', () => { ok.disabled = true; ok.textContent = 'Importando…'; importarPendientes(); });
+}
+async function importarPendientes(){
+  const msgs = []; ST.err = '';
+  for(const p of ST.pendiente){
+    const filas = p.filas.map(r => ({ cuit: r.cuit, pv: r.pv, nro: r.nro, letra: r.letra || null, clase: r.clase || null, tipo: r.tipo || null, tipo_nombre: r.tipoN || null,
+      fecha: r.fecha || null, razon: r.razon || null, moneda: r.moneda || null, tc: r.tc || null, total: Math.round(r.total * 100) / 100, iva: Math.round(r.iva * 100) / 100, neto: Math.round(r.neto * 100) / 100, cae: r.cae || null }));
+    const { data, error } = await DB().rpc('cc_importar', { p_lado: p.lado, p_archivo: p.archivo, p_filas: filas });
+    if(error){ ST.err = `No se pudo importar ${p.archivo}: ${error.message}`; break; }
+    msgs.push(`${p.lado === 'libro' ? 'Libro IVA' : 'ARCA'}: <b>${data.nuevos}</b> nuevos sumados · ${data.existentes} ya estaban (no se duplicaron)` +
+      (data.corregidos ? ` · ${data.corregidos} con importe corregido` : '') + (data.reactivados ? ` · ${data.reactivados} reactivados` : ''));
+  }
+  ST.pendiente = []; ST.importar = !!ST.err;
+  if(msgs.length) ST.msg = '✓ Importado. ' + msgs.join(' &nbsp;|&nbsp; ');
+  const err = ST.err; await cargar(); if(err) ST.err = err; render();
+}
+
+/* ---------- copiar listado ---------- */
+function textoListado(){
+  const t = ST.tab, L0 = t === 'bajas' ? ST.bajas : ST.R[t], L = filtra(L0).filter(x => !REVISABLES.includes(t) || !rev(kDe(x)));
+  const tit = { faltan: 'Comprobantes que faltan cargar', diferencias: 'Comprobantes con diferencia de importe', posibles: 'Posibles errores de carga (revisar número / punto de venta)',
+    noArca: 'Comprobantes cargados que no están en ARCA', posteriores: 'Comprobantes posteriores al libro', noControla: 'Comprobantes que no se controlan', excluidos: 'Proveedores excluidos', bajas: 'Comprobantes dados de baja' }[t];
+  const g = {}; L.forEach(x => { const r = x.l || x.a || x; (g[r.cuit] = g[r.cuit] || { razon: (x.a || r).razon || r.razon, cuit: r.cuit, L: [] }).L.push(x); });
+  const G = Object.values(g).sort((a, b) => a.razon.localeCompare(b.razon));
+  const lin = x => {
+    if(t === 'diferencias') return `• ${x.a.tipoN} ${nro(x.a)} · Libro ${ars(valor(x.l))} · ARCA ${ars(valor(x.a))} · Dif. ${ars(x.d)}`;
+    if(t === 'posibles') return `• Cargado ${nro(x.l)} → en ARCA es ${nro(x.a)} (${x.a.tipoN}, ${fmt(x.a.fecha)}) · ${ars(valor(x.a))}`;
+    if(x.lado === 'arca') return `• ${fmt(x.fecha)} · ${x.tipoN} ${nro(x)} · ${ars(valor(x))}`;
+    return `• Cargado el ${fmt(x.fecha)} · ${x.clase} ${nro(x)} · ${ars(valor(x))}`;
+  };
+  const tot = L.reduce((s, x) => s + totDe(x), 0);
+  return [`*${tit}*`, `Control al ${fmt(hoy())} · ${L.length} comprobante${L.length === 1 ? '' : 's'} · ${ars(tot)}`, '',
+    ...G.flatMap(x => [`*${x.razon}* (CUIT ${cuitF(x.cuit)})`, ...x.L.map(lin), ''])].join('\n').trim();
+}
+async function copiar(){
+  const txt = textoListado(), b = document.getElementById('ccCopiar');
+  let ok = false;
+  try{ await navigator.clipboard.writeText(txt); ok = true; }catch(_){
+    const ta = document.createElement('textarea'); ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select();
+    try{ ok = document.execCommand('copy'); }catch(__){} ta.remove(); }
+  window.__ccCopiado = txt;
+  if(b){ b.textContent = ok ? '✓ Copiado' : 'No se pudo copiar'; setTimeout(() => { if(b.isConnected) b.textContent = '📋 Copiar listado'; }, 2200); }
+}
+
+function exportar(){
+  const R = ST.R, f = [['Resultado','Proveedor','CUIT','Tipo','Punto de venta','Número','Fecha','Total libro','Total ARCA','Diferencia','Revisado','Comentario']];
+  const add = (res, l, a, d) => { const r = l || a, rv = rev(r.k) || {}; f.push([res, (a || r).razon, r.cuit, a ? a.tipoN : (l.clase + ' ' + l.letra), r.pv, r.nro, (a || l).fecha, l ? l.total : '', a ? a.total : '', d ?? '', rev(r.k) ? 'Sí' : '', rv.comentario || '']); };
+  R.faltan.forEach(a => add('Falta cargar', null, a)); R.diferencias.forEach(x => add('Diferencia de importe', x.l, x.a, x.d)); R.posibles.forEach(x => add('Posible error de carga: ' + x.motivo, x.l, x.a));
+  R.noArca.forEach(l => add('Cargado y no está en ARCA', l, null)); R.coinciden.forEach(x => add('Coincide', x.l, x.a, x.d)); R.posteriores.forEach(a => add('Posterior al libro', null, a)); R.excluidos.forEach(a => add('Proveedor excluido', null, a));
+  const csv = '﻿' + f.map(r => r.map(v => `"${String(typeof v === 'number' ? v.toFixed(2).replace('.', ',') : v ?? '').replace(/"/g, '""')}"`).join(';')).join('\r\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type:'text/csv;charset=utf-8' })); a.download = `control_comprobantes_${hoy()}.csv`; a.click();
+}
+/* ---------- Excel del listado actual ---------- */
+function filasExcel(x){
+  const t = ST.tab, r = x.l || x.a || x, a = x.a || (x.lado === 'arca' ? x : null), l = x.l || (x.lado === 'libro' ? x : null), m = rev(r.k);
+  const tipo = a ? a.tipoN : `${l.clase} ${l.letra}`.trim();
+  const base = { 'Proveedor': (a || r).razon, 'CUIT': cuitF(r.cuit), 'Tipo': tipo, 'Comprobante': nro(a || l) };
+  if(t === 'diferencias' || t === 'coinciden') Object.assign(base, { 'Fecha ARCA': fmt(a.fecha), 'Total libro': +l.total.toFixed(2), 'Total ARCA': +a.total.toFixed(2), 'Diferencia': +x.d.toFixed(2) });
+  else if(t === 'posibles') Object.assign(base, { 'Comprobante': nro(l), 'En ARCA': nro(a), 'Motivo': x.motivo, 'Cargado el': fmt(l.fecha), 'Fecha ARCA': fmt(a.fecha), 'Total libro': +valor(l).toFixed(2), 'Total ARCA': +valor(a).toFixed(2) });
+  else if(a) Object.assign(base, { 'Fecha': fmt(a.fecha), 'CAE': a.cae, 'Moneda': a.moneda, 'Total': +valor(a).toFixed(2) });
+  else Object.assign(base, { 'Cargado el': fmt(l.fecha), 'Total': +valor(l).toFixed(2) });
+  if(REVISABLES.includes(t)) Object.assign(base, { 'Revisado': m ? 'Sí' : '', 'Comentario': m ? m.comentario || '' : '' });
+  return base;
+}
+function excel(modo){
+  if(typeof XLSX === 'undefined' || !XLSX.utils || !XLSX.writeFile){ aviso('No se pudo cargar el generador de Excel. Recargá la página.'); return; }
+  const t = ST.tab, L0 = t === 'bajas' ? ST.bajas : ST.R[t], L = filtra(L0), nombre = CAT[t][0];
+  const wb = XLSX.utils.book_new(), ancho = ws => { const r = XLSX.utils.sheet_to_json(ws, { header: 1 }); ws['!cols'] = (r[0] || []).map((_, i) => ({ wch: Math.min(50, Math.max(10, ...r.slice(0, 300).map(f => String(f[i] ?? '').length + 2))) })); return ws; };
+  const tit = [[`${nombre} · control al ${fmt(hoy())}`], [`${L.length} comprobantes · total ${ars(L.reduce((s, x) => s + totDe(x), 0))}`], []];
+  if(modo === 'monto'){
+    const F = ordenar(L, 'monto').map(filasExcel), H = Object.keys(F[0] || {});
+    const ws = XLSX.utils.aoa_to_sheet(tit.concat([H], F.map(f => H.map(h => f[h]))));
+    XLSX.utils.book_append_sheet(wb, ancho(ws), 'Por monto');
+  } else {
+    const g = {}; L.forEach(x => { const r = x.a || x.l || x; (g[r.cuit] = g[r.cuit] || { razon: razonDe(x), cuit: r.cuit, L: [] }).L.push(x); });
+    const G = Object.values(g).sort((p, q) => q.L.reduce((s, x) => s + totDe(x), 0) - p.L.reduce((s, x) => s + totDe(x), 0));
+    const res = [['Proveedor', 'CUIT', 'Comprobantes', 'Total']].concat(G.map(x => [x.razon, cuitF(x.cuit), x.L.length, +x.L.reduce((s, y) => s + totDe(y), 0).toFixed(2)]));
+    XLSX.utils.book_append_sheet(wb, ancho(XLSX.utils.aoa_to_sheet(tit.concat(res))), 'Resumen por proveedor');
+    const det = []; let H = null;
+    G.forEach(x => { const F = ordenar(x.L, 'fecha').map(filasExcel); H = H || Object.keys(F[0]);
+      det.push([`${x.razon} · CUIT ${cuitF(x.cuit)} · ${x.L.length} comprobante${x.L.length === 1 ? '' : 's'}`]);
+      F.forEach(f => det.push(H.map(h => f[h])));
+      det.push(['Subtotal ' + x.razon, '', '', '', ...H.slice(4).map(h => { const F2 = x.L.map(filasExcel); return ['Total','Total libro','Total ARCA','Diferencia'].includes(h) ? +F2.reduce((s, f) => s + (Number(f[h]) || 0), 0).toFixed(2) : ''; })]); det.push([]); });
+    XLSX.utils.book_append_sheet(wb, ancho(XLSX.utils.aoa_to_sheet(tit.concat([H], det))), 'Detalle por proveedor');
+  }
+  const arch = `${nombre.toLowerCase().replace(/[^a-z0-9áéíóúñ]+/gi, '_')}_${modo === 'monto' ? 'por_monto' : 'por_proveedor'}_${hoy()}.xlsx`;
+  XLSX.writeFile(wb, arch); window.__ccExcel = { arch, hojas: wb.SheetNames, wb };
+}
+window.ccMostrar = render;
+})();
+/* ======================= MENÚ AGRUPADO (fijar / ocultar) ======================= */
+(function(){
+const $n = id => document.getElementById(id);
+const tab = id => () => { const b = $n(id); if(b) b.click(); };
+const MENU = [
+  { k:'home', t:'Inicio', v:'home' },
+  { k:'personas', t:'Control Contratistas', v:'personas', m:'contratistas' },
+  { k:'siniestros', t:'Siniestros ART', v:'siniestros' },
+  { g:'Pagos general', items:[
+    { k:'venc', t:'Vencimientos mensuales', v:'proveedores', m:'proveedores', f: tab('tabBtnVenc') } ] },
+  { g:'Contabilidad', items:[
+    { k:'comprobantes', t:'Control de comprobantes compras', v:'comprobantes', m:'comprobantes' } ] }
+];
+const TODOS = MENU.flatMap(x => x.items ? x.items.map(i => Object.assign({ grupo: x.g }, i)) : [x]);
+let actual = 'home', modo = 'fijo', abiertos = {};
+try{ modo = localStorage.getItem('adm.nav.modo') || 'fijo'; abiertos = JSON.parse(localStorage.getItem('adm.nav.grupos') || '{}'); }catch(_){}
+const guardar = () => { try{ localStorage.setItem('adm.nav.modo', modo); localStorage.setItem('adm.nav.grupos', JSON.stringify(abiertos)); }catch(_){} };
+const ve = i => !i.m || typeof tieneAcceso !== 'function' || typeof profile === 'undefined' || !profile || tieneAcceso(i.m);
+
+function pintar(){
+  const n = $n('nav2'); if(!n) return;
+  const it = i => ve(i) ? `<div class="nav2-it ${i.k === actual ? 'on' : ''}" data-nk="${i.k}">${i.t}</div>` : '';
+  n.innerHTML = MENU.map(x => {
+    if(!x.items) return it(x);
+    const vis = x.items.filter(ve); if(!vis.length) return '';
+    const activo = vis.some(i => i.k === actual), ab = abiertos[x.g] !== undefined ? abiertos[x.g] : true;
+    return `<div class="nav2-g ${ab ? 'ab' : ''} ${activo ? 'act' : ''}"><div class="nav2-gt" data-ng="${x.g}"><span>${x.g}</span><i>▸</i></div><div class="nav2-sub">${vis.map(it).join('')}</div></div>`;
+  }).join('');
+  n.querySelectorAll('[data-nk]').forEach(el => el.addEventListener('click', () => ir(el.dataset.nk)));
+  n.querySelectorAll('[data-ng]').forEach(el => el.addEventListener('click', () => { const g = el.dataset.ng, g0 = el.parentElement.classList.contains('ab'); abiertos[g] = !g0; guardar(); pintar(); }));
+}
+function ir(k){
+  const i = TODOS.find(x => x.k === k); if(!i) return;
+  actual = k; if(i.grupo) abiertos[i.grupo] = true; guardar();
+  showView(i.v); if(i.f) i.f();
+  pintar(); document.body.classList.remove('nav-flota');
+  window.scrollTo(0, 0);
+}
+window.navIr = ir;
+
+const showOriginal = window.showView;
+window.showView = function(view){
+  showOriginal(view);
+  const i = TODOS.find(x => x.k === actual);
+  if(!i || i.v !== view){ const c = TODOS.find(x => x.v === view); if(c) actual = c.k; }
+  pintar();
+};
+const accOriginal = window.aplicarAccesoModulos;
+if(accOriginal) window.aplicarAccesoModulos = function(){ accOriginal(); pintar(); };
+
+function aplicarModo(){
+  document.body.classList.toggle('nav-oculto', modo === 'oculto');
+  const b = $n('navPin'); if(b){ b.textContent = modo === 'oculto' ? '📌 Fijar menú' : '« Ocultar menú'; b.title = modo === 'oculto' ? 'Dejar el menú siempre visible' : 'Ocultar el menú y usar toda la pantalla'; }
+}
+function montar(){
+  const sb = document.querySelector('#appShell .sidebar'); if(!sb || $n('nav2')) return;
+  sb.querySelectorAll(':scope > .navitem').forEach(x => x.classList.add('nav-viejo'));
+  const ref = sb.querySelector('.brand-sub') || sb.querySelector('.brand');
+  const cont = document.createElement('div'); cont.id = 'nav2';
+  const pin = document.createElement('button'); pin.id = 'navPin'; pin.className = 'nav2-pin';
+  pin.addEventListener('click', () => { modo = modo === 'oculto' ? 'fijo' : 'oculto'; guardar(); document.body.classList.remove('nav-flota'); aplicarModo(); });
+  (ref ? ref.after(cont) : sb.prepend(cont)); cont.after(pin);
+  const abrir = document.createElement('button'); abrir.id = 'navAbrir'; abrir.className = 'nav2-abrir'; abrir.innerHTML = '☰ <span>Menú</span>'; abrir.title = 'Mostrar el menú';
+  abrir.addEventListener('click', ev => { ev.stopPropagation(); document.body.classList.toggle('nav-flota'); });
+  document.body.appendChild(abrir);
+  document.addEventListener('click', ev => { if(document.body.classList.contains('nav-flota') && !ev.target.closest('.sidebar') && !ev.target.closest('#navAbrir')) document.body.classList.remove('nav-flota'); });
+  aplicarModo(); pintar();
+}
+montar();
+})();
+
+document.getElementById('vencContenido').addEventListener('click', ev => { const b = ev.target.closest('[data-vborrar]'); if(!b) return; ev.stopPropagation(); ev.preventDefault(); window.vencBorrar(b.dataset.vborrar); }, true);
+
 </script>
 </body>
 </html>
