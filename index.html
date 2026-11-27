@@ -2330,12 +2330,13 @@ function render(){
   c.innerHTML = `<div class="ccm">
     <div class="cc-top">
       <div class="cc-estado">${resumenGuardado()}</div><span class="sp"></span>
-      <button class="btn" id="ccGuia">📖 Cómo se lee</button>
+      <button class="btn" id="ccGuia">📖 Instructivo</button>
       ${ed ? `<button class="btn btn-p" id="ccImp">⬆ Importar Libro IVA + ARCA</button>` : ''}
       ${R ? `<button class="btn" id="ccCsv" title="Todos los listados en un CSV">Exportar todo (CSV)</button>` : ''}
     </div>
     ${ST.msg ? `<div class="cc-ok">${ST.msg}<button class="cc-x" id="ccMsgX">✕</button></div>` : ''}
     ${ST.err ? `<div class="cc-err">${e(ST.err)}</div>` : ''}
+    ${R && (!ST.arca.length || !ST.libro.length) ? `<div class="cc-aviso" style="background:#FFF7E0;border-color:#EBD9A6"><b>Falta importar ${!ST.arca.length ? 'el archivo de ARCA · Mis Comprobantes Recibidos' : 'el Libro IVA Compras'}.</b> Hasta que no esté, el cruce no sirve: ${!ST.arca.length ? 'todo lo cargado figura como "no está en ARCA"' : 'todo lo de ARCA figura como "falta cargar"'}.</div>` : ''}
     ${ST.importar || !R ? importarHTML(ed) : ''}
     ${ST.guia ? guiaHTML() : ''}
     ${R ? `
@@ -2382,7 +2383,7 @@ function sumaHTML(t, L0){
 }
 function guiaHTML(){
   return `<div class="cc-guia">
-    <div class="cc-guia-h"><b>Cómo funciona</b></div>
+    <div class="cc-guia-h"><b>Instructivo · Control de comprobantes compras</b></div>
     <ol>
       <li>Bajá del sistema el <b>Libro IVA Compras</b> y de ARCA <b>Mis Comprobantes → Recibidos</b> (Excel). Conviene bajar ARCA desde 2 meses antes del libro.</li>
       <li>Tocá <b>⬆ Importar Libro IVA + ARCA</b> y elegí <b>los dos archivos juntos</b> (o uno solo): la app reconoce sola cuál es cada uno. Cada importación <b>se suma</b> a lo guardado: lo que ya estaba no se borra ni se duplica (si un importe vino corregido, se actualiza el importe).</li>
@@ -2522,9 +2523,13 @@ async function leerArchivo(f){
   return XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header:1, defval:null, raw:true });
 }
 function reconocer(filas){
-  try{ return { lado: 'libro', filas: ccLeerLibro(filas) }; }catch(_){}
-  try{ return { lado: 'arca', filas: ccLeerArca(filas) }; }catch(_){}
-  throw new Error('No reconocí el archivo: tiene que ser la exportación del Libro IVA Compras o el Excel de ARCA · Mis Comprobantes Recibidos.');
+  let r = null;
+  try{ r = { lado: 'libro', filas: ccLeerLibro(filas) }; }catch(_){}
+  if(!r) try{ r = { lado: 'arca', filas: ccLeerArca(filas) }; }catch(_){}
+  if(!r){ const cab = (filas.find(f => f && f.filter(c => c !== null && c !== '').length > 3) || []).filter(c => c !== null && c !== '').slice(0, 8).join(' | ');
+    throw new Error('No reconocí el archivo: tiene que ser la exportación del Libro IVA Compras o el Excel de ARCA · Mis Comprobantes Recibidos.' + (cab ? ' Títulos que encontré: ' + cab : ' La hoja está vacía.')); }
+  if(!r.filas.length) throw new Error(`Reconocí el archivo como ${r.lado === 'libro' ? 'Libro IVA' : 'ARCA'} pero no encontré comprobantes adentro.`);
+  return r;
 }
 function prepararPendiente(lado, filas, archivo){
   const ya = new Set((lado === 'libro' ? ST.libro : ST.arca).concat(ST.bajas.filter(b => b.lado === lado)).map(r => r.k));
@@ -2537,6 +2542,7 @@ window.ccImportarPendientes = () => importarPendientes();
 function enlazarImportar(){
   const i = document.getElementById('ccF');
   if(i) i.addEventListener('change', async () => {
+    if(!i.files.length) return;
     ST.err = ''; ST.pendiente = []; const errs = [];
     for(const f of [...i.files].slice(0, 4)){
       try{ const r = reconocer(await leerArchivo(f)); prepararPendiente(r.lado, r.filas, f.name); }
@@ -2552,8 +2558,14 @@ async function importarPendientes(){
   for(const p of ST.pendiente){
     const filas = p.filas.map(r => ({ cuit: r.cuit, pv: r.pv, nro: r.nro, letra: r.letra || null, clase: r.clase || null, tipo: r.tipo || null, tipo_nombre: r.tipoN || null,
       fecha: r.fecha || null, razon: r.razon || null, moneda: r.moneda || null, tc: r.tc || null, total: Math.round(r.total * 100) / 100, iva: Math.round(r.iva * 100) / 100, neto: Math.round(r.neto * 100) / 100, cae: r.cae || null }));
-    const { data, error } = await DB().rpc('cc_importar', { p_lado: p.lado, p_archivo: p.archivo, p_filas: filas });
-    if(error){ ST.err = `No se pudo importar ${p.archivo}: ${error.message}`; break; }
+    // en partes de 400 para que la base no corte por tiempo
+    const T = 400, partes = Math.ceil(filas.length / T), data = { nuevos: 0, existentes: 0, corregidos: 0, reactivados: 0 }; let error = null;
+    for(let i = 0; i < partes && !error; i++){
+      const r = await DB().rpc('cc_importar', { p_lado: p.lado, p_archivo: p.archivo + (partes > 1 ? ` (parte ${i + 1}/${partes})` : ''), p_filas: filas.slice(i * T, (i + 1) * T) });
+      if(r.error){ error = r.error; if(i) error = { message: `${r.error.message} (se importaron ${i} de ${partes} partes; volvé a importar el archivo, lo ya guardado no se duplica)` }; break; }
+      ['nuevos','existentes','corregidos','reactivados'].forEach(k => data[k] += Number(r.data[k]) || 0);
+    }
+    if(error){ console.error('cc_importar', p.archivo, error); ST.err = (ST.err ? ST.err + ' · ' : '') + `No se pudo importar ${p.lado === 'libro' ? 'el Libro IVA' : 'el de ARCA'} (${p.archivo}): ${error.message}`; continue; }
     msgs.push(`${p.lado === 'libro' ? 'Libro IVA' : 'ARCA'}: <b>${data.nuevos}</b> nuevos sumados · ${data.existentes} ya estaban (no se duplicaron)` +
       (data.corregidos ? ` · ${data.corregidos} con importe corregido` : '') + (data.reactivados ? ` · ${data.reactivados} reactivados` : ''));
   }
